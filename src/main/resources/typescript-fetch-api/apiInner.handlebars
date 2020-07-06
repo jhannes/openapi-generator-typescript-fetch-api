@@ -1,19 +1,21 @@
-{{#withInterfaces}}
-{{#operations}}
+{{~#withInterfaces~}}
+{{~#operations~}}
 /**
- * {{classname}} - object-oriented interface{{#description}}
- * {{{description}}}{{/description}}
+ * {{classname}} - object-oriented interface
+{{~#description}}
+ * {{{description}}}
+{{~/description}}
  * @export
  * @class {{classname}}Interface
  * @extends {BaseAPI}
  */
 export interface {{classname}}Interface {
-    {{#operation}}
+{{~#operation}}
     /**
      * {{&notes}}
-     {{#summary}}
-     * @summary {{&summary}}
-     {{/summary}}
+     {{~#summary}}
+     * @summary {{summary}}
+     {{~/summary}}
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      * @memberof {{classname}}
@@ -24,14 +26,11 @@ export interface {{classname}}Interface {
           {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
           formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }, {{/hasFormParams}}
           options?: any
-    }): {{#returnType}}Promise<{{{returnType}}}>{{/returnType}}{{^returnType}}Promise<void>{{/returnType}};
-    {{/operation}}
+    }): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
+{{~/operation}}
 }
-{{/operations}}
-{{/withInterfaces}}
-
+{{/operations}}{{/withInterfaces}}
 {{#operations}}
-
 /**
  * {{classname}} - object-oriented interface{{#description}}
  * {{{description}}}{{/description}}
@@ -39,18 +38,18 @@ export interface {{classname}}Interface {
  * @class {{classname}}
  * @extends {BaseAPI}
  */
-{{#withInterfaces}}
+{{~#withInterfaces}}
 export class {{classname}} extends BaseAPI implements {{classname}}Interface {
-{{/withInterfaces}}
-{{^withInterfaces}}
+{{~/withInterfaces}}
+{{~^withInterfaces}}
 export class {{classname}} extends BaseAPI {
-{{/withInterfaces}}
-{{#operation}}
+{{~/withInterfaces}}
+{{~#operation}}
     /**
      * {{&notes}}
-     {{#summary}}
+     {{~#summary}}
      * @summary {{&summary}}
-     {{/summary}}
+     {{~/summary}}
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      * @memberof {{classname}}
@@ -61,33 +60,37 @@ export class {{classname}} extends BaseAPI {
           {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
           formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }, {{/hasFormParams}}
           options?: any
-    }): {{#returnType}}Promise<{{{returnType}}}>{{/returnType}}{{^returnType}}Promise<void>{{/returnType}} {
+    }): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
         return await this.{{httpMethod}}(
-            {{#pathParams.0}}this.path("{{{path}}}", params.pathParams){{/pathParams.0}}{{^pathParams.0}}"{{{path}}}"{{/pathParams.0}},
-            {{#queryParams.0}}params && params.queryParams{{/queryParams.0}}{{^queryParams.0}}{}{{/queryParams.0}},
-            {{#bodyParam}}{ body: params.{{paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes.0}}"{{{mediaType}}}"{{/consumes.0}} }{{/bodyParam}}{{^bodyParam}}{{#hasFormParams}}{ body: params.formParams, contentType: "application/x-www-form-urlencoded" }{{/hasFormParams}}{{^hasFormParams}}undefined{{/hasFormParams}}{{/bodyParam}},
+            {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
+            {{#if queryParams}}params && params.queryParams{{else}}{}{{/if}},
+            {{~#if bodyParam}}
+            { body: params.{{bodyParam.paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes}}"{{{mediaType}}}"{{/consumes}} },
+            {{~else if hasFormParams}}
+            { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
+            {{~else}}
+            undefined,
+            {{~/if}}
             params && params.options,
         );
     }
-
-    {{/operation}}
+{{/operation}}
 }
-{{/operations}}
+{{~/operations}}
 
-{{#withInterfaces}}
-{{#operations}}
-
+{{#withInterfaces}}{{#operations}}
 export function mock{{classname}}(operations: {
-    {{#operation}}
-        {{nickname}}?: () => {{#returnType}}Promise<{{{returnType}}}>{{/returnType}}{{^returnType}}Promise<void>{{/returnType}}
-    {{/operation}}
+    {{~#operation}}
+        {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}}
+    {{~/operation}}
 }): {{classname}}Interface {
     const reject = (operation: string) => () => Promise.reject(new Error("Unexpected function call " + operation));
     return {
-    {{#operation}}
+    {{~#operation}}
         {{nickname}}: (operations.{{nickname}} || reject("{{nickname}}")),
-    {{/operation}}
+    {{~/operation}}
     };
 }
-{{/operations}}
-{{/withInterfaces}}
+
+
+{{/operations}}{{/withInterfaces}}

@@ -8,8 +8,10 @@ import org.openapitools.codegen.CodegenModel;
 import org.openapitools.codegen.CodegenOperation;
 import org.openapitools.codegen.CodegenProperty;
 import org.openapitools.codegen.SupportingFile;
+import org.openapitools.codegen.api.TemplatingEngineAdapter;
 import org.openapitools.codegen.languages.AbstractTypeScriptClientCodegen;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
+import org.openapitools.codegen.templating.HandlebarsEngineAdapter;
 import org.openapitools.codegen.utils.ModelUtils;
 
 import java.util.ArrayList;
@@ -46,10 +48,15 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         typeMapping.put("date", "Date");
 
         this.cliOptions.add(new CliOption(NPM_REPOSITORY, "Use this property to set an url of your private npmRepo in the package.json"));
-        //this.cliOptions.add(new CliOption(SNAPSHOT, "When setting this property to true the version will be suffixed with -SNAPSHOT.yyyyMMddHHmm", SchemaTypeUtil.BOOLEAN_TYPE).defaultValue(Boolean.FALSE.toString()));
         this.cliOptions.add(new CliOption(WITH_INTERFACES, "Setting this property to true will generate interfaces next to the default class implementations.", SchemaTypeUtil.BOOLEAN_TYPE).defaultValue(Boolean.FALSE.toString()));
         this.cliOptions.add(new CliOption(SEPARATE_MODELS_AND_API, "Put the model and api in separate folders and in separate classes", SchemaTypeUtil.BOOLEAN_TYPE).defaultValue(Boolean.FALSE.toString()));
         this.cliOptions.add(new CliOption(WITHOUT_PREFIX_ENUMS, "Don't prefix enum names with class names", SchemaTypeUtil.BOOLEAN_TYPE).defaultValue(Boolean.FALSE.toString()));
+
+        super.setTemplatingEngine(new HandlebarsEngineAdapter());
+    }
+
+    @Override
+    public void setTemplatingEngine(TemplatingEngineAdapter templatingEngine) {
     }
 
     @Override
@@ -94,12 +101,11 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         additionalProperties.put("apiRelativeToRoot", apiRelativeToRoot);
         additionalProperties.put("modelRelativeToRoot", modelRelativeToRoot);
 
-        supportingFiles.add(new SupportingFile("index.mustache", "", "index.ts"));
-        supportingFiles.add(new SupportingFile("baseApi.mustache", "", "base.ts"));
-        supportingFiles.add(new SupportingFile("api.mustache", "", "api.ts"));
-        supportingFiles.add(new SupportingFile("configuration.mustache", "", "configuration.ts"));
-        supportingFiles.add(new SupportingFile("custom.d.mustache", "", "custom.d.ts"));
-        supportingFiles.add(new SupportingFile("git_push.sh.mustache", "", "git_push.sh"));
+        supportingFiles.add(new SupportingFile("index.handlebars", "", "index.ts"));
+        supportingFiles.add(new SupportingFile("baseApi.handlebars", "", "base.ts"));
+        supportingFiles.add(new SupportingFile("api.handlebars", "", "api.ts"));
+        supportingFiles.add(new SupportingFile("configuration.handlebars", "", "configuration.ts"));
+        supportingFiles.add(new SupportingFile("git_push.sh.handlebars", "", "git_push.sh"));
         supportingFiles.add(new SupportingFile("gitignore", "", ".gitignore"));
 
         if (additionalProperties.containsKey(SEPARATE_MODELS_AND_API)) {
@@ -108,18 +114,15 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 if (StringUtils.isAnyBlank(modelPackage, apiPackage)) {
                     throw new RuntimeException("apiPackage and modelPackage must be defined");
                 }
-                modelTemplateFiles.put("model.mustache", ".ts");
-                apiTemplateFiles.put("apiInner.mustache", ".ts");
-                supportingFiles.add(new SupportingFile("modelIndex.mustache", tsModelPackage, "index.ts"));
+                modelTemplateFiles.put("model.handlebars", ".ts");
+                apiTemplateFiles.put("apiInner.handlebars", ".ts");
+                supportingFiles.add(new SupportingFile("modelIndex.handlebars", tsModelPackage, "index.ts"));
             }
         }
 
-        /*
         if (additionalProperties.containsKey(NPM_NAME)) {
             addNpmPackageGeneration();
         }
-
-         */
 
     }
 
@@ -161,7 +164,6 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         return objs;
     }
 
-    // org.openapitools.codegen.DefaultCodegen.getPrimitiveType
     @Override
     public Map<String, Object> postProcessAllModels(Map<String, Object> objs) {
         Map<String, Object> result = super.postProcessAllModels(objs);
@@ -176,6 +178,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         }
         return result;
     }
+
 
     @Override
     protected void addAdditionPropertiesToCodeGenModel(CodegenModel codegenModel, Schema schema) {
@@ -193,7 +196,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             withoutPrefixEnums = Boolean.parseBoolean(additionalProperties.get(WITHOUT_PREFIX_ENUMS).toString());
         }
 
-        for (Object _mo : models) {
+        for (Object _mo  : models) {
             Map<String, Object> mo = (Map<String, Object>) _mo;
             CodegenModel cm = (CodegenModel) mo.get("model");
 
@@ -201,7 +204,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             cm.classFilename = cm.classname.replaceAll("([a-z0-9])([A-Z])", "$1-$2").toLowerCase(Locale.ROOT);
 
             //processed enum names
-            if (!withoutPrefixEnums) {
+            if(!withoutPrefixEnums) {
                 cm.imports = new TreeSet(cm.imports);
                 // name enum with model name, e.g. StatusEnum => PetStatusEnum
                 for (CodegenProperty var : cm.vars) {
