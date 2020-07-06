@@ -1,0 +1,4 @@
+/localSnapshotTests/
+/target/
+*.iml
+.idea

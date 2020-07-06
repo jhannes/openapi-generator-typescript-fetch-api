@@ -1,0 +1,93 @@
+{{#withInterfaces}}
+{{#operations}}
+/**
+ * {{classname}} - object-oriented interface{{#description}}
+ * {{{description}}}{{/description}}
+ * @export
+ * @class {{classname}}Interface
+ * @extends {BaseAPI}
+ */
+export interface {{classname}}Interface {
+    {{#operation}}
+    /**
+     * {{&notes}}
+     {{#summary}}
+     * @summary {{&summary}}
+     {{/summary}}
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     * @memberof {{classname}}
+     */
+    {{nickname}}(params?: { {{#pathParams.0}}
+          pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/pathParams}} },{{/pathParams.0}}{{#queryParams.0}}
+          queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} },{{/queryParams.0}}{{#bodyParam}}
+          {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
+          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }, {{/hasFormParams}}
+          options?: any
+    }): {{#returnType}}Promise<{{{returnType}}}>{{/returnType}}{{^returnType}}Promise<void>{{/returnType}};
+    {{/operation}}
+}
+{{/operations}}
+{{/withInterfaces}}
+
+{{#operations}}
+
+/**
+ * {{classname}} - object-oriented interface{{#description}}
+ * {{{description}}}{{/description}}
+ * @export
+ * @class {{classname}}
+ * @extends {BaseAPI}
+ */
+{{#withInterfaces}}
+export class {{classname}} extends BaseAPI implements {{classname}}Interface {
+{{/withInterfaces}}
+{{^withInterfaces}}
+export class {{classname}} extends BaseAPI {
+{{/withInterfaces}}
+{{#operation}}
+    /**
+     * {{&notes}}
+     {{#summary}}
+     * @summary {{&summary}}
+     {{/summary}}
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     * @memberof {{classname}}
+     */
+    public async {{nickname}}(params{{^allParams}}?{{/allParams}}: { {{#pathParams.0}}
+          pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/pathParams}} },{{/pathParams.0}}{{#queryParams.0}}
+          queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} },{{/queryParams.0}}{{#bodyParam}}
+          {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
+          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }, {{/hasFormParams}}
+          options?: any
+    }): {{#returnType}}Promise<{{{returnType}}}>{{/returnType}}{{^returnType}}Promise<void>{{/returnType}} {
+        return await this.{{httpMethod}}(
+            {{#pathParams.0}}this.path("{{{path}}}", params.pathParams){{/pathParams.0}}{{^pathParams.0}}"{{{path}}}"{{/pathParams.0}},
+            {{#queryParams.0}}params && params.queryParams{{/queryParams.0}}{{^queryParams.0}}{}{{/queryParams.0}},
+            {{#bodyParam}}{ body: params.{{paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes.0}}"{{{mediaType}}}"{{/consumes.0}} }{{/bodyParam}}{{^bodyParam}}{{#hasFormParams}}{ body: params.formParams, contentType: "application/x-www-form-urlencoded" }{{/hasFormParams}}{{^hasFormParams}}undefined{{/hasFormParams}}{{/bodyParam}},
+            params && params.options,
+        );
+    }
+
+    {{/operation}}
+}
+{{/operations}}
+
+{{#withInterfaces}}
+{{#operations}}
+
+export function mock{{classname}}(operations: {
+    {{#operation}}
+        {{nickname}}?: () => {{#returnType}}Promise<{{{returnType}}}>{{/returnType}}{{^returnType}}Promise<void>{{/returnType}}
+    {{/operation}}
+}): {{classname}}Interface {
+    const reject = (operation: string) => () => Promise.reject(new Error("Unexpected function call " + operation));
+    return {
+    {{#operation}}
+        {{nickname}}: (operations.{{nickname}} || reject("{{nickname}}")),
+    {{/operation}}
+    };
+}
+{{/operations}}
+{{/withInterfaces}}
