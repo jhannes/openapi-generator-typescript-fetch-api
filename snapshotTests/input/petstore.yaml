@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+servers:
+  - url: http://api.example.com/v1
+    description: Optional server description, e.g. Main (production) server
+  - url: http://staging-api.example.com
+    description: Optional server description, e.g. Internal staging server for testing
+paths:
+  /pets:
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnyPet'
+      responses:
+        '200':
+          description: Updated
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - pet_type
+      properties:
+        pet_type:
+          type: string
+        name:
+          type: string
+        birth_date:
+          type: string
+      discriminator:
+        propertyName: pet_type
+    Dog:     # "Dog" is a value for the pet_type property (the discriminator value)
+      allOf: # Combines the main `Pet` schema with `Dog`-specific properties
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          # all other properties specific to a `Dog`
+          properties:
+            bark:
+              type: boolean
+            breed:
+              type: string
+              enum: [Dingo, Husky, Retriever, Shepherd]
+          discriminator:
+            propertyName: pet_type
+      x-discriminator-value: 'ADog'
+    Cat:     # "Cat" is a value for the pet_type property (the discriminator value)
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          # all other properties specific to a `Cat`
+          properties:
+            hunts:
+              type: boolean
+            age:
+              type: integer
+          discriminator:
+            propertyName: pet_type
+      x-discriminator-value: 'ACat'
+    AnyPet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: pet_type
