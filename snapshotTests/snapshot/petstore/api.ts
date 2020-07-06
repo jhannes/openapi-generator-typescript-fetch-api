@@ -454,7 +454,7 @@ export class TestSampleData {
         }
         return {
             bark: this.generate(template?.bark, {containerClass, propertyName: "bark", example: "null", isNullable: false }, () => this.sampleboolean()),
-            breed: this.generate(template?.breed, {containerClass, propertyName: "breed", example: "null", isNullable: false }, () => this.pickOne([BreedDtoEnum.Dingo,BreedDtoEnum.Husky,BreedDtoEnum.Retriever,BreedDtoEnum.Shepherd])),
+            breed: this.generate(template?.breed, {containerClass, propertyName: "breed", example: "null", isNullable: false }, () => this.pickOne([DogAllOfDtoBreedDtoEnum.Dingo,DogAllOfDtoBreedDtoEnum.Husky,DogAllOfDtoBreedDtoEnum.Retriever,DogAllOfDtoBreedDtoEnum.Shepherd])),
         };
     }
 

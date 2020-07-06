@@ -225,7 +225,7 @@ export class TestSampleData {
             {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}", isNullable: {{isNullable}} }, () => this.sampleString("{{dataFormat}}"{{#example}}, "{{{example}}}"{{/example}})),
 {{/isEnum}}
 {{#isEnum}}
-            {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} }, () => {{^isContainer}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{enumName}}.{{{name}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}]){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{enumName}}.{{{name}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}]){{/mostInnerItems}}{{/isContainer}}),
+            {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} }, () => {{^isContainer}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{datatypeWithEnum}}.{{{name}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}]){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{datatypeWithEnum}}.{{{name}}}{{^-last}},{{/-last}}{{/enumVars}}{{/allowableValues}}]){{/mostInnerItems}}{{/isContainer}}),
 {{/isEnum}}
 {{/isString}}
 {{#isDateTime}}

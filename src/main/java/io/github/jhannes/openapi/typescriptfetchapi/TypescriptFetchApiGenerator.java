@@ -9,6 +9,7 @@ import org.openapitools.codegen.CodegenOperation;
 import org.openapitools.codegen.CodegenProperty;
 import org.openapitools.codegen.SupportingFile;
 import org.openapitools.codegen.languages.AbstractTypeScriptClientCodegen;
+import org.openapitools.codegen.meta.features.DocumentationFeature;
 import org.openapitools.codegen.utils.ModelUtils;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
     public TypescriptFetchApiGenerator() {
         super();
 
-        //modifyFeatureSet(features -> features.includeDocumentationFeatures(DocumentationFeature.Readme));
+        modifyFeatureSet(features -> features.includeDocumentationFeatures(DocumentationFeature.Readme));
 
         // clear import mapping (from default generator) as TS does not use it
         // at the moment
@@ -209,12 +210,10 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         var.enumName = var.enumName.replace(var.enumName, cm.classname + var.enumName);
                     }
                 }
-                if (cm.parent != null) {
-                    for (CodegenProperty var : cm.allVars) {
-                        if (Boolean.TRUE.equals(var.isEnum)) {
-                            var.datatypeWithEnum = var.datatypeWithEnum.replace(var.enumName, cm.classname + var.enumName);
-                            var.enumName = var.enumName.replace(var.enumName, cm.classname + var.enumName);
-                        }
+                for (CodegenProperty var : cm.allVars) {
+                    if (Boolean.TRUE.equals(var.isEnum)) {
+                        var.datatypeWithEnum = var.datatypeWithEnum.replace(var.enumName, cm.classname + var.enumName);
+                        var.enumName = var.enumName.replace(var.enumName, cm.classname + var.enumName);
                     }
                 }
             }
