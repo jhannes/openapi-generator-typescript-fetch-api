@@ -205,4 +205,20 @@
             </build>
         </profile>
     </profiles>
+    <scm>
+        <connection>scm:git:https://github.com/jhannes/openapi-generator-typescript-fetch-api.git</connection>
+        <developerConnection>scm:git:https://github.com/jhannes/openapi-generator-typescript-fetch-api.git</developerConnection>
+        <url>https://github.com/jhannes/openapi-generator-typescript-fetch-api.git</url>
+        <tag>HEAD</tag>
+    </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 </project>
