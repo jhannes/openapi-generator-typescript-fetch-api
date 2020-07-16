@@ -1,0 +1,353 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Infection Tracker",
+    "description": "Infection Tracker - A case management system for tracking the spread of diseases",
+    "version": "1.0.0-draft"
+  },
+  "servers": [
+    {
+      "description": "current",
+      "url": "/api"
+    },
+    {
+      "description": "production",
+      "url": "https://infectiontracker.example.gov/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Cases",
+      "description": "List, add and edit infected individuals"
+    },
+    {
+      "name": "Exposures",
+      "description": "List, add and edit exposures to infected individuals"
+    },
+    {
+      "name": "CaseWorkers",
+      "description": "List, add and edit people who can follow up infected individuals"
+    }
+  ],
+  "paths": {
+    "/api/cases": {
+      "get": {
+        "operationId": "listCases",
+        "tags": [
+          "Cases"
+        ],
+        "responses": {
+          "200": {
+            "description": "The resulting infection case",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Infection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "newCase",
+        "tags": [
+          "Cases"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InfectionInformation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The case was registered"
+          }
+        }
+      }
+    },
+    "/api/cases/{caseId}": {
+      "get": {
+        "operationId": "getCaseDetails",
+        "tags": [
+          "Cases"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "caseId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The details of an infection case, including the exposures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Infection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{caseId}/exposures": {
+      "post": {
+        "operationId": "registerExposure",
+        "tags": [
+          "Cases"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "caseId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Exposure"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The exposure was registered"
+          }
+        }
+      }
+    },
+    "/api/exposures": {
+      "get": {
+        "operationId": "listExposures",
+        "tags": [
+          "Exposures"
+        ],
+        "responses": {
+          "200": {
+            "description": "List exposures that the case worker can follow up",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exposure"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exposures/{exposureId}": {
+      "put": {
+        "operationId": "updateExposure",
+        "tags": [
+          "Exposures"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "exposureId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Exposure"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The exposure was registered"
+          }
+        }
+      }
+    },
+    "/api/caseWorkers": {
+      "get": {
+        "operationId": "listCaseWorkers",
+        "tags": [
+          "CaseWorkers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the case workers that the current user can assign to cases",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseWorker"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "registerCaseWorker",
+        "tags": [
+          "CaseWorkers"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaseWorker"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The exposure was registered"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CaseWorker": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Florence Nightingale"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "administrator",
+              "interviewer",
+              "followup"
+            ]
+          }
+        },
+        "required": [
+          "fullName", "email", "role"
+        ]
+      },
+      "Infection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "information": {
+            "$ref": "#/components/schemas/InfectionInformation"
+          },
+          "registeredExposures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Exposure"
+            }
+          }
+        },
+        "required": [
+          "id", "information", "registeredExposures"
+        ]
+      },
+      "Exposure": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "exposedPersonName": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "exposedPersonPhoneNumber": {
+            "type": "string",
+            "format": "phone"
+          },
+          "exposedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "exposureLocation": {
+            "type": "string",
+            "description": "Address or other identifying description of the location"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Information that may be relevant to identify the person fully or determine if they are infected"
+          },
+          "caseWorker": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The id of the case worker assigned to follow up this person"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "unidentified",
+              "identified",
+              "contacted",
+              "tested",
+              "infected"
+            ]
+          }
+        },
+        "required": ["status"]
+      },
+      "InfectionInformation": {
+        "type": "object",
+        "properties": {
+          "patientName": {
+            "type": "string",
+            "example": "John Smith"
+          },
+          "patientPhoneNumber": {
+            "type": "string",
+            "format": "phone"
+          },
+          "likelyInfectionDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Free form text to describe anything about the patient"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "infectionTracker",
+  "version": "1.0.0-draft",
+  "description": "OpenAPI client for infectionTracker",
+  "author": "OpenAPI-Generator Contributors",
+  "keywords": [
+    "typescript",
+    "openapi-client",
+    "openapi-generator",
+    "infectionTracker"
+  ],
+  "license": "Unlicense",
+  "files": [ "dist" ],
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist/",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^3.4.5"
+  }
+}
