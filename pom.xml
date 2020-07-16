@@ -4,6 +4,11 @@
 
     <groupId>io.github.jhannes.openapi</groupId>
     <artifactId>openapi-generator-typescript-fetch-api</artifactId>
+    <name>openapi-generator-typescript-fetch-api</name>
+    <description>
+        OpenAPI-generator for TypeScript interfaces using the browser native fetch API.
+        Generates direct mapping of APIs as interfaces and test-data generators for DTOs
+    </description>
     <version>0.1.1-SNAPSHOT</version>
 
     <build>
@@ -103,6 +108,14 @@
                 <configuration>
                     <source>1.8</source>
                     <doclint>all,-missing</doclint>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <releaseProfiles>release</releaseProfiles>
                 </configuration>
             </plugin>
         </plugins>
