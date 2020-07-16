@@ -9,7 +9,7 @@
         OpenAPI-generator for TypeScript interfaces using the browser native fetch API.
         Generates direct mapping of APIs as interfaces and test-data generators for DTOs
     </description>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.1</version>
 
     <build>
         <plugins>
@@ -220,7 +220,7 @@
         <connection>scm:git:https://github.com/jhannes/openapi-generator-typescript-fetch-api.git</connection>
         <developerConnection>scm:git:https://github.com/jhannes/openapi-generator-typescript-fetch-api.git</developerConnection>
         <url>https://github.com/jhannes/openapi-generator-typescript-fetch-api.git</url>
-        <tag>HEAD</tag>
+        <tag>openapi-generator-typescript-fetch-api-0.1.1</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
