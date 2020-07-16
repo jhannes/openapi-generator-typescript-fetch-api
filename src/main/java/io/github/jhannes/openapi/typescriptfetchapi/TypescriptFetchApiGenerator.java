@@ -21,6 +21,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 
+import static org.openapitools.codegen.CodegenConstants.GENERATE_API_TESTS;
+import static org.openapitools.codegen.CodegenConstants.GENERATE_MODEL_TESTS;
+
 public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen {
 
     public static final String NPM_REPOSITORY = "npmRepository";
@@ -101,12 +104,29 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         additionalProperties.put("apiRelativeToRoot", apiRelativeToRoot);
         additionalProperties.put("modelRelativeToRoot", modelRelativeToRoot);
 
-        supportingFiles.add(new SupportingFile("index.handlebars", "", "index.ts"));
+        supportingFiles.add(new SupportingFile("package.handlebars", "", "package.json"));
+        supportingFiles.add(new SupportingFile("package.handlebars", "", "package.json"));
         supportingFiles.add(new SupportingFile("baseApi.handlebars", "", "base.ts"));
         supportingFiles.add(new SupportingFile("api.handlebars", "", "api.ts"));
-        supportingFiles.add(new SupportingFile("configuration.handlebars", "", "configuration.ts"));
+        supportingFiles.add(new SupportingFile("model.handlebars", "", "model.ts"));
         supportingFiles.add(new SupportingFile("git_push.sh.handlebars", "", "git_push.sh"));
         supportingFiles.add(new SupportingFile("gitignore", "", ".gitignore"));
+
+        if (additionalProperties.containsKey(GENERATE_API_TESTS)) {
+            boolean generateApiTests = Boolean.parseBoolean(additionalProperties.get(GENERATE_API_TESTS).toString());
+            if (generateApiTests) {
+                supportingFiles.add(new SupportingFile("apiTest.handlebars", "test", "apiTest.ts"));
+            }
+        }
+
+        if (additionalProperties.containsKey(GENERATE_MODEL_TESTS)) {
+            boolean generateModelTests = Boolean.parseBoolean(additionalProperties.get(GENERATE_MODEL_TESTS).toString());
+            if (generateModelTests) {
+                additionalProperties.put("withInterfaces", "true");
+                supportingFiles.add(new SupportingFile("modelTest.handlebars", "test", "modelTest.ts"));
+            }
+        }
+
 
         if (additionalProperties.containsKey(SEPARATE_MODELS_AND_API)) {
             boolean separateModelsAndApi = Boolean.parseBoolean(additionalProperties.get(SEPARATE_MODELS_AND_API).toString());
@@ -259,9 +279,9 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         }
 
         //Files for building our lib
-        supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
-        supportingFiles.add(new SupportingFile("package.mustache", "", "package.json"));
-        supportingFiles.add(new SupportingFile("tsconfig.mustache", "", "tsconfig.json"));
+        supportingFiles.add(new SupportingFile("README.handlebars", "", "README.md"));
+        supportingFiles.add(new SupportingFile("package.handlebars", "", "package.json"));
+        supportingFiles.add(new SupportingFile("tsconfig.handlebars", "", "tsconfig.json"));
     }
 
 }

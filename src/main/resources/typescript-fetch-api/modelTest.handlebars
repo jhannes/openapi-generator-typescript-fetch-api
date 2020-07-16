@@ -1,3 +1,18 @@
+import {
+{{~#models}}
+{{~#model}}
+   {{classname}},
+{{~^oneOf}}
+{{~#vars}}
+   {{~#isEnum}}
+   {{datatypeWithEnum}},
+   {{~/isEnum}}
+{{~/vars}}
+{{~/oneOf}}
+{{~/model}}
+{{~/models}}
+} from "../model";
+
 export class Random {
     seed: number;
     constructor(seed: number) {
@@ -116,6 +131,10 @@ export class TestSampleData {
 
     randomLastName() {
         return this.pickOne(["Smith", "Williams", "Johnson", "Jones", "Brown", "Davis", "Miller", "Wilson"]);
+    }
+
+    randomFullName() {
+        return this.randomFirstName() + " " + this.randomLastName();
     }
 
     randomDomain() {

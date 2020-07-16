@@ -1,5 +1,4 @@
 // tslint:disable
-/// <reference path="./custom.d.ts" />
 /**
  * Sample API
  * Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
@@ -13,32 +12,6 @@
  */
 
 
-import { Configuration } from "./configuration";
-
-/**
- *
- * @export
- */
-export const COLLECTION_FORMATS = {
-    csv: ",",
-    ssv: " ",
-    tsv: "\t",
-    pipes: "|",
-};
-
-/**
- *
- * @export
- * @interface RequestArgs
- */
-export interface RequestArgs {
-    url: string;
-    options: any;
-}
-
-export interface Api {
-    fetch(method: string, url: string, queryParams: any, requestBody?: RequestBody, options?: any): Promise<any>;
-}
 
 export interface RequestBody {
     body: any;

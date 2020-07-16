@@ -1,8 +1,8 @@
-## {{appName}}@{{version}}
+## Sample API@0.1.9
 
-{{#infoEmail}}Contact: {{{infoEmail}}}{{/infoEmail}}
 
-{{{appDescription}}}
+
+Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
 
 ### Environment
 
@@ -39,7 +39,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install {{npmName}}@{{npmVersion}} --save
+npm install petstore@0.1.9 --save
 ```
 
 _unPublished (not recommended):_

@@ -5,9 +5,6 @@
 {{~#description}}
  * {{{description}}}
 {{~/description}}
- * @export
- * @class {{classname}}Interface
- * @extends {BaseAPI}
  */
 export interface {{classname}}Interface {
 {{~#operation}}
@@ -34,9 +31,6 @@ export interface {{classname}}Interface {
 /**
  * {{classname}} - object-oriented interface{{#description}}
  * {{{description}}}{{/description}}
- * @export
- * @class {{classname}}
- * @extends {BaseAPI}
  */
 {{~#withInterfaces}}
 export class {{classname}} extends BaseAPI implements {{classname}}Interface {
@@ -52,7 +46,6 @@ export class {{classname}} extends BaseAPI {
      {{~/summary}}
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof {{classname}}
      */
     public async {{nickname}}(params{{^allParams}}?{{/allParams}}: { {{#pathParams.0}}
           pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/pathParams}} },{{/pathParams.0}}{{#queryParams.0}}
@@ -77,20 +70,3 @@ export class {{classname}} extends BaseAPI {
 {{/operation}}
 }
 {{~/operations}}
-
-{{#withInterfaces}}{{#operations}}
-export function mock{{classname}}(operations: {
-    {{~#operation}}
-        {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}}
-    {{~/operation}}
-}): {{classname}}Interface {
-    const reject = (operation: string) => () => Promise.reject(new Error("Unexpected function call " + operation));
-    return {
-    {{~#operation}}
-        {{nickname}}: (operations.{{nickname}} || reject("{{nickname}}")),
-    {{~/operation}}
-    };
-}
-
-
-{{/operations}}{{/withInterfaces}}

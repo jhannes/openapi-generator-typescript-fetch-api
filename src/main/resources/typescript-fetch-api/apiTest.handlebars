@@ -1,0 +1,33 @@
+// tslint:disable
+{{>licenseInfo}}
+
+import {
+{{~#models}}
+    {{~#model}}
+        {{classname}},
+    {{~/model}}
+{{~/models}}
+} from "../model";
+
+import {
+{{~#apiInfo}}{{#apis}}
+    {{classname}}Interface,
+{{~/apis}}{{/apiInfo}}
+} from "../api";
+
+
+{{#apiInfo}}{{#apis}}
+{{#operations}}
+export function mock{{classname}}(operations: {
+    {{~#operation}}
+        {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}}
+    {{~/operation}}
+}): {{classname}}Interface {
+    const reject = (operation: string) => () => Promise.reject(new Error("Unexpected function call " + operation));
+    return {
+    {{~#operation}}
+        {{nickname}}: (operations.{{nickname}} || reject("{{nickname}}")),
+    {{~/operation}}
+    };
+}
+{{/operations}}{{/apis}}{{/apiInfo}}

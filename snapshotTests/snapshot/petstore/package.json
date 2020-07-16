@@ -1,0 +1,23 @@
+{
+  "name": "petstore",
+  "version": "0.1.9",
+  "description": "OpenAPI client for petstore",
+  "author": "OpenAPI-Generator Contributors",
+  "keywords": [
+    "typescript",
+    "openapi-client",
+    "openapi-generator",
+    "petstore"
+  ],
+  "license": "Unlicense",
+  "files": [ "dist" ],
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist/",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^3.4.5"
+  }
+}

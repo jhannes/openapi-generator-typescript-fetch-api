@@ -56,7 +56,9 @@ public class SnapshotTests {
                     .setGeneratorName("typescript-fetch-api")
                     .setInputSpec(file.toString())
                     .setModelNameSuffix("Dto")
+                    .addAdditionalProperty("npmName", modelName)
                     .addAdditionalProperty("withInterfaces", "true")
+                    .addAdditionalProperty("generateModelTests", "true")
                     .setOutputDir(output.resolve(modelName).toString());
 
             final ClientOptInput clientOptInput = configurator.toClientOptInput();

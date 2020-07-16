@@ -1,8 +1,8 @@
+{{~#description}}
 /**
  * {{{description}}}
- * @export
- * @interface {{classname}}
  */
+{{~/description}}
 export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
 
 {{~#additionalPropertiesType}}
@@ -10,20 +10,21 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
 
 {{/additionalPropertiesType~}}
 {{~#vars}}
+    {{~#description}}
     /**
      * {{{description}}}
-     * @type {{=<% %>=}}{<%&datatype%>}<%={{ }}=%>
-     * @memberof {{classname}}
      */
+    {{~/description}}
     {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{#isReadOnly}}?{{/isReadOnly}}{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{#isNullable}} | null{{/isNullable}}{{/isEnum}};
 {{~/vars}}
 }
 
 {{#hasEnums}}{{#vars}}{{#isEnum~}}
+{{~#description}}
 /**
-    * @export
-    * @enum {string}
-    */
+ * {{{description}}}
+ */
+{{~/description}}
 export enum {{enumName}} {
 {{~#allowableValues}}
     {{~#enumVars}}

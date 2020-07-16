@@ -1,6 +1,7 @@
+{{~#description}}
 /**
- * @type {{classname}}{{#description}}
- * {{{description}}}{{/description}}
- * @export
+ * {{{description}}}
  */
+{{~/description}}
 export type {{classname}} = {{#oneOf}}{{{.}}}{{#unless @last}} | {{/unless}}{{/oneOf}};
+
