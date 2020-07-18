@@ -16,15 +16,9 @@ export interface CaseWorkerDto {
     readonly id?: string;
     fullName: string;
     email: string;
-    role: CaseWorkerDtoRoleDtoEnum;
+    role: UserRoleDto;
 }
 
-
-export enum CaseWorkerDtoRoleDtoEnum {
-    Administrator = 'administrator',
-    Interviewer = 'interviewer',
-    Followup = 'followup'
-}
 
 
 export interface ExposureDto {
@@ -76,6 +70,16 @@ export interface InfectionInformationDto {
 }
 
 
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum UserRoleDto {
+    Administrator = 'administrator',
+    Interviewer = 'interviewer',
+    Followup = 'followup'
+}
 
 
 

@@ -1,10 +1,10 @@
 import {
    CaseWorkerDto,
-   CaseWorkerDtoRoleDtoEnum,
    ExposureDto,
    ExposureDtoStatusDtoEnum,
    InfectionDto,
    InfectionInformationDto,
+   UserRoleDto,
 } from "../model";
 
 export class Random {
@@ -198,14 +198,16 @@ export class TestSampleData {
 
     sample(modelName: string): any {
         switch(modelName) {
-            case "CaseWorkerDto": return this.sampleCaseWorkerDto({});
-            case "Array<CaseWorkerDto>": return this.sampleArrayCaseWorkerDto({});
-            case "ExposureDto": return this.sampleExposureDto({});
-            case "Array<ExposureDto>": return this.sampleArrayExposureDto({});
-            case "InfectionDto": return this.sampleInfectionDto({});
-            case "Array<InfectionDto>": return this.sampleArrayInfectionDto({});
-            case "InfectionInformationDto": return this.sampleInfectionInformationDto({});
-            case "Array<InfectionInformationDto>": return this.sampleArrayInfectionInformationDto({});
+            case "CaseWorkerDto": return this.sampleCaseWorkerDto();
+            case "Array<CaseWorkerDto>": return this.sampleArrayCaseWorkerDto();
+            case "ExposureDto": return this.sampleExposureDto();
+            case "Array<ExposureDto>": return this.sampleArrayExposureDto();
+            case "InfectionDto": return this.sampleInfectionDto();
+            case "Array<InfectionDto>": return this.sampleArrayInfectionDto();
+            case "InfectionInformationDto": return this.sampleInfectionInformationDto();
+            case "Array<InfectionInformationDto>": return this.sampleArrayInfectionInformationDto();
+            case "UserRoleDto": return this.sampleUserRoleDto();
+            case "Array<UserRoleDto>": return this.sampleArrayUserRoleDto();
             default: throw new Error("Unknown type "+ modelName);
         }
     }
@@ -219,7 +221,7 @@ export class TestSampleData {
             id: this.generate(template?.id, {containerClass, propertyName: "id", isNullable: false }, () => this.sampleString("uuid", "null")),
             fullName: this.generate(template?.fullName, {containerClass, propertyName: "fullName", isNullable: false }, () => this.sampleString("", "Florence Nightingale")),
             email: this.generate(template?.email, {containerClass, propertyName: "email", isNullable: false }, () => this.sampleString("email", "null")),
-            role: this.generate(template?.role, {containerClass, propertyName: "role", example: "null", isNullable: false }, () => this.pickOne([CaseWorkerDtoRoleDtoEnum.Administrator,CaseWorkerDtoRoleDtoEnum.Interviewer,CaseWorkerDtoRoleDtoEnum.Followup])),
+            role: this.generate(template?.role, {containerClass, propertyName: "role", example: "null", isNullable: false }, () => this.sampleUserRoleDto()),
         };
     }
 
@@ -276,6 +278,21 @@ export class TestSampleData {
 
     sampleArrayInfectionInformationDto(template: Factory<InfectionInformationDto> = {}, length?: number): Array<InfectionInformationDto> {
         return this.randomArray(() => this.sampleInfectionInformationDto(template), length ?? this.arrayLength("InfectionInformationDto"));
+    }
+    sampleUserRoleDto(): UserRoleDto {
+        const containerClass = "UserRoleDto";
+        if (typeof(this.sampleModelProperties[containerClass]) === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return this.pickOne([
+                UserRoleDto.Administrator,
+                UserRoleDto.Interviewer,
+                UserRoleDto.Followup
+        ]);
+    }
+
+    sampleArrayUserRoleDto( length?: number): Array<UserRoleDto> {
+        return this.randomArray(() => this.sampleUserRoleDto(), length ?? this.arrayLength("UserRoleDto"));
     }
 
 }

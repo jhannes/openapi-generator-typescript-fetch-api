@@ -202,16 +202,16 @@ export class TestSampleData {
 
     sample(modelName: string): any {
         switch(modelName) {
-            case "CatAllOfDto": return this.sampleCatAllOfDto({});
-            case "Array<CatAllOfDto>": return this.sampleArrayCatAllOfDto({});
-            case "CatDto": return this.sampleCatDto({});
-            case "Array<CatDto>": return this.sampleArrayCatDto({});
-            case "DogAllOfDto": return this.sampleDogAllOfDto({});
-            case "Array<DogAllOfDto>": return this.sampleArrayDogAllOfDto({});
-            case "DogDto": return this.sampleDogDto({});
-            case "Array<DogDto>": return this.sampleArrayDogDto({});
-            case "PetDto": return this.samplePetDto({});
-            case "Array<PetDto>": return this.sampleArrayPetDto({});
+            case "CatAllOfDto": return this.sampleCatAllOfDto();
+            case "Array<CatAllOfDto>": return this.sampleArrayCatAllOfDto();
+            case "CatDto": return this.sampleCatDto();
+            case "Array<CatDto>": return this.sampleArrayCatDto();
+            case "DogAllOfDto": return this.sampleDogAllOfDto();
+            case "Array<DogAllOfDto>": return this.sampleArrayDogAllOfDto();
+            case "DogDto": return this.sampleDogDto();
+            case "Array<DogDto>": return this.sampleArrayDogDto();
+            case "PetDto": return this.samplePetDto();
+            case "Array<PetDto>": return this.sampleArrayPetDto();
             default: throw new Error("Unknown type "+ modelName);
         }
     }

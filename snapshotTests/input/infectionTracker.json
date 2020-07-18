@@ -247,16 +247,19 @@
             "format": "email"
           },
           "role": {
-            "type": "string",
-            "enum": [
-              "administrator",
-              "interviewer",
-              "followup"
-            ]
+            "$ref": "#/components/schemas/UserRole"
           }
         },
         "required": [
           "fullName", "email", "role"
+        ]
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": [
+          "administrator",
+          "interviewer",
+          "followup"
         ]
       },
       "Infection": {

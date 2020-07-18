@@ -1,6 +1,6 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openapitools.codegen.ClientOptInput;
 import org.openapitools.codegen.DefaultGenerator;
 import org.openapitools.codegen.config.CodegenConfigurator;
@@ -20,7 +20,7 @@ public class TypescriptFetchApiGeneratorTest {
     // use this test to launch you code generator in the debugger.
     // this allows you to easily set break points in MyclientcodegenGenerator.
     @Test
-    public void launchCodeGenerator() {
+    void launchCodeGenerator() {
         // to understand how the 'openapi-generator-cli' module is using 'CodegenConfigurator', have a look at the 'Generate' class:
         // https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator-cli/src/main/java/org/openapitools/codegen/cmd/Generate.java
         final CodegenConfigurator configurator = new CodegenConfigurator()
@@ -34,7 +34,7 @@ public class TypescriptFetchApiGeneratorTest {
     }
 
     @Test
-    public void shouldGenerateWithClassHierarchy() {
+    void shouldGenerateWithClassHierarchy() {
       final CodegenConfigurator configurator = new CodegenConfigurator()
               .setGeneratorName("typescript-fetch-api") // use this codegen library
               .setInputSpec("src/test/resources/petstore.yaml")

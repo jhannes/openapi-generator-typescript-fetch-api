@@ -204,8 +204,8 @@ export class TestSampleData {
     sample(modelName: string): any {
         switch(modelName) {
 {{~#models}}{{#model}}{{^oneOf}}
-            case "{{classname}}": return this.sample{{classname}}({});
-            case "Array<{{classname}}>": return this.sampleArray{{classname}}({});{{~/oneOf}}{{/model}}{{~/models}}
+            case "{{classname}}": return this.sample{{classname}}();
+            case "Array<{{classname}}>": return this.sampleArray{{classname}}();{{~/oneOf}}{{/model}}{{~/models}}
             default: throw new Error("Unknown type "+ modelName);
         }
     }
@@ -217,11 +217,11 @@ export class TestSampleData {
         }
 {{~#if isEnum}}
         return this.pickOne([
-        {{#allowableValues}}
-            {{#enumVars}}
+        {{~#allowableValues}}
+            {{~#enumVars}}
                 {{classname}}.{{{name}}}{{#unless @last}},{{/unless}}
-            {{/enumVars}}
-        {{/allowableValues}}
+            {{~/enumVars}}
+        {{~/allowableValues}}
         ]);
 {{~else}}
         return {

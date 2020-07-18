@@ -16,6 +16,7 @@ import {
         ExposureDto,
         InfectionDto,
         InfectionInformationDto,
+        UserRoleDto,
 } from "./model";
 
 import { BaseAPI } from './base';
