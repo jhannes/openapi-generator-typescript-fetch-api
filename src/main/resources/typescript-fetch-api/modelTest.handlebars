@@ -209,7 +209,8 @@ export class TestSampleData {
             default: throw new Error("Unknown type "+ modelName);
         }
     }
-{{#models}}{{#model}}{{^oneOf}}
+{{~#models}}{{~#model}}{{^oneOf}}
+
     sample{{classname}}({{^isEnum}}template: Factory<{{classname}}> = {}{{/isEnum}}): {{classname}} {
         const containerClass = "{{classname}}";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {

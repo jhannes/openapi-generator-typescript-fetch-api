@@ -63,6 +63,7 @@ export interface SampleModelFactories {
     ExposureDto?: Factory<ExposureDto> | ((testData: TestSampleData) => ExposureDto);
     InfectionDto?: Factory<InfectionDto> | ((testData: TestSampleData) => InfectionDto);
     InfectionInformationDto?: Factory<InfectionInformationDto> | ((testData: TestSampleData) => InfectionInformationDto);
+    UserRoleDto?: Factory<UserRoleDto> | ((testData: TestSampleData) => UserRoleDto);
 }
 
 export interface SamplePropertyValues {
@@ -228,6 +229,7 @@ export class TestSampleData {
     sampleArrayCaseWorkerDto(template: Factory<CaseWorkerDto> = {}, length?: number): Array<CaseWorkerDto> {
         return this.randomArray(() => this.sampleCaseWorkerDto(template), length ?? this.arrayLength("CaseWorkerDto"));
     }
+
     sampleExposureDto(template: Factory<ExposureDto> = {}): ExposureDto {
         const containerClass = "ExposureDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {
@@ -248,6 +250,7 @@ export class TestSampleData {
     sampleArrayExposureDto(template: Factory<ExposureDto> = {}, length?: number): Array<ExposureDto> {
         return this.randomArray(() => this.sampleExposureDto(template), length ?? this.arrayLength("ExposureDto"));
     }
+
     sampleInfectionDto(template: Factory<InfectionDto> = {}): InfectionDto {
         const containerClass = "InfectionDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {
@@ -263,6 +266,7 @@ export class TestSampleData {
     sampleArrayInfectionDto(template: Factory<InfectionDto> = {}, length?: number): Array<InfectionDto> {
         return this.randomArray(() => this.sampleInfectionDto(template), length ?? this.arrayLength("InfectionDto"));
     }
+
     sampleInfectionInformationDto(template: Factory<InfectionInformationDto> = {}): InfectionInformationDto {
         const containerClass = "InfectionInformationDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {
@@ -279,6 +283,7 @@ export class TestSampleData {
     sampleArrayInfectionInformationDto(template: Factory<InfectionInformationDto> = {}, length?: number): Array<InfectionInformationDto> {
         return this.randomArray(() => this.sampleInfectionInformationDto(template), length ?? this.arrayLength("InfectionInformationDto"));
     }
+
     sampleUserRoleDto(): UserRoleDto {
         const containerClass = "UserRoleDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {

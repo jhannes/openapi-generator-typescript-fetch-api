@@ -230,6 +230,7 @@ export class TestSampleData {
     sampleArrayCatAllOfDto(template: Factory<CatAllOfDto> = {}, length?: number): Array<CatAllOfDto> {
         return this.randomArray(() => this.sampleCatAllOfDto(template), length ?? this.arrayLength("CatAllOfDto"));
     }
+
     sampleCatDto(template: Factory<CatDto> = {}): CatDto {
         const containerClass = "CatDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {
@@ -247,6 +248,7 @@ export class TestSampleData {
     sampleArrayCatDto(template: Factory<CatDto> = {}, length?: number): Array<CatDto> {
         return this.randomArray(() => this.sampleCatDto(template), length ?? this.arrayLength("CatDto"));
     }
+
     sampleDogAllOfDto(template: Factory<DogAllOfDto> = {}): DogAllOfDto {
         const containerClass = "DogAllOfDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {
@@ -261,6 +263,7 @@ export class TestSampleData {
     sampleArrayDogAllOfDto(template: Factory<DogAllOfDto> = {}, length?: number): Array<DogAllOfDto> {
         return this.randomArray(() => this.sampleDogAllOfDto(template), length ?? this.arrayLength("DogAllOfDto"));
     }
+
     sampleDogDto(template: Factory<DogDto> = {}): DogDto {
         const containerClass = "DogDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {
@@ -278,6 +281,7 @@ export class TestSampleData {
     sampleArrayDogDto(template: Factory<DogDto> = {}, length?: number): Array<DogDto> {
         return this.randomArray(() => this.sampleDogDto(template), length ?? this.arrayLength("DogDto"));
     }
+
     samplePetDto(template: Factory<PetDto> = {}): PetDto {
         const containerClass = "PetDto";
         if (typeof(this.sampleModelProperties[containerClass]) === "function") {
