@@ -26,8 +26,6 @@ import {
 } from "../api";
 
 
-
-
 export function mockDefaultApi(operations: {
         petsPatch?: () => Promise<void>
 }): DefaultApiInterface {

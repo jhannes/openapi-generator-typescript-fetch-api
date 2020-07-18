@@ -14,10 +14,8 @@ import {
     {{classname}}Interface,
 {{~/apis}}{{/apiInfo}}
 } from "../api";
+{{#apiInfo}}{{#apis}}{{#operations}}
 
-
-{{#apiInfo}}{{#apis}}
-{{#operations}}
 export function mock{{classname}}(operations: {
     {{~#operation}}
         {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}}
@@ -30,4 +28,4 @@ export function mock{{classname}}(operations: {
     {{~/operation}}
     };
 }
-{{/operations}}{{/apis}}{{/apiInfo}}
+{{~/operations}}{{~/apis}}{{~/apiInfo}}

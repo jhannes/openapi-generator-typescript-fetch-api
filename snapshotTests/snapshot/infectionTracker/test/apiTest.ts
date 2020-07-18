@@ -27,8 +27,6 @@ import {
 } from "../api";
 
 
-
-
 export function mockCaseWorkersApi(operations: {
         listCaseWorkers?: () => Promise<CaseWorkerDto>
         registerCaseWorker?: () => Promise<void>
@@ -39,7 +37,6 @@ export function mockCaseWorkersApi(operations: {
         registerCaseWorker: (operations.registerCaseWorker || reject("registerCaseWorker")),
     };
 }
-
 
 export function mockCasesApi(operations: {
         getCaseDetails?: () => Promise<InfectionDto>
@@ -55,7 +52,6 @@ export function mockCasesApi(operations: {
         registerExposure: (operations.registerExposure || reject("registerExposure")),
     };
 }
-
 
 export function mockExposuresApi(operations: {
         listExposures?: () => Promise<ExposureDto>
