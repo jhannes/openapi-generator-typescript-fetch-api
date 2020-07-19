@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-unused-vars: off */
 /**
  * Sample API
  * Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
@@ -34,7 +35,6 @@ export interface DefaultApiInterface {
      */
     petsPatch(params?: { 
           anyPetDto?: AnyPetDto,
-          options?: any
     }): Promise<void>;
 }
 
@@ -50,13 +50,11 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async petsPatch(params: { 
           anyPetDto?: AnyPetDto,
-          options?: any
     }): Promise<void> {
         return await this.PATCH(
             "/pets",
             {},
             { body: params.anyPetDto, contentType: "application/json" },
-            params && params.options,
         );
     }
 

@@ -1,4 +1,4 @@
-// tslint:disable
+/* eslint @typescript-eslint/no-unused-vars: off */
 /**
  * Infection Tracker
  * Infection Tracker - A case management system for tracking the spread of diseases

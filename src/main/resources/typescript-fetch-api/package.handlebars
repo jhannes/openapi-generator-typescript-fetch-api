@@ -15,13 +15,32 @@
   "typings": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc --outDir dist/",
+    "lint": "eslint . --ext .ts",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.5.0"
   }{{#npmRepository}},
   "publishConfig": {
     "registry": "{{npmRepository}}"
   }
-{{/npmRepository}}
+{{/npmRepository}},
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+    },
+    "ignorePatterns": ["dist/**"]
+  }
 }

@@ -31,7 +31,7 @@ export class Random {
         return this.next() % limit;
     }
 
-    nextBoolean() {
+    nextBoolean(): boolean {
         return this.nextInt(2) == 0;
     }
 
@@ -40,13 +40,13 @@ export class Random {
     }
 
     pickSome<T>(options: Array<T>, n?: number): T[] {
-        var shuffled = options.sort(() => (.5 - this.next()));
+        const shuffled = options.sort(() => (.5 - this.next()));
         return shuffled.slice(0, n||this.nextInt(options.length));
     }
 
-    uuidv4() {
+    uuidv4(): string {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-            var r = this.nextInt(16) | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            const r = this.nextInt(16) | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
@@ -67,6 +67,7 @@ export interface SampleModelFactories {
 }
 
 export interface SamplePropertyValues {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: (sampleData: TestSampleData) => any;
 }
 
@@ -80,12 +81,14 @@ export interface TestData {
 export interface PropertyDefinition {
     containerClass: string;
     propertyName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     example?: string|null|Array<any>;
     isNullable?: boolean;
 }
 
 export class TestSampleData {
     random: Random;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sampleModelProperties: any;
     samplePropertyValues: SamplePropertyValues;
     now: Date;
@@ -97,59 +100,59 @@ export class TestSampleData {
         this.samplePropertyValues = samplePropertyValues || {};
     }
 
-    nextFloat() { return this.random.nextFloat(); }
+    nextFloat(): number { return this.random.nextFloat(); }
 
-    nextInt(limit: number) { return this.random.nextInt(limit); }
+    nextInt(limit: number): number { return this.random.nextInt(limit); }
 
-    nextBoolean() { return this.random.nextBoolean(); }
+    nextBoolean(): boolean { return this.random.nextBoolean(); }
 
-    sampleboolean() { return this.random.nextBoolean(); }
+    sampleboolean(): boolean { return this.random.nextBoolean(); }
 
-    pickOne<T>(options: Array<T>) { return this.random.pickOne(options); }
+    pickOne<T>(options: Array<T>): T { return this.random.pickOne(options); }
 
-    pickSome<T>(options: Array<T>) { return this.random.pickSome(options); }
+    pickSome<T>(options: Array<T>): T[] { return this.random.pickSome(options); }
 
-    uuidv4() { return this.random.uuidv4(); }
+    uuidv4(): string { return this.random.uuidv4(); }
 
-    randomArray(generator: (n: number) => any, length?: number) {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         return Array.from({length: length || this.nextInt(3) + 1}).map((_, index) => generator(index));
     }
 
-    randomEmail() {
+    randomEmail(): string {
         return this.randomFirstName().toLowerCase() +
             "." + this.randomLastName().toLowerCase() +
             "@" + this.randomDomain();
     }
 
-    randomFirstName() {
+    randomFirstName(): string {
         return this.pickOne(["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda"]);
     }
 
-    randomLastName() {
+    randomLastName(): string {
         return this.pickOne(["Smith", "Williams", "Johnson", "Jones", "Brown", "Davis", "Miller", "Wilson"]);
     }
 
-    randomFullName() {
+    randomFullName(): string {
         return this.randomFirstName() + " " + this.randomLastName();
     }
 
-    randomDomain() {
+    randomDomain(): string {
         return this.pickOne(["a", "b", "c", "d", "e"]) + ".example." + this.pickOne(["net", "com", "org"]);
     }
 
-    randomPastDateTime(now: Date) {
+    randomPastDateTime(now: Date): Date {
         return new Date((now.getTime() - this.nextInt(4*7*24*60*60*1000)));
     }
 
-    sampleDateTime() {
+    sampleDateTime(): Date {
         return this.randomPastDateTime(this.now);
     }
 
-    samplenumber() {
+    samplenumber(): number {
         return this.nextInt(10000);
     }
 
-    sampleDate() {
+    sampleDate(): Date {
         return this.randomPastDateTime(this.now);
     }
 
@@ -168,9 +171,10 @@ export class TestSampleData {
     }
 
     sampleArrayString(length?: number): Array<string> {
-        return Array.from({length: length || this.arrayLength("string")}).map(() => this.sampleString());
+        return Array.from({length: length || this.arrayLength()}).map(() => this.sampleString());
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     generate(template?: ((sampleData: TestSampleData) => any)|any, propertyDefinition?: PropertyDefinition, generator?: () => any): any {
         if (template) {
            return typeof(template) === "function" ? template(this) : template;
@@ -178,6 +182,7 @@ export class TestSampleData {
         if (propertyDefinition) {
             const {containerClass, propertyName, example} = propertyDefinition;
             if (this.sampleModelProperties[containerClass]) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const propertyFactory: Factory<any> = this.sampleModelProperties[containerClass][propertyName];
                 if (propertyFactory && typeof(propertyFactory) === "function") {
                     return propertyFactory(this);
@@ -193,10 +198,11 @@ export class TestSampleData {
         return generator && generator();
     }
 
-    arrayLength(modelClass: string) {
+    arrayLength(): number {
         return this.nextInt(3) + 1;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
         switch(modelName) {
             case "CaseWorkerDto": return this.sampleCaseWorkerDto();
@@ -227,7 +233,7 @@ export class TestSampleData {
     }
 
     sampleArrayCaseWorkerDto(template: Factory<CaseWorkerDto> = {}, length?: number): Array<CaseWorkerDto> {
-        return this.randomArray(() => this.sampleCaseWorkerDto(template), length ?? this.arrayLength("CaseWorkerDto"));
+        return this.randomArray(() => this.sampleCaseWorkerDto(template), length ?? this.arrayLength());
     }
 
     sampleExposureDto(template: Factory<ExposureDto> = {}): ExposureDto {
@@ -248,7 +254,7 @@ export class TestSampleData {
     }
 
     sampleArrayExposureDto(template: Factory<ExposureDto> = {}, length?: number): Array<ExposureDto> {
-        return this.randomArray(() => this.sampleExposureDto(template), length ?? this.arrayLength("ExposureDto"));
+        return this.randomArray(() => this.sampleExposureDto(template), length ?? this.arrayLength());
     }
 
     sampleInfectionDto(template: Factory<InfectionDto> = {}): InfectionDto {
@@ -264,7 +270,7 @@ export class TestSampleData {
     }
 
     sampleArrayInfectionDto(template: Factory<InfectionDto> = {}, length?: number): Array<InfectionDto> {
-        return this.randomArray(() => this.sampleInfectionDto(template), length ?? this.arrayLength("InfectionDto"));
+        return this.randomArray(() => this.sampleInfectionDto(template), length ?? this.arrayLength());
     }
 
     sampleInfectionInformationDto(template: Factory<InfectionInformationDto> = {}): InfectionInformationDto {
@@ -281,7 +287,7 @@ export class TestSampleData {
     }
 
     sampleArrayInfectionInformationDto(template: Factory<InfectionInformationDto> = {}, length?: number): Array<InfectionInformationDto> {
-        return this.randomArray(() => this.sampleInfectionInformationDto(template), length ?? this.arrayLength("InfectionInformationDto"));
+        return this.randomArray(() => this.sampleInfectionInformationDto(template), length ?? this.arrayLength());
     }
 
     sampleUserRoleDto(): UserRoleDto {
@@ -297,7 +303,7 @@ export class TestSampleData {
     }
 
     sampleArrayUserRoleDto( length?: number): Array<UserRoleDto> {
-        return this.randomArray(() => this.sampleUserRoleDto(), length ?? this.arrayLength("UserRoleDto"));
+        return this.randomArray(() => this.sampleUserRoleDto(), length ?? this.arrayLength());
     }
 
 }

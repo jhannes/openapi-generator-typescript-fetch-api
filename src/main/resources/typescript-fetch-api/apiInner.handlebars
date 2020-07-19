@@ -17,13 +17,12 @@ export interface {{classname}}Interface {
      * @throws {HttpError}
      * @memberof {{classname}}
      */
-    {{nickname}}(params?: { {{#pathParams.0}}
+    {{nickname}}({{#hasParams}}params?: { {{#pathParams.0}}
           pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/pathParams}} },{{/pathParams.0}}{{#queryParams.0}}
           queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} },{{/queryParams.0}}{{#bodyParam}}
           {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
-          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }, {{/hasFormParams}}
-          options?: any
-    }): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
+          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }{{/hasFormParams}}
+    }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
 {{~/operation}}
 }
 {{/operations}}{{/withInterfaces}}
@@ -47,13 +46,12 @@ export class {{classname}} extends BaseAPI {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async {{nickname}}(params{{^allParams}}?{{/allParams}}: { {{#pathParams.0}}
+    public async {{nickname}}({{#hasParams}}params{{^allParams}}?{{/allParams}}: { {{#pathParams.0}}
           pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/pathParams}} },{{/pathParams.0}}{{#queryParams.0}}
           queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} },{{/queryParams.0}}{{#bodyParam}}
           {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
-          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }, {{/hasFormParams}}
-          options?: any
-    }): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
+          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }{{/hasFormParams}}
+    }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
         return await this.{{httpMethod}}(
             {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
             {{#if queryParams}}params && params.queryParams{{else}}{}{{/if}},
@@ -61,10 +59,7 @@ export class {{classname}} extends BaseAPI {
             { body: params.{{bodyParam.paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes}}"{{{mediaType}}}"{{/consumes}} },
             {{~else if hasFormParams}}
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
-            {{~else}}
-            undefined,
             {{~/if}}
-            params && params.options,
         );
     }
 {{/operation}}

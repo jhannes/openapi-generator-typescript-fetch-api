@@ -1,4 +1,5 @@
-// tslint:disable
+/* eslint @typescript-eslint/no-explicit-any: off */
+/* eslint @typescript-eslint/explicit-module-boundary-types: off */
 /**
  * Infection Tracker
  * Infection Tracker - A case management system for tracking the spread of diseases
@@ -118,14 +119,14 @@ export class BaseAPI {
         return pathTemplate.replace(/{(\w+)}/g, (match, g) => params[g]);
     }
 
-    protected async GET(path: string, queryParams: any, requestBody?: RequestBody, options?: any) : Promise<any> {
+    protected async GET(path: string, queryParams: any) : Promise<any> {
         const result = await fetch(this.basePath + path + this.query(queryParams), {
             credentials: 'same-origin',
         });
         return await this.handleResponse(result);
     }
 
-    protected async PUT(path: string, queryParams: any, requestBody?: RequestBody, options?: any) : Promise<any> {
+    protected async PUT(path: string, queryParams: any, requestBody?: RequestBody) : Promise<any> {
         const headers:any = {};
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -140,7 +141,7 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async POST(path: string, queryParams: any, requestBody?: RequestBody, options?: any) : Promise<any> {
+    protected async POST(path: string, queryParams: any, requestBody?: RequestBody) : Promise<any> {
         const headers:any = {};
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -155,7 +156,7 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async PATCH(path: string, queryParams: any, requestBody?: RequestBody, options?: any) : Promise<any> {
+    protected async PATCH(path: string, queryParams: any, requestBody?: RequestBody) : Promise<any> {
         const headers:any = {};
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -170,7 +171,7 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async DELETE(path: string, queryParams: any, requestBody?: RequestBody, options?: any) : Promise<void> {
+    protected async DELETE(path: string, queryParams: any, requestBody?: RequestBody) : Promise<void> {
         const headers:any = {};
         const body = this.createRequestBody(requestBody);
         if (requestBody) {

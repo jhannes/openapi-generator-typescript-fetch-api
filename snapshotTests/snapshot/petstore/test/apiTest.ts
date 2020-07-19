@@ -1,4 +1,4 @@
-// tslint:disable
+/* eslint @typescript-eslint/no-unused-vars: off */
 /**
  * Sample API
  * Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
