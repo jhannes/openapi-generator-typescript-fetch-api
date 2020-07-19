@@ -4,12 +4,10 @@
 import {
 {{~#models}}
     {{~#model}}
-        {{classname}},
+    {{classname}},
     {{~/model}}
 {{~/models}}
 } from "./model";
 
-import { BaseAPI } from './base';
-
+import { BaseAPI } from "./base";
 {{#apiInfo}}{{#apis}}{{>apiInner}}{{/apis}}{{/apiInfo}}
-

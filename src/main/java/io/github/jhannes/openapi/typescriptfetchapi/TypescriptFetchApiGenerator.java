@@ -146,6 +146,14 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
 
     }
 
+    public String toEnumValue(String value, String datatype) {
+        if ("number".equals(datatype)) {
+            return value;
+        } else {
+            return "\"" + escapeText(value) + "\"";
+        }
+    }
+
     @Override
     public Map<String, Object> postProcessOperationsWithModels(Map<String, Object> objs, List<Object> allModels) {
     /*

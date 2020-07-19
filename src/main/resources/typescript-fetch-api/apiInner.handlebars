@@ -1,5 +1,5 @@
 {{~#withInterfaces~}}
-{{~#operations~}}
+{{~#operations}}
 /**
  * {{classname}} - object-oriented interface
 {{~#description}}
@@ -9,7 +9,7 @@
 export interface {{classname}}Interface {
 {{~#operation}}
     /**
-     * {{&notes}}
+     *
      {{~#summary}}
      * @summary {{summary}}
      {{~/summary}}
@@ -17,16 +17,16 @@ export interface {{classname}}Interface {
      * @throws {HttpError}
      * @memberof {{classname}}
      */
-    {{nickname}}({{#hasParams}}params?: { {{#pathParams.0}}
-          pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/pathParams}} },{{/pathParams.0}}{{#queryParams.0}}
-          queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} },{{/queryParams.0}}{{#bodyParam}}
-          {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
-          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }{{/hasFormParams}}
+    {{nickname}}({{#hasParams}}params?: { {{~#pathParams.0}}
+        pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/pathParams.0}}{{#queryParams.0}}
+        queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/queryParams.0}}{{#bodyParam}}
+        {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
+        formParams: { {{#formParams}}{{paramName}}:{{{dataType}}};{{/formParams}} }{{/hasFormParams}}
     }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
 {{~/operation}}
 }
-{{/operations}}{{/withInterfaces}}
-{{#operations}}
+{{/operations}}{{~/withInterfaces}}
+{{~#operations}}
 /**
  * {{classname}} - object-oriented interface{{#description}}
  * {{{description}}}{{/description}}
@@ -39,29 +39,29 @@ export class {{classname}} extends BaseAPI {
 {{~/withInterfaces}}
 {{~#operation}}
     /**
-     * {{&notes}}
+     *
      {{~#summary}}
      * @summary {{&summary}}
      {{~/summary}}
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async {{nickname}}({{#hasParams}}params{{^allParams}}?{{/allParams}}: { {{#pathParams.0}}
-          pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/pathParams}} },{{/pathParams.0}}{{#queryParams.0}}
-          queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} },{{/queryParams.0}}{{#bodyParam}}
-          {{paramName}}{{^required}}?{{/required}}: {{{dataType}}},{{/bodyParam}}{{#hasFormParams}}
-          formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }{{/hasFormParams}}
+    public async {{nickname}}({{#hasParams}}params{{^allParams}}?{{/allParams}}: { {{~#pathParams.0}}
+        pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/pathParams.0}}{{#queryParams.0}}
+        queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/queryParams.0}}{{#bodyParam}}
+        {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
+        formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }{{/hasFormParams}}
     }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
         return await this.{{httpMethod}}(
             {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
             {{#if queryParams}}params && params.queryParams{{else}}{}{{/if}},
             {{~#if bodyParam}}
-            { body: params.{{bodyParam.paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes}}"{{{mediaType}}}"{{/consumes}} },
+            { body: params.{{bodyParam.paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes}}"{{{mediaType}}}"{{/consumes}} }
             {{~else if hasFormParams}}
-            { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
+            { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
             {{~/if}}
         );
     }
-{{/operation}}
+{{~/operation}}
 }
 {{~/operations}}

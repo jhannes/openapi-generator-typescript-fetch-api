@@ -1,12 +1,12 @@
 import {
 {{~#models}}
 {{~#model}}
-   {{classname}},
+    {{classname}},
 {{~^oneOf}}
 {{~#vars}}
-   {{~#isEnum}}
-   {{datatypeWithEnum}},
-   {{~/isEnum}}
+    {{~#isEnum}}
+    {{datatypeWithEnum}},
+    {{~/isEnum}}
 {{~/vars}}
 {{~/oneOf}}
 {{~/model}}
@@ -21,7 +21,7 @@ export class Random {
     }
 
     next(): number {
-        this.seed = this.seed * 16807 % 2147483647;
+        this.seed = (this.seed * 16807) % 2147483647;
         return this.seed;
     }
 
@@ -46,22 +46,21 @@ export class Random {
     }
 
     pickSome<T>(options: Array<T>, n?: number): T[] {
-        const shuffled = options.sort(() => (.5 - this.next()));
-        return shuffled.slice(0, n||this.nextInt(options.length));
+        const shuffled = options.sort(() => 0.5 - this.next());
+        return shuffled.slice(0, n || this.nextInt(options.length));
     }
 
     uuidv4(): string {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-            const r = this.nextInt(16) | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+            const r = this.nextInt(16) | 0;
+            const v = c == "x" ? r : (r & 0x3) | 0x8;
             return v.toString(16);
         });
     }
 }
 
-
-
 type Factory<T> = {
-    [P in keyof T]?: ((sampleData: TestSampleData) => T[P])|T[P];
+    [P in keyof T]?: ((sampleData: TestSampleData) => T[P]) | T[P];
 };
 
 export interface SampleModelFactories {
@@ -86,7 +85,7 @@ export interface PropertyDefinition {
     containerClass: string;
     propertyName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    example?: string|null|Array<any>;
+    example?: string | null | Array<any>;
     isNullable?: boolean;
 }
 
@@ -97,43 +96,62 @@ export class TestSampleData {
     samplePropertyValues: SamplePropertyValues;
     now: Date;
 
-    constructor({seed, sampleModelProperties, samplePropertyValues, now}: TestData) {
+    constructor({ seed, sampleModelProperties, samplePropertyValues, now }: TestData) {
         this.random = new Random(seed || 100);
         this.now = now || new Date(2019, 1, seed);
         this.sampleModelProperties = sampleModelProperties || {};
         this.samplePropertyValues = samplePropertyValues || {};
     }
 
-    nextFloat(): number { return this.random.nextFloat(); }
+    nextFloat(): number {
+        return this.random.nextFloat();
+    }
 
-    nextInt(limit: number): number { return this.random.nextInt(limit); }
+    nextInt(limit: number): number {
+        return this.random.nextInt(limit);
+    }
 
-    nextBoolean(): boolean { return this.random.nextBoolean(); }
+    nextBoolean(): boolean {
+        return this.random.nextBoolean();
+    }
 
-    sampleboolean(): boolean { return this.random.nextBoolean(); }
+    sampleboolean(): boolean {
+        return this.random.nextBoolean();
+    }
 
-    pickOne<T>(options: Array<T>): T { return this.random.pickOne(options); }
+    pickOne<T>(options: Array<T>): T {
+        return this.random.pickOne(options);
+    }
 
-    pickSome<T>(options: Array<T>): T[] { return this.random.pickSome(options); }
+    pickSome<T>(options: Array<T>): T[] {
+        return this.random.pickSome(options);
+    }
 
-    uuidv4(): string { return this.random.uuidv4(); }
+    uuidv4(): string {
+        return this.random.uuidv4();
+    }
 
     randomArray<T>(generator: (n: number) => T, length?: number): T[] {
-        return Array.from({length: length || this.nextInt(3) + 1}).map((_, index) => generator(index));
+        if (!length) length = this.nextInt(3) + 1;
+        return Array.from({ length }).map((_, index) => generator(index));
     }
 
     randomEmail(): string {
-        return this.randomFirstName().toLowerCase() +
-            "." + this.randomLastName().toLowerCase() +
-            "@" + this.randomDomain();
+        return (
+            this.randomFirstName().toLowerCase() +
+            "." +
+            this.randomLastName().toLowerCase() +
+            "@" +
+            this.randomDomain()
+        );
     }
 
     randomFirstName(): string {
-        return this.pickOne(["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda"]);
+        return this.pickOne(["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Linda"]);
     }
 
     randomLastName(): string {
-        return this.pickOne(["Smith", "Williams", "Johnson", "Jones", "Brown", "Davis", "Miller", "Wilson"]);
+        return this.pickOne(["Smith", "Williams", "Johnson", "Jones", "Brown", "Davis", "Wilson"]);
     }
 
     randomFullName(): string {
@@ -141,11 +159,15 @@ export class TestSampleData {
     }
 
     randomDomain(): string {
-        return this.pickOne(["a", "b", "c", "d", "e"]) + ".example." + this.pickOne(["net", "com", "org"]);
+        return (
+            this.pickOne(["a", "b", "c", "d", "e"]) +
+            ".example." +
+            this.pickOne(["net", "com", "org"])
+        );
     }
 
     randomPastDateTime(now: Date): Date {
-        return new Date((now.getTime() - this.nextInt(4*7*24*60*60*1000)));
+        return new Date(now.getTime() - this.nextInt(4 * 7 * 24 * 60 * 60 * 1000));
     }
 
     sampleDateTime(): Date {
@@ -175,20 +197,25 @@ export class TestSampleData {
     }
 
     sampleArrayString(length?: number): Array<string> {
-        return Array.from({length: length || this.arrayLength()}).map(() => this.sampleString());
+        return Array.from({ length: length || this.arrayLength() }).map(() => this.sampleString());
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    generate(template?: ((sampleData: TestSampleData) => any)|any, propertyDefinition?: PropertyDefinition, generator?: () => any): any {
+    generate(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        template?: ((sampleData: TestSampleData) => any) | any,
+        propertyDefinition?: PropertyDefinition,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        generator?: () => any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ): any {
         if (template) {
-           return typeof(template) === "function" ? template(this) : template;
+            return typeof template === "function" ? template(this) : template;
         }
         if (propertyDefinition) {
-            const {containerClass, propertyName, example} = propertyDefinition;
+            const { containerClass, propertyName, example } = propertyDefinition;
             if (this.sampleModelProperties[containerClass]) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const propertyFactory: Factory<any> = this.sampleModelProperties[containerClass][propertyName];
-                if (propertyFactory && typeof(propertyFactory) === "function") {
+                const propertyFactory = this.sampleModelProperties[containerClass][propertyName];
+                if (propertyFactory && typeof propertyFactory === "function") {
                     return propertyFactory(this);
                 } else if (propertyFactory) {
                     return propertyFactory;
@@ -208,25 +235,28 @@ export class TestSampleData {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
-        switch(modelName) {
+        switch (modelName) {
 {{~#models}}{{#model}}{{^oneOf}}
-            case "{{classname}}": return this.sample{{classname}}();
-            case "Array<{{classname}}>": return this.sampleArray{{classname}}();{{~/oneOf}}{{/model}}{{~/models}}
-            default: throw new Error("Unknown type "+ modelName);
+            case "{{classname}}":
+                return this.sample{{classname}}();
+            case "Array<{{classname}}>":
+                return this.sampleArray{{classname}}();{{~/oneOf}}{{/model}}{{~/models}}
+            default:
+                throw new Error("Unknown type " + modelName);
         }
     }
 {{~#models}}{{~#model}}{{^oneOf}}
 
     sample{{classname}}({{^isEnum}}template: Factory<{{classname}}> = {}{{/isEnum}}): {{classname}} {
         const containerClass = "{{classname}}";
-        if (typeof(this.sampleModelProperties[containerClass]) === "function") {
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
 {{~#if isEnum}}
         return this.pickOne([
         {{~#allowableValues}}
             {{~#enumVars}}
-                {{classname}}.{{{name}}}{{#unless @last}},{{/unless}}
+            {{classname}}.{{{name}}},
             {{~/enumVars}}
         {{~/allowableValues}}
         ]);
@@ -235,22 +265,46 @@ export class TestSampleData {
 {{~#allVars}}
 {{~#isString}}
 {{~^isEnum}}
-            {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}", isNullable: {{isNullable}} }, () => this.sampleString({{#if dataFormat}}"{{dataFormat}}"{{else}}""{{/if}}{{#example}}, "{{{example}}}"{{/example}})),
+            {{name}}: this.generate(
+                template?.{{name}},
+                { containerClass, propertyName: "{{{name}}}", isNullable: {{isNullable}} },
+                () => this.sampleString({{#if dataFormat}}"{{dataFormat}}"{{else}}""{{/if}}{{#example}}, "{{{example}}}"{{/example}})
+            ),
 {{~/isEnum}}
 {{~#isEnum}}
-            {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} }, () => {{^isContainer}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{datatypeWithEnum}}.{{{name}}}{{#unless @last}},{{/unless}}{{/enumVars}}{{/allowableValues}}]){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{datatypeWithEnum}}.{{{name}}}{{#unless @last}},{{/unless}}{{/enumVars}}{{/allowableValues}}]){{/mostInnerItems}}{{/isContainer}}),
+            {{name}}: this.generate(
+                template?.{{name}},
+                { containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
+                () =>
+                    {{^isContainer}}this.pickOne([{{#allowableValues}}{{#enumVars}}
+                        {{datatypeWithEnum}}.{{{name}}},
+                {{~/enumVars}}{{/allowableValues}}
+                    ]){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{datatypeWithEnum}}.{{{name}}}{{#unless @last}},{{/unless}}{{/enumVars}}{{/allowableValues}}]){{/mostInnerItems}}{{/isContainer}}
+            ),
 {{~/isEnum}}
 {{~/isString}}
 {{~#isDateTime}}
-            {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} }, () => this.sampleDate()),
+            {{name}}: this.generate(
+                template?.{{name}},
+                { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
+                () => this.sampleDate()
+            ),
 {{~/isDateTime}}
 {{~^isString}}
 {{~^isDateTime}}
 {{~#isContainer}}
-            {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} }, () => {{#items}}{{#isString}}this.sampleArrayString{{/isString}}{{^isString}}this.sampleArray{{dataType}}{{/isString}}{{/items}}()),
+            {{name}}: this.generate(
+                template?.{{name}},
+                { containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
+                () => {{#items}}{{#isString}}this.sampleArrayString{{/isString}}{{^isString}}this.sampleArray{{dataType}}{{/isString}}{{/items}}()
+            ),
 {{~/isContainer}}
 {{~^isContainer}}
-            {{name}}: this.generate(template?.{{name}}, {containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} }, () => this.sample{{dataType}}()),
+            {{name}}: this.generate(
+                template?.{{name}},
+                { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
+                () => this.sample{{dataType}}()
+            ),
 {{~/isContainer}}
 {{~/isDateTime}}
 {{~/isString}}
@@ -259,11 +313,16 @@ export class TestSampleData {
 {{~/if}}
     }
 
-    sampleArray{{classname}}({{^isEnum}}template: Factory<{{classname}}> = {},{{/isEnum}} length?: number): Array<{{classname}}> {
-        return this.randomArray(() => this.sample{{classname}}({{^isEnum}}template{{/isEnum}}), length ?? this.arrayLength());
+    sampleArray{{classname}}{{^isEnum}}(
+        template: Factory<{{classname}}> = {},
+        length?: number
+    ){{/isEnum}}{{#isEnum}}(length?: number){{/isEnum}}: Array<{{classname}}> {
+        return this.randomArray(
+            () => this.sample{{classname}}({{^isEnum}}template{{/isEnum}}),
+            length ?? this.arrayLength()
+        );
     }
 {{~/oneOf}}
 {{~/model}}
 {{~/models}}
-
 }

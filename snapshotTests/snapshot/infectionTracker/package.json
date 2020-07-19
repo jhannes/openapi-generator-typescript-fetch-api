@@ -1,42 +1,55 @@
 {
-  "name": "infectionTracker",
-  "version": "1.0.0-draft",
-  "description": "OpenAPI client for infectionTracker",
-  "author": "OpenAPI-Generator Contributors",
-  "keywords": [
-    "typescript",
-    "openapi-client",
-    "openapi-generator",
-    "infectionTracker"
-  ],
-  "license": "Unlicense",
-  "files": [ "dist" ],
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc --outDir dist/",
-    "lint": "eslint . --ext .ts",
-    "prepublishOnly": "npm run build"
-  },
-  "devDependencies": {
-    "typescript": "^3.4.5",
-    "@typescript-eslint/eslint-plugin": "^3.6.1",
-    "@typescript-eslint/parser": "^3.6.1",
-    "eslint": "^7.5.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
+    "name": "infectionTracker",
+    "version": "1.0.0-draft",
+    "description": "OpenAPI client for infectionTracker",
+    "author": "OpenAPI-Generator Contributors",
+    "keywords": [
+        "typescript",
+        "openapi-client",
+        "openapi-generator",
+        "infectionTracker"
     ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
+    "license": "Unlicense",
+    "files": [
+        "dist"
     ],
-    "rules": {
+    "main": "./dist/index.js",
+    "typings": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsc --outDir dist/",
+        "lint": "eslint . --ext .ts",
+        "format": "prettier --write *.ts test/*.ts *.json",
+        "prepublishOnly": "npm run build"
     },
-    "ignorePatterns": ["dist/**"]
-  }
+    "devDependencies": {
+        "typescript": "^3.4.5",
+        "eslint": "^7.5.0",
+        "prettier": "^2.0.5",
+        "@typescript-eslint/eslint-plugin": "^3.6.1",
+        "@typescript-eslint/parser": "^3.6.1",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.4"
+    },
+    "eslintConfig": {
+        "root": true,
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint"
+        ],
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/eslint-recommended",
+            "plugin:@typescript-eslint/recommended",
+            "prettier"
+        ],
+        "rules": {
+        },
+        "ignorePatterns": [
+            "dist/**"
+        ]
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "printWidth": 100
+    }
 }

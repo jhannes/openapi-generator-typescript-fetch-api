@@ -4,7 +4,7 @@
 import {
 {{~#models}}
     {{~#model}}
-        {{classname}},
+    {{classname}},
     {{~/model}}
 {{~/models}}
 } from "../model";
@@ -14,17 +14,21 @@ import {
     {{classname}}Interface,
 {{~/apis}}{{/apiInfo}}
 } from "../api";
-{{#apiInfo}}{{#apis}}{{#operations}}
+
+function reject(operation: string) {
+    return () => Promise.reject(new Error("Unexpected function call " + operation));
+}
+
+{{~#apiInfo}}{{~#apis}}{{~#operations}}
 
 export function mock{{classname}}(operations: {
     {{~#operation}}
-        {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}}
+    {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
     {{~/operation}}
 }): {{classname}}Interface {
-    const reject = (operation: string) => () => Promise.reject(new Error("Unexpected function call " + operation));
     return {
     {{~#operation}}
-        {{nickname}}: (operations.{{nickname}} || reject("{{nickname}}")),
+        {{nickname}}: operations.{{nickname}} || reject("{{nickname}}"),
     {{~/operation}}
     };
 }

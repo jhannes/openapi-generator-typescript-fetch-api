@@ -19,8 +19,8 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
 {{~/vars}}
 }
 
-{{#hasEnums}}{{#vars}}{{#isEnum~}}
-{{~#description}}
+{{~#hasEnums}}{{~#vars}}{{~#isEnum}}
+{{#description~}}
 /**
  * {{{description}}}
  */
@@ -28,8 +28,8 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
 export enum {{enumName}} {
 {{~#allowableValues}}
     {{~#enumVars}}
-    {{{name}}} = {{{value}}}{{#unless @last}},{{/unless}}
+    {{{name}}} = {{{value}}},
     {{~/enumVars}}
 {{~/allowableValues}}
 }
-{{/isEnum}}{{/vars}}{{/hasEnums}}
+{{~/isEnum}}{{~/vars}}{{~/hasEnums}}
