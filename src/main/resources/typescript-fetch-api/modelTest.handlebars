@@ -63,9 +63,11 @@ type Factory<T> = {
     [P in keyof T]?: ((sampleData: TestSampleData) => T[P]) | T[P];
 };
 
+type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
+
 export interface SampleModelFactories {
 {{~#models}}{{#model}}
-    {{classname}}?: Factory<{{classname}}> | ((testData: TestSampleData) => {{classname}});
+    {{classname}}?: ModelFactory<{{classname}}>;
 {{~/model}}{{/models}}
 }
 

@@ -47,6 +47,20 @@
             "prettier"
         ],
         "rules": {
+            "comma-dangle": [ "warn", "always-multiline" ],
+            "indent": [ "error", 4, { "SwitchCase": 1 } ],
+            "linebreak-style": [ "error", "unix" ],
+            "max-len": [ "warn", 100, {
+                    "comments":  140,
+                    "ignorePattern": "\\{ containerClass, propertyName:|sample\\w+Dto\\(template: Factory"
+                }
+            ],
+            "no-trailing-spaces": "error",
+            "quotes": "warn",
+            "@typescript-eslint/explicit-function-return-type": [
+                "warn",
+                {"allowExpressions":  true }
+            ]
         },
         "ignorePatterns": [
             "dist/**"

@@ -57,12 +57,14 @@ type Factory<T> = {
     [P in keyof T]?: ((sampleData: TestSampleData) => T[P]) | T[P];
 };
 
+type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
+
 export interface SampleModelFactories {
-    CaseWorkerDto?: Factory<CaseWorkerDto> | ((testData: TestSampleData) => CaseWorkerDto);
-    ExposureDto?: Factory<ExposureDto> | ((testData: TestSampleData) => ExposureDto);
-    InfectionDto?: Factory<InfectionDto> | ((testData: TestSampleData) => InfectionDto);
-    InfectionInformationDto?: Factory<InfectionInformationDto> | ((testData: TestSampleData) => InfectionInformationDto);
-    UserRoleDto?: Factory<UserRoleDto> | ((testData: TestSampleData) => UserRoleDto);
+    CaseWorkerDto?: ModelFactory<CaseWorkerDto>;
+    ExposureDto?: ModelFactory<ExposureDto>;
+    InfectionDto?: ModelFactory<InfectionDto>;
+    InfectionInformationDto?: ModelFactory<InfectionInformationDto>;
+    UserRoleDto?: ModelFactory<UserRoleDto>;
 }
 
 export interface SamplePropertyValues {

@@ -59,13 +59,15 @@ type Factory<T> = {
     [P in keyof T]?: ((sampleData: TestSampleData) => T[P]) | T[P];
 };
 
+type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
+
 export interface SampleModelFactories {
-    AnyPetDto?: Factory<AnyPetDto> | ((testData: TestSampleData) => AnyPetDto);
-    CatAllOfDto?: Factory<CatAllOfDto> | ((testData: TestSampleData) => CatAllOfDto);
-    CatDto?: Factory<CatDto> | ((testData: TestSampleData) => CatDto);
-    DogAllOfDto?: Factory<DogAllOfDto> | ((testData: TestSampleData) => DogAllOfDto);
-    DogDto?: Factory<DogDto> | ((testData: TestSampleData) => DogDto);
-    PetDto?: Factory<PetDto> | ((testData: TestSampleData) => PetDto);
+    AnyPetDto?: ModelFactory<AnyPetDto>;
+    CatAllOfDto?: ModelFactory<CatAllOfDto>;
+    CatDto?: ModelFactory<CatDto>;
+    DogAllOfDto?: ModelFactory<DogAllOfDto>;
+    DogDto?: ModelFactory<DogDto>;
+    PetDto?: ModelFactory<PetDto>;
 }
 
 export interface SamplePropertyValues {
