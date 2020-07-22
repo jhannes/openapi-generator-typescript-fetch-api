@@ -28,7 +28,7 @@ export function mock{{classname}}(operations: {
 }): {{classname}}Interface {
     return {
     {{~#operation}}
-        {{nickname}}: operations.{{nickname}} || reject("{{nickname}}"),
+        {{nickname}}: operations.{{nickname}} || reject("{{classname}}.{{nickname}}"),
     {{~/operation}}
     };
 }

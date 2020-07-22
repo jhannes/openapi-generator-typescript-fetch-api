@@ -32,6 +32,6 @@ export function mockDefaultApi(operations: {
     petsPatch?: () => Promise<void>;
 }): DefaultApiInterface {
     return {
-        petsPatch: operations.petsPatch || reject("petsPatch"),
+        petsPatch: operations.petsPatch || reject("DefaultApi.petsPatch"),
     };
 }

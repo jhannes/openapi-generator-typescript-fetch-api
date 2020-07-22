@@ -70,7 +70,7 @@ export class RedirectedError extends HttpError {
  */
 export class BaseAPI {
     protected query(queryParams: any): string {
-        if (!queryParams && Object.keys(queryParams).length) {
+        if (!queryParams || !Object.keys(queryParams).length) {
             return "";
         }
         const query = Object.keys(queryParams)

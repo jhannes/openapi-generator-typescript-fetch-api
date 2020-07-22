@@ -34,8 +34,8 @@ export function mockCaseWorkersApi(operations: {
     registerCaseWorker?: () => Promise<void>;
 }): CaseWorkersApiInterface {
     return {
-        listCaseWorkers: operations.listCaseWorkers || reject("listCaseWorkers"),
-        registerCaseWorker: operations.registerCaseWorker || reject("registerCaseWorker"),
+        listCaseWorkers: operations.listCaseWorkers || reject("CaseWorkersApi.listCaseWorkers"),
+        registerCaseWorker: operations.registerCaseWorker || reject("CaseWorkersApi.registerCaseWorker"),
     };
 }
 
@@ -46,10 +46,10 @@ export function mockCasesApi(operations: {
     registerExposure?: () => Promise<void>;
 }): CasesApiInterface {
     return {
-        getCaseDetails: operations.getCaseDetails || reject("getCaseDetails"),
-        listCases: operations.listCases || reject("listCases"),
-        newCase: operations.newCase || reject("newCase"),
-        registerExposure: operations.registerExposure || reject("registerExposure"),
+        getCaseDetails: operations.getCaseDetails || reject("CasesApi.getCaseDetails"),
+        listCases: operations.listCases || reject("CasesApi.listCases"),
+        newCase: operations.newCase || reject("CasesApi.newCase"),
+        registerExposure: operations.registerExposure || reject("CasesApi.registerExposure"),
     };
 }
 
@@ -58,7 +58,7 @@ export function mockExposuresApi(operations: {
     updateExposure?: () => Promise<void>;
 }): ExposuresApiInterface {
     return {
-        listExposures: operations.listExposures || reject("listExposures"),
-        updateExposure: operations.updateExposure || reject("updateExposure"),
+        listExposures: operations.listExposures || reject("ExposuresApi.listExposures"),
+        updateExposure: operations.updateExposure || reject("ExposuresApi.updateExposure"),
     };
 }
