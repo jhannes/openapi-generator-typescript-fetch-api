@@ -21,6 +21,7 @@ import {
 } from "../model";
 
 import {
+    ApplicationApis,
     DefaultApiInterface,
 } from "../api";
 
@@ -28,9 +29,15 @@ function reject(operation: string) {
     return () => Promise.reject(new Error("Unexpected function call " + operation));
 }
 
+export function mockApplicationApis({
+    defaultApi = mockDefaultApi(),
+}: Partial<ApplicationApis>): ApplicationApis {
+    return { defaultApi };
+}
+
 export function mockDefaultApi(operations: {
     petsPatch?: () => Promise<void>;
-}): DefaultApiInterface {
+} = {}): DefaultApiInterface {
     return {
         petsPatch: operations.petsPatch || reject("DefaultApi.petsPatch"),
     };

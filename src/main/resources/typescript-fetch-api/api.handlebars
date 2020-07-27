@@ -10,4 +10,12 @@ import {
 } from "./model";
 
 import { BaseAPI } from "./base";
+
+{{#withInterfaces~}}
+export interface ApplicationApis {
+{{~#apiInfo}}{{#apis}}
+    {{classVarName}}Api: {{classname}}Interface;
+{{~/apis}}{{/apiInfo}}
+}
+{{~/withInterfaces}}
 {{#apiInfo}}{{#apis}}{{>apiInner}}{{/apis}}{{/apiInfo}}

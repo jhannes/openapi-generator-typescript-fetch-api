@@ -21,6 +21,12 @@ import {
 
 import { BaseAPI } from "./base";
 
+export interface ApplicationApis {
+    caseWorkersApi: CaseWorkersApiInterface;
+    casesApi: CasesApiInterface;
+    exposuresApi: ExposuresApiInterface;
+}
+
 /**
  * CaseWorkersApi - object-oriented interface
  */

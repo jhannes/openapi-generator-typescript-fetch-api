@@ -22,6 +22,10 @@ import {
 
 import { BaseAPI } from "./base";
 
+export interface ApplicationApis {
+    defaultApi: DefaultApiInterface;
+}
+
 /**
  * DefaultApi - object-oriented interface
  */

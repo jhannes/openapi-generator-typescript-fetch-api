@@ -20,6 +20,7 @@ import {
 } from "../model";
 
 import {
+    ApplicationApis,
     CaseWorkersApiInterface,
     CasesApiInterface,
     ExposuresApiInterface,
@@ -29,10 +30,18 @@ function reject(operation: string) {
     return () => Promise.reject(new Error("Unexpected function call " + operation));
 }
 
+export function mockApplicationApis({
+    caseWorkersApi = mockCaseWorkersApi(),
+    casesApi = mockCasesApi(),
+    exposuresApi = mockExposuresApi(),
+}: Partial<ApplicationApis>): ApplicationApis {
+    return { caseWorkersApi, casesApi, exposuresApi };
+}
+
 export function mockCaseWorkersApi(operations: {
     listCaseWorkers?: () => Promise<CaseWorkerDto>;
     registerCaseWorker?: () => Promise<void>;
-}): CaseWorkersApiInterface {
+} = {}): CaseWorkersApiInterface {
     return {
         listCaseWorkers: operations.listCaseWorkers || reject("CaseWorkersApi.listCaseWorkers"),
         registerCaseWorker: operations.registerCaseWorker || reject("CaseWorkersApi.registerCaseWorker"),
@@ -44,7 +53,7 @@ export function mockCasesApi(operations: {
     listCases?: () => Promise<InfectionDto>;
     newCase?: () => Promise<void>;
     registerExposure?: () => Promise<void>;
-}): CasesApiInterface {
+} = {}): CasesApiInterface {
     return {
         getCaseDetails: operations.getCaseDetails || reject("CasesApi.getCaseDetails"),
         listCases: operations.listCases || reject("CasesApi.listCases"),
@@ -56,7 +65,7 @@ export function mockCasesApi(operations: {
 export function mockExposuresApi(operations: {
     listExposures?: () => Promise<ExposureDto>;
     updateExposure?: () => Promise<void>;
-}): ExposuresApiInterface {
+} = {}): ExposuresApiInterface {
     return {
         listExposures: operations.listExposures || reject("ExposuresApi.listExposures"),
         updateExposure: operations.updateExposure || reject("ExposuresApi.updateExposure"),

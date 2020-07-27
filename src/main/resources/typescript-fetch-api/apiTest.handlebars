@@ -10,6 +10,7 @@ import {
 } from "../model";
 
 import {
+    ApplicationApis,
 {{~#apiInfo}}{{#apis}}
     {{classname}}Interface,
 {{~/apis}}{{/apiInfo}}
@@ -19,13 +20,23 @@ function reject(operation: string) {
     return () => Promise.reject(new Error("Unexpected function call " + operation));
 }
 
+{{#withInterfaces~}}
+export function mockApplicationApis({
+{{~#apiInfo}}{{#apis}}
+    {{classVarName}}Api = mock{{classname}}(),
+{{~/apis}}{{/apiInfo}}
+}: Partial<ApplicationApis>): ApplicationApis {
+    return { {{#apiInfo}}{{#apis}}{{classVarName}}Api{{#unless @last}}, {{/unless}}{{~/apis}}{{/apiInfo}} };
+}
+{{~/withInterfaces~}}
+
 {{~#apiInfo}}{{~#apis}}{{~#operations}}
 
 export function mock{{classname}}(operations: {
     {{~#operation}}
     {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
     {{~/operation}}
-}): {{classname}}Interface {
+} = {}): {{classname}}Interface {
     return {
     {{~#operation}}
         {{nickname}}: operations.{{nickname}} || reject("{{classname}}.{{nickname}}"),
