@@ -39,7 +39,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install petstore@0.1.9 --save
+npm install typeHierarchy@0.1.9 --save
 ```
 
 _unPublished (not recommended):_

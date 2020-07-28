@@ -1,13 +1,13 @@
 {
-    "name": "petstore",
+    "name": "typeHierarchy",
     "version": "0.1.9",
-    "description": "OpenAPI client for petstore",
+    "description": "OpenAPI client for typeHierarchy",
     "author": "OpenAPI-Generator Contributors",
     "keywords": [
         "typescript",
         "openapi-client",
         "openapi-generator",
-        "petstore"
+        "typeHierarchy"
     ],
     "license": "Unlicense",
     "files": [
