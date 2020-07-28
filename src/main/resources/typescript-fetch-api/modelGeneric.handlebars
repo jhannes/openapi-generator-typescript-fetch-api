@@ -15,7 +15,7 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
      * {{{description}}}
      */
     {{~/description}}
-    {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{#isReadOnly}}?{{/isReadOnly}}{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{#isNullable}} | null{{/isNullable}}{{/isEnum}};
+    {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{#isReadOnly}}?{{/isReadOnly}}{{/required}}: {{#if isEnum}}{{{datatypeWithEnum}}}{{else if isFile}}Blob{{else}}{{{dataType}}}{{/if}}{{#isNullable}} | null{{/isNullable}};
 {{~/vars}}
 }
 

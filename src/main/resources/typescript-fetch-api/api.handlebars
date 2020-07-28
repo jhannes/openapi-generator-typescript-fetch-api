@@ -21,7 +21,9 @@ export interface ApplicationApis {
 {{#apiInfo}}{{#apis}}{{>apiInner}}{{/apis}}{{/apiInfo}}
 
 export const servers: ApplicationApis[] = [{{#servers}}
+    {{~#description}}
     // {{description}}
+    {{~/description}}
     {
     {{~#apiInfo}}{{#apis}}
         {{classVarName}}Api: new {{classname}}("{{url}}"),

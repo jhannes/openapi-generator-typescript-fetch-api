@@ -1,0 +1,69 @@
+{
+    "name": "petstore",
+    "version": "1.0.0",
+    "description": "OpenAPI client for petstore",
+    "author": "OpenAPI-Generator Contributors",
+    "keywords": [
+        "typescript",
+        "openapi-client",
+        "openapi-generator",
+        "petstore"
+    ],
+    "license": "Unlicense",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "typings": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsc --outDir dist/",
+        "lint": "eslint . --ext .ts",
+        "format": "prettier --write *.ts test/*.ts *.json",
+        "prepublishOnly": "npm run build"
+    },
+    "devDependencies": {
+        "typescript": "^3.4.5",
+        "eslint": "^7.5.0",
+        "prettier": "^2.0.5",
+        "@typescript-eslint/eslint-plugin": "^3.6.1",
+        "@typescript-eslint/parser": "^3.6.1",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.4"
+    },
+    "eslintConfig": {
+        "root": true,
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint"
+        ],
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/eslint-recommended",
+            "plugin:@typescript-eslint/recommended",
+            "prettier"
+        ],
+        "rules": {
+            "comma-dangle": [ "warn", "always-multiline" ],
+            "indent": [ "error", 4, { "SwitchCase": 1 } ],
+            "linebreak-style": [ "error", "unix" ],
+            "max-len": [ "warn", 100, {
+                    "comments":  140,
+                    "ignorePattern": "\\{ containerClass, propertyName:|sample\\w+Dto\\(template: Factory"
+                }
+            ],
+            "no-trailing-spaces": "error",
+            "quotes": "warn",
+            "@typescript-eslint/explicit-function-return-type": [
+                "warn",
+                {"allowExpressions":  true }
+            ]
+        },
+        "ignorePatterns": [
+            "dist/**"
+        ]
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "printWidth": 100
+    }
+}
