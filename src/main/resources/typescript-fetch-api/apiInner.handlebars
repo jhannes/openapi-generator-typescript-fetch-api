@@ -51,7 +51,19 @@ export class {{classname}} extends BaseAPI {
         queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/queryParams.0}}{{#bodyParam}}
         {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
         formParams: { {{#formParams}}{{paramName}}:{{{dataType}}}, {{/formParams}} }{{/hasFormParams}}
-    }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
+    }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else if isResponseFile}}Promise<Blob>{{else}}Promise<void>{{/if}} {
+        {{~#if isResponseFile}}
+        const response = await this.{{httpMethod}}(
+            {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
+            {{#if queryParams}}params && params.queryParams{{else}}{}{{/if}},
+            {{~#if bodyParam}}
+            { body: params.{{bodyParam.paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes}}"{{{mediaType}}}"{{/consumes}} }
+            {{~else if hasFormParams}}
+            { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
+            {{~/if}}
+        );
+        return await response.blob();
+        {{~else}}
         return await this.{{httpMethod}}(
             {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
             {{#if queryParams}}params && params.queryParams{{else}}{}{{/if}},
@@ -61,6 +73,7 @@ export class {{classname}} extends BaseAPI {
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
             {{~/if}}
         );
+        {{~/if}}
     }
 {{~/operation}}
 }
