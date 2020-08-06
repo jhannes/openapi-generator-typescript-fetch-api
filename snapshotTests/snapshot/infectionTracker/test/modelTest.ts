@@ -259,9 +259,9 @@ export class TestSampleData {
         }
     }
 
-    sampleCaseWorkerDto(template: Factory<CaseWorkerDto> = {}): CaseWorkerDto {
+    sampleCaseWorkerDto(template?: Factory<CaseWorkerDto>): CaseWorkerDto {
         const containerClass = "CaseWorkerDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
@@ -298,9 +298,9 @@ export class TestSampleData {
         );
     }
 
-    sampleExposureDto(template: Factory<ExposureDto> = {}): ExposureDto {
+    sampleExposureDto(template?: Factory<ExposureDto>): ExposureDto {
         const containerClass = "ExposureDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
@@ -364,9 +364,9 @@ export class TestSampleData {
         );
     }
 
-    sampleInfectionDto(template: Factory<InfectionDto> = {}): InfectionDto {
+    sampleInfectionDto(template?: Factory<InfectionDto>): InfectionDto {
         const containerClass = "InfectionDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
@@ -398,9 +398,9 @@ export class TestSampleData {
         );
     }
 
-    sampleInfectionInformationDto(template: Factory<InfectionInformationDto> = {}): InfectionInformationDto {
+    sampleInfectionInformationDto(template?: Factory<InfectionInformationDto>): InfectionInformationDto {
         const containerClass = "InfectionInformationDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {

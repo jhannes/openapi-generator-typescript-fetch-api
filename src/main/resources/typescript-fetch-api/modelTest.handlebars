@@ -249,9 +249,9 @@ export class TestSampleData {
     }
 {{~#models}}{{~#model}}{{^oneOf}}
 
-    sample{{classname}}({{^isEnum}}template: Factory<{{classname}}> = {}{{/isEnum}}): {{classname}} {
+    sample{{classname}}({{^isEnum}}template?: Factory<{{classname}}>{{/isEnum}}): {{classname}} {
         const containerClass = "{{classname}}";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if ({{^isEnum}}!template && {{/isEnum}}typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
 {{~#if isEnum}}

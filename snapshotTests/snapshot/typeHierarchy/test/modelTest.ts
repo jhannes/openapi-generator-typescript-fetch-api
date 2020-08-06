@@ -262,9 +262,9 @@ export class TestSampleData {
         }
     }
 
-    sampleCatAllOfDto(template: Factory<CatAllOfDto> = {}): CatAllOfDto {
+    sampleCatAllOfDto(template?: Factory<CatAllOfDto>): CatAllOfDto {
         const containerClass = "CatAllOfDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
@@ -291,9 +291,9 @@ export class TestSampleData {
         );
     }
 
-    sampleCatDto(template: Factory<CatDto> = {}): CatDto {
+    sampleCatDto(template?: Factory<CatDto>): CatDto {
         const containerClass = "CatDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
@@ -335,9 +335,9 @@ export class TestSampleData {
         );
     }
 
-    sampleDogAllOfDto(template: Factory<DogAllOfDto> = {}): DogAllOfDto {
+    sampleDogAllOfDto(template?: Factory<DogAllOfDto>): DogAllOfDto {
         const containerClass = "DogAllOfDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
@@ -370,9 +370,9 @@ export class TestSampleData {
         );
     }
 
-    sampleDogDto(template: Factory<DogDto> = {}): DogDto {
+    sampleDogDto(template?: Factory<DogDto>): DogDto {
         const containerClass = "DogDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
@@ -420,9 +420,9 @@ export class TestSampleData {
         );
     }
 
-    samplePetDto(template: Factory<PetDto> = {}): PetDto {
+    samplePetDto(template?: Factory<PetDto>): PetDto {
         const containerClass = "PetDto";
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
