@@ -1,0 +1,183 @@
+openapi: 3.0.2
+info:
+  title: "Poly API"
+  description: "An example of a polymorphic API"
+  version: "0.1.0"
+  contact:
+    name: "Johannes Brodwall"
+    email: "johannes@brodwall.com"
+paths:
+  /parties:
+    get:
+      responses:
+        200:
+          description: "Returns all parties that the user can see"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnyParty'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnyParty'
+      responses:
+        200:
+          description: "The party was created"
+        400:
+          description: "Something went wrong"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreationError'
+  /parties/{id}:
+    put:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnyParty'
+      responses:
+        200:
+          description: "The party was updated"
+        400:
+          description: "Something went wrong"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateError'
+components:
+  schemas:
+    AnyParty:
+      oneOf:
+        - $ref: '#/components/schemas/Person'
+        - $ref: '#/components/schemas/Organization'
+      discriminator:
+        propertyName: type
+        mapping:
+          person: Person
+          organization: Organization
+    Person:
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          type: string
+        givenName:
+          type: string
+        familyName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          format: phone
+        birthDate:
+          type: string
+          format: date
+      required:
+        - type
+        - givenName
+        - familyName
+    Organization:
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        url:
+          type: string
+          format: uri
+        email:
+          type: string
+          format: email
+        emailDomains:
+          type: array
+          items:
+            type: string
+            example: "myorg.example.com"
+        phone:
+          type: string
+          format: phone
+      required:
+        - type
+        - name
+    CreationError:
+      oneOf:
+        - $ref: '#/components/schemas/GeneralError'
+        - $ref: '#/components/schemas/DuplicateIdentifierError'
+        - $ref: '#/components/schemas/IllegalEmailAddressError'
+      discriminator:
+        propertyName: code
+    UpdateError:
+      oneOf:
+        - $ref: '#/components/schemas/GeneralError'
+        - $ref: '#/components/schemas/NotFoundError'
+        - $ref: '#/components/schemas/DuplicateIdentifierError'
+        - $ref: '#/components/schemas/IllegalEmailAddressError'
+      discriminator:
+        propertyName: code
+    GeneralError:
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+      required:
+        - code
+        - description
+    DuplicateIdentifierError:
+      properties:
+        code:
+          type: string
+        identifierValue:
+          type: string
+        entityType:
+          type: string
+      required:
+        - code
+        - identitierValue
+        - entityType
+    IllegalEmailAddressError:
+      properties:
+        code:
+          type: string
+        inputEmailAddress:
+          type: string
+        validDomains:
+          type: array
+          items:
+            type: string
+      required:
+        - code
+        - inputEmailAddress
+        - validDomains
+    NotFoundError:
+      properties:
+        code:
+          type: string
+        identifierValue:
+          type: string
+        entityType:
+          type: string
+      required:
+        - code
+        - identitierValue
+        - entityType

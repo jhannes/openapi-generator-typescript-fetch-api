@@ -5,3 +5,4 @@
 /snapshotTests/output/
 pom.xml.releaseBackup
 release.properties
+node_modules/

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.CliOption;
+import org.openapitools.codegen.CodegenDiscriminator;
 import org.openapitools.codegen.CodegenModel;
 import org.openapitools.codegen.CodegenOperation;
 import org.openapitools.codegen.CodegenProperty;
@@ -16,9 +17,11 @@ import org.openapitools.codegen.utils.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import static org.openapitools.codegen.CodegenConstants.GENERATE_API_TESTS;
@@ -203,6 +206,26 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 CodegenModel codegenModel = (CodegenModel) model.get("model");
                 model.put("hasAllOf", codegenModel.allOf.size() > 0);
                 model.put("hasOneOf", codegenModel.oneOf.size() > 0);
+
+                if (!codegenModel.oneOf.isEmpty()) {
+                    if (codegenModel.discriminator.getMapping() == null) {
+                        Set<CodegenDiscriminator.MappedModel> mappedModels = new HashSet<>();
+                        HashMap<String, String> mapping = new HashMap<>();
+                        for (String className : codegenModel.oneOf) {
+
+                            String subtypeModel = result.entrySet().stream()
+                                    .filter(e -> ((Map<String, Object>) e.getValue()).get("classname").equals(className))
+                                    .map(Map.Entry::getKey)
+                                    .findFirst()
+                                    .orElseThrow(() -> new IllegalArgumentException("Undefined model " + className + " referenced from " + codegenModel.getClassname()));
+                            mapping.put(subtypeModel, className);
+                            mappedModels.add(new CodegenDiscriminator.MappedModel(subtypeModel, className));
+                        }
+                        codegenModel.discriminator.setMapping(mapping);
+                        codegenModel.discriminator.setMappedModels(mappedModels);
+                    }
+                }
+
             }
         }
         return result;

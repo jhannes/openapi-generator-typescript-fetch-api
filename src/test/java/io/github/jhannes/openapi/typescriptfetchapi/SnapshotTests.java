@@ -26,48 +26,45 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class SnapshotTests {
 
-
     @TestFactory
-    Stream<DynamicNode> snapshots() throws IOException {
+    Stream<DynamicNode> typescriptFetchApi() throws IOException {
         return Stream.of(
-                snapshots(Paths.get("snapshotTests")),
-                snapshots(Paths.get("localSnapshotTests"))
+                snapshots(Paths.get("snapshotTests"), "typescript-fetch-api", Paths.get("snapshotTests").resolve("output"), Paths.get("snapshotTests").resolve("snapshot")),
+                snapshots(Paths.get("localSnapshotTests"), "typescript-fetch-api", Paths.get("localSnapshotTests").resolve("output"), Paths.get("localSnapshotTests").resolve("snapshot"))
         );
     }
 
-    private DynamicNode snapshots(Path testDir) throws IOException {
+    private DynamicNode snapshots(Path testDir, String generatorName, Path outputDir, Path snapshotDir) throws IOException {
         Path inputDir = testDir.resolve("input");
         if (!Files.isDirectory(inputDir)) {
             return dynamicTest("No snapshots for " + testDir, () -> {});
         }
-        Path output = testDir.resolve("output");
-        cleanDirectory(output);
-        return dynamicContainer("Snapshots of " + testDir, Files.list(inputDir).map(this::createTestsForSpec));
+        cleanDirectory(outputDir);
+        return dynamicContainer(
+                "Snapshots of " + testDir,
+                Files.list(inputDir).map(spec -> createTestsForSpec(spec, generatorName, outputDir, snapshotDir))
+        );
     }
 
-    private DynamicNode createTestsForSpec(Path spec) {
-        generate(spec);
+    private DynamicNode createTestsForSpec(Path spec, String generatorName, Path outputDir, Path snapshotDir) {
+        generate(spec, generatorName, outputDir, getModelName(spec));
 
-        Path output = spec.getParent().getParent().resolve("output");
-        Path snapshotDir = spec.getParent().getParent().resolve("snapshot");
         List<Path> files;
-        try (Stream<Path> list = Files.walk(output.resolve(getModelName(spec)))) {
+        try (Stream<Path> list = Files.walk(outputDir.resolve(getModelName(spec)))) {
             files = list.filter(this::isTextOutput).collect(Collectors.toList());
         } catch (IOException e) {
-            return dynamicTest("Snapshot for " + spec, () -> assertNull(e));
+            return dynamicTest("Snapshots for " + spec, () -> assertNull(e));
         }
         return dynamicContainer("Snapshots for " + spec, Stream.of(
-                dynamicTest("Files", () -> compareFiles(spec)),
-                dynamicContainer("File contents in " + output, files.stream().map(file ->
-                        dynamicTest("file " + output.relativize(file), () -> diff(file, snapshotDir.resolve(output.relativize(file))))
+                dynamicTest("Files", () -> compareFiles(outputDir, snapshotDir, getModelName(spec))),
+                dynamicContainer("File contents in " + outputDir, files.stream().map(file ->
+                        dynamicTest("file " + outputDir.relativize(file), () -> diff(file, snapshotDir.resolve(outputDir.relativize(file))))
                 ))));
     }
 
-    private void compareFiles(Path spec) throws IOException {
-        Path output = spec.getParent().getParent().resolve("output");
-        Path snapshotDir = spec.getParent().getParent().resolve("snapshot");
-        String outputFiles = Files.walk(output.resolve(getModelName(spec))).map(path -> output.relativize(path).toString()).collect(Collectors.joining("\n"));
-        String snapshotFiles = Files.walk(snapshotDir.resolve(getModelName(spec))).map(path -> snapshotDir.relativize(path).toString()).collect(Collectors.joining("\n"));
+    private void compareFiles(Path output, Path snapshotDir, String modelName) throws IOException {
+        String outputFiles = Files.walk(output.resolve(modelName)).map(path -> output.relativize(path).toString()).collect(Collectors.joining("\n"));
+        String snapshotFiles = Files.walk(snapshotDir.resolve(modelName)).map(path -> snapshotDir.relativize(path).toString()).collect(Collectors.joining("\n"));
         assertEquals(snapshotFiles, outputFiles);
     }
 
@@ -81,12 +78,9 @@ public class SnapshotTests {
         assertEquals("", diff.getDeltas().stream().map(Object::toString).collect(Collectors.joining("\n")));
     }
 
-    private void generate(Path file) {
-        Path output = file.getParent().getParent().resolve("output");
-        String modelName = getModelName(file);
-
+    private void generate(Path file, String generatorName, Path output, String modelName) {
         final CodegenConfigurator configurator = new CodegenConfigurator()
-                .setGeneratorName("typescript-fetch-api")
+                .setGeneratorName(generatorName)
                 .setInputSpec(file.toString())
                 .setModelNameSuffix("Dto")
                 .addAdditionalProperty("npmName", modelName)

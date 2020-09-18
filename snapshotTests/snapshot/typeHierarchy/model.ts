@@ -10,7 +10,9 @@
  * Do not edit the class manually.
  */
 
-export type AnyPetDto = CatDto | DogDto;
+export type AnyPetDto =
+	{ pet_type: 'Cat' } & CatDto |
+	{ pet_type: 'Dog' } & DogDto;
 
 
 export interface CatAllOfDto {
