@@ -129,6 +129,10 @@ export class TestSampleData {
         return this.random.uuidv4();
     }
 
+    randomString(): string {
+        return this.pickOne(["foo", "bar", "baz"]);
+    }
+
     randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
@@ -176,6 +180,12 @@ export class TestSampleData {
         return this.nextInt(10000);
     }
 
+    sampleany(): any {
+        return {
+            [this.randomString()]: this.randomString()
+        }
+    }
+
     sampleDate(): Date {
         return this.randomPastDateTime(this.now);
     }
@@ -191,7 +201,7 @@ export class TestSampleData {
             return this.randomEmail();
         }
         if (example && example !== "null") return example;
-        return "foo";
+        return this.randomString();
     }
 
     sampleArrayString(length?: number): Array<string> {
