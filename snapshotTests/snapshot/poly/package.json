@@ -43,11 +43,26 @@
             "prettier"
         ],
         "rules": {
-            "comma-dangle": [ "warn", "always-multiline" ],
-            "indent": [ "error", 4, { "SwitchCase": 1 } ],
-            "linebreak-style": [ "error", "unix" ],
-            "max-len": [ "warn", 100, {
-                    "comments":  140,
+            "comma-dangle": [
+                "warn",
+                "always-multiline"
+            ],
+            "indent": [
+                "error",
+                4,
+                {
+                    "SwitchCase": 1
+                }
+            ],
+            "linebreak-style": [
+                "error",
+                "unix"
+            ],
+            "max-len": [
+                "warn",
+                100,
+                {
+                    "comments": 140,
                     "ignorePattern": "\\{ containerClass, propertyName:|sample\\w+Dto\\(template: Factory"
                 }
             ],
@@ -55,7 +70,9 @@
             "quotes": "warn",
             "@typescript-eslint/explicit-function-return-type": [
                 "warn",
-                {"allowExpressions":  true }
+                {
+                    "allowExpressions": true
+                }
             ]
         },
         "ignorePatterns": [

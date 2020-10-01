@@ -203,6 +203,10 @@ export class TestSampleData {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.sampleString());
     }
 
+    sampleArraynumber(length?: number): Array<number> {
+        return Array.from({ length: length || this.arrayLength() }).map(() => this.samplenumber());
+    }
+
     generate(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         template?: ((sampleData: TestSampleData) => any) | any,

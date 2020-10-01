@@ -35,13 +35,25 @@ public class TypescriptFetchApiGeneratorTest {
 
     @Test
     void shouldGenerateWithClassHierarchy() {
-      final CodegenConfigurator configurator = new CodegenConfigurator()
-              .setGeneratorName("typescript-fetch-api") // use this codegen library
-              .setInputSpec("src/test/resources/petstore.yaml")
-              .setOutputDir("target/out/typescript-fetch-api"); // output directory
+        final CodegenConfigurator configurator = new CodegenConfigurator()
+                .setGeneratorName("typescript-fetch-api") // use this codegen library
+                .setInputSpec("src/test/resources/petstore.yaml")
+                .setOutputDir("target/out/typescript-fetch-api"); // output directory
 
-      final ClientOptInput clientOptInput = configurator.toClientOptInput();
-      DefaultGenerator generator = new DefaultGenerator();
-      generator.opts(clientOptInput).generate();
+        final ClientOptInput clientOptInput = configurator.toClientOptInput();
+        DefaultGenerator generator = new DefaultGenerator();
+        generator.opts(clientOptInput).generate();
+    }
+
+    @Test
+    void shouldGenerateWithClassHierarchy2() {
+        final CodegenConfigurator configurator = new CodegenConfigurator()
+                .setGeneratorName("typescript-fetch-api") // use this codegen library
+                .setInputSpec("snapshotTests/input/poly.yaml")
+                .setOutputDir("target/out/poly-typescript-fetch-api"); // output directory
+
+        final ClientOptInput clientOptInput = configurator.toClientOptInput();
+        DefaultGenerator generator = new DefaultGenerator();
+        generator.opts(clientOptInput).generate();
     }
 }

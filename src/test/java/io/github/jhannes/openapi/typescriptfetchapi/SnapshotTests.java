@@ -63,8 +63,18 @@ public class SnapshotTests {
     }
 
     private void compareFiles(Path output, Path snapshotDir, String modelName) throws IOException {
-        String outputFiles = Files.walk(output.resolve(modelName)).map(path -> output.relativize(path).toString()).collect(Collectors.joining("\n"));
-        String snapshotFiles = Files.walk(snapshotDir.resolve(modelName)).map(path -> snapshotDir.relativize(path).toString()).collect(Collectors.joining("\n"));
+        String outputFiles = Files.walk(output.resolve(modelName))
+                .filter(file -> !file.startsWith(output.resolve(modelName).resolve("node_modules")))
+                .filter(file -> !file.startsWith(output.resolve(modelName).resolve("package-lock.json")))
+                .filter(file -> !file.startsWith(output.resolve(modelName).resolve("dist")))
+                .map(path -> output.relativize(path).toString())
+                .collect(Collectors.joining("\n"));
+        String snapshotFiles = Files.walk(snapshotDir.resolve(modelName))
+                .filter(file -> !file.startsWith(snapshotDir.resolve(modelName).resolve("node_modules")))
+                .filter(file -> !file.startsWith(snapshotDir.resolve(modelName).resolve("package-lock.json")))
+                .filter(file -> !file.startsWith(snapshotDir.resolve(modelName).resolve("dist")))
+                .map(path -> snapshotDir.relativize(path).toString())
+                .collect(Collectors.joining("\n"));
         assertEquals(snapshotFiles, outputFiles);
     }
 

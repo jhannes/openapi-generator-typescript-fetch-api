@@ -206,6 +206,8 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 CodegenModel codegenModel = (CodegenModel) model.get("model");
                 model.put("hasAllOf", codegenModel.allOf.size() > 0);
                 model.put("hasOneOf", codegenModel.oneOf.size() > 0);
+                model.put("hasReadOnly", codegenModel.allVars.stream().anyMatch(v -> v.isReadOnly));
+                model.put("hasWriteOnly", codegenModel.allVars.stream().anyMatch(v -> v.isWriteOnly));
 
                 if (!codegenModel.oneOf.isEmpty()) {
                     if (codegenModel.discriminator.getMapping() == null) {
