@@ -77,14 +77,11 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected createRequestBody(requestBody?: RequestBody): string | undefined {
+    protected createRequestBody(requestBody?: RequestBody): string|undefined {
         if (requestBody) {
             if (requestBody.contentType === "application/x-www-form-urlencoded") {
-                const form: any = new FormData();
-                for (const name in requestBody.body) {
-                    form.append(name, requestBody.body[name]);
-                }
-                return new URLSearchParams(form).toString();
+                return Object.keys(requestBody.body)
+                    .map(key => key + '=' + encodeURIComponent(requestBody.body[key])).join("&");
             } else {
                 return JSON.stringify(requestBody.body);
             }
