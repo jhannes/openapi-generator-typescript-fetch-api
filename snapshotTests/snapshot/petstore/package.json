@@ -9,7 +9,6 @@
         "openapi-generator",
         "petstore"
     ],
-    "license": "Unlicense",
     "files": [
         "dist"
     ],

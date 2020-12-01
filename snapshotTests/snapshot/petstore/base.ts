@@ -23,8 +23,12 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async PUT(path: string, queryParams: any, requestBody?: RequestBody): Promise<any> {
-        const headers: any = {};
+    protected async PUT(
+        path: string,
+        queryParams: any,
+        requestBody?: RequestBody,
+        headers: any = {}
+    ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;
@@ -38,8 +42,12 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async POST(path: string, queryParams: any, requestBody?: RequestBody): Promise<any> {
-        const headers: any = {};
+    protected async POST(
+        path: string,
+        queryParams: any,
+        requestBody?: RequestBody,
+        headers: any = {}
+    ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;
@@ -53,8 +61,12 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async PATCH(path: string, queryParams: any, requestBody?: RequestBody): Promise<any> {
-        const headers: any = {};
+    protected async PATCH(
+            path: string,
+            queryParams: any,
+            requestBody?: RequestBody,
+            headers: any = {}
+    ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;
@@ -71,9 +83,9 @@ export class BaseAPI {
     protected async DELETE(
         path: string,
         queryParams: any,
-        requestBody?: RequestBody
+        requestBody?: RequestBody,
+        headers: any = {}
     ): Promise<void> {
-        const headers: any = {};
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;

@@ -4,9 +4,9 @@ import {
     {{classname}},
 {{~^oneOf}}
 {{~#vars}}
-    {{~#isEnum}}
+    {{~#isEnum}}{{~^isContainer}}
     {{datatypeWithEnum}},
-    {{~/isEnum}}
+    {{~/isContainer}}{{~/isEnum}}
 {{~/vars}}
 {{~/oneOf}}
 {{~/model}}

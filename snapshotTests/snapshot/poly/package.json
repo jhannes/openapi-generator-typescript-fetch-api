@@ -9,7 +9,6 @@
         "openapi-generator",
         "poly"
     ],
-    "license": "Unlicense",
     "files": [
         "dist"
     ],

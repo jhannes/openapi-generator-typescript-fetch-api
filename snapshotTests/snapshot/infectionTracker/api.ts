@@ -62,6 +62,7 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
         return await this.GET(
             "/api/caseWorkers",
             {},
+            undefined
         );
     }
     /**
@@ -135,6 +136,7 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         return await this.GET(
             this.path("/api/cases/{caseId}", params.pathParams),
             {},
+            undefined
         );
     }
     /**
@@ -146,6 +148,7 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         return await this.GET(
             "/api/cases",
             {},
+            undefined
         );
     }
     /**
@@ -214,6 +217,7 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
         return await this.GET(
             "/api/exposures",
             {},
+            undefined
         );
     }
     /**

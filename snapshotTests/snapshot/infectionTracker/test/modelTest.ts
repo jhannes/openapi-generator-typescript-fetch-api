@@ -180,6 +180,7 @@ export class TestSampleData {
         return this.nextInt(10000);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sampleany(): any {
         return {
             [this.randomString()]: this.randomString()

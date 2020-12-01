@@ -133,7 +133,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.POST(
             "/pet",
             {},
-            { body: params.petDto, contentType: "application/json" }
+            { body: params.petDto, contentType: "application/json" },
+            this.petstore_auth()
         );
     }
     /**
@@ -148,6 +149,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.DELETE(
             this.path("/pet/{petId}", params.pathParams),
             {},
+            undefined,
+            this.petstore_auth()
         );
     }
     /**
@@ -162,6 +165,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.GET(
             "/pet/findByStatus",
             params && params.queryParams,
+            undefined,
+            this.petstore_auth()
         );
     }
     /**
@@ -176,6 +181,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.GET(
             "/pet/findByTags",
             params && params.queryParams,
+            undefined,
+            this.petstore_auth()
         );
     }
     /**
@@ -190,6 +197,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.GET(
             this.path("/pet/{petId}", params.pathParams),
             {},
+            undefined,
+            this.api_key()
         );
     }
     /**
@@ -204,7 +213,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.PUT(
             "/pet",
             {},
-            { body: params.petDto, contentType: "application/json" }
+            { body: params.petDto, contentType: "application/json" },
+            this.petstore_auth()
         );
     }
     /**
@@ -220,7 +230,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.POST(
             this.path("/pet/{petId}", params.pathParams),
             {},
-            { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
+            { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
+            this.petstore_auth()
         );
     }
     /**
@@ -236,7 +247,8 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         return await this.POST(
             this.path("/pet/{petId}/uploadImage", params.pathParams),
             {},
-            { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
+            { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
+            this.petstore_auth()
         );
     }
 }
@@ -300,6 +312,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         return await this.DELETE(
             this.path("/store/order/{orderId}", params.pathParams),
             {},
+            undefined
         );
     }
     /**
@@ -312,6 +325,8 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         return await this.GET(
             "/store/inventory",
             {},
+            undefined,
+            this.api_key()
         );
     }
     /**
@@ -326,6 +341,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         return await this.GET(
             this.path("/store/order/{orderId}", params.pathParams),
             {},
+            undefined
         );
     }
     /**
@@ -490,6 +506,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.DELETE(
             this.path("/user/{username}", params.pathParams),
             {},
+            undefined
         );
     }
     /**
@@ -504,6 +521,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.GET(
             this.path("/user/{username}", params.pathParams),
             {},
+            undefined
         );
     }
     /**
@@ -518,6 +536,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.GET(
             "/user/login",
             params && params.queryParams,
+            undefined
         );
     }
     /**
@@ -530,6 +549,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.GET(
             "/user/logout",
             {},
+            undefined
         );
     }
     /**

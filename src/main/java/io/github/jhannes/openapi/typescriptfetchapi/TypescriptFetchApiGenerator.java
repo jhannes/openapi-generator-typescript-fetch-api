@@ -12,6 +12,7 @@ import org.openapitools.codegen.SupportingFile;
 import org.openapitools.codegen.api.TemplatingEngineAdapter;
 import org.openapitools.codegen.languages.AbstractTypeScriptClientCodegen;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
+import org.openapitools.codegen.meta.features.SecurityFeature;
 import org.openapitools.codegen.templating.HandlebarsEngineAdapter;
 import org.openapitools.codegen.utils.ModelUtils;
 
@@ -41,7 +42,9 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
     public TypescriptFetchApiGenerator() {
         super();
 
-        modifyFeatureSet(features -> features.includeDocumentationFeatures(DocumentationFeature.Readme));
+        modifyFeatureSet(features -> features
+                .includeSecurityFeatures(SecurityFeature.ApiKey, SecurityFeature.BasicAuth, SecurityFeature.BearerToken, SecurityFeature.OpenIDConnect)
+                .includeDocumentationFeatures(DocumentationFeature.Readme));
 
         // clear import mapping (from default generator) as TS does not use it
         // at the moment

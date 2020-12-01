@@ -9,7 +9,6 @@
         "openapi-generator",
         "typeHierarchy"
     ],
-    "license": "Unlicense",
     "files": [
         "dist"
     ],

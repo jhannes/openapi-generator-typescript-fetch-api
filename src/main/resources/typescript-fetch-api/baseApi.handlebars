@@ -5,16 +5,40 @@
 export class BaseAPI {
 
     constructor(protected basePath: string = window.location.origin) {}
+{{#if hasAuthMethods}}{{#authMethods}}
+    private _{{name}}?: string;
 
-    protected async GET(path: string, queryParams: any): Promise<any> {
+    set{{name}}(value: string) {
+        this._{{name}} = value;
+    }
+
+    {{name}}() {
+        {{~#if isBasicBearer}}
+        return { "Authorization": "Bearer " + this._{{name}} };
+        {{~else if isBasicBasic}}
+        return { "Authorization": "Basic " + this._{{name}} };
+        {{~else if isKeyInHeader}}
+        return { "{{name}}": this._{{name}} };
+        {{~else if isOAuth}}
+        return { "Authorization": "Bearer " + this._{{name}} };
+        {{~else}}
+        throw new Error("Unknown authorization scheme {{scheme}}");
+        {{~/if}}
+    }
+{{/authMethods}}{{/if}}
+    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: any = {}): Promise<any> {
         const result = await fetch(this.basePath + path + this.query(queryParams), {
-            credentials: "same-origin",
+            credentials: "same-origin", headers
         });
         return await this.handleResponse(result);
     }
 
-    protected async PUT(path: string, queryParams: any, requestBody?: RequestBody): Promise<any> {
-        const headers: any = {};
+    protected async PUT(
+        path: string,
+        queryParams: any,
+        requestBody?: RequestBody,
+        headers: any = {}
+    ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;
@@ -28,8 +52,12 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async POST(path: string, queryParams: any, requestBody?: RequestBody): Promise<any> {
-        const headers: any = {};
+    protected async POST(
+        path: string,
+        queryParams: any,
+        requestBody?: RequestBody,
+        headers: any = {}
+    ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;
@@ -43,8 +71,12 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected async PATCH(path: string, queryParams: any, requestBody?: RequestBody): Promise<any> {
-        const headers: any = {};
+    protected async PATCH(
+            path: string,
+            queryParams: any,
+            requestBody?: RequestBody,
+            headers: any = {}
+    ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;
@@ -61,9 +93,9 @@ export class BaseAPI {
     protected async DELETE(
         path: string,
         queryParams: any,
-        requestBody?: RequestBody
+        requestBody?: RequestBody,
+        headers: any = {}
     ): Promise<void> {
-        const headers: any = {};
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
             headers["Content-Type"] = requestBody.contentType;

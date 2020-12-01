@@ -74,6 +74,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         return await this.GET(
             "/parties",
             {},
+            undefined
         );
     }
     /**
