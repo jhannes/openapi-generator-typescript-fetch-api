@@ -16,9 +16,29 @@ export class BaseAPI {
 
     constructor(protected basePath: string = window.location.origin) {}
 
-    protected async GET(path: string, queryParams: any): Promise<any> {
+    private _api_key?: string;
+
+    setapi_key(value: string) {
+        this._api_key = value;
+    }
+
+    api_key() {
+        return { "api_key": this._api_key };
+    }
+
+    private _petstore_auth?: string;
+
+    setpetstore_auth(value: string) {
+        this._petstore_auth = value;
+    }
+
+    petstore_auth() {
+        return { "Authorization": "Bearer " + this._petstore_auth };
+    }
+
+    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: any = {}): Promise<any> {
         const result = await fetch(this.basePath + path + this.query(queryParams), {
-            credentials: "same-origin",
+            credentials: "same-origin", headers
         });
         return await this.handleResponse(result);
     }
