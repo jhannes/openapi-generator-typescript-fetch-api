@@ -6,30 +6,16 @@
 export class BaseAPI {
 
     constructor(protected basePath: string = window.location.origin) {}
-{{#authMethods}}
-    private _{{name}}?: string;
 
-    set{{name}}(value: string) {
-        this._{{name}} = value;
-    }
-
-    {{name}}() {
-        {{~#if isBasicBearer}}
-        return { "Authorization": "Bearer " + this._{{name}} };
-        {{~else if isBasicBasic}}
-        return { "Authorization": "Basic " + this._{{name}} };
-        {{~else if isKeyInHeader}}
-        return { "{{name}}": this._{{name}} };
-        {{~else if isOAuth}}
-        return { "Authorization": "Bearer " + this._{{name}} };
-        {{~else}}
-        throw new Error("Unknown authorization scheme {{scheme}}");
-        {{~/if}}
-    }
-{{/authMethods}}
-    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: Record<string, string> = {}): Promise<any> {
+    protected async GET(
+        path: string,
+        queryParams: any,
+        requestBody: undefined,
+        headers: Record<string, string> = {}
+    ): Promise<any> {
         const result = await fetch(this.basePath + path + this.query(queryParams), {
-            credentials: "same-origin", headers
+            credentials: "same-origin",
+            headers,
         });
         return await this.handleResponse(result);
     }
@@ -114,7 +100,7 @@ export class BaseAPI {
         if (requestBody) {
             if (requestBody.contentType === "application/x-www-form-urlencoded") {
                 return Object.keys(requestBody.body)
-                    .map(key => key + '=' + encodeURIComponent(requestBody.body[key])).join("&");
+                    .map(key => key + "=" + encodeURIComponent(requestBody.body[key])).join("&");
             } else {
                 return JSON.stringify(requestBody.body);
             }

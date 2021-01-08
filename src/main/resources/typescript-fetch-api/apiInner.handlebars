@@ -26,7 +26,7 @@ export interface {{classname}}Interface {
         security: {{name}};{{/if}}{{/authMethods}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
-    }{{/if}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
+    }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
 {{~/operation}}
 }
 {{/operations}}{{~/withInterfaces}}
@@ -59,7 +59,7 @@ export class {{classname}} extends BaseAPI {
         security: {{name}};{{/if}}{{/authMethods}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
-    }{{/if}}): {{#if returnType}}Promise<{{{returnType}}}>{{else if isResponseFile}}Promise<Blob>{{else}}Promise<void>{{/if}} {
+    }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
         {{~#if isResponseFile}}
         const response: Response = await this.{{httpMethod}}(
             {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
@@ -73,7 +73,7 @@ export class {{classname}} extends BaseAPI {
             {{~/if}},
             { {{~#hasHeaderParams}}
                 ...params.headers,{{/hasHeaderParams}}{{#hasAuthMethods}}
-                ...params.security?.headers(){{/hasAuthMethods}}
+                ...params.security?.headers(),{{/hasAuthMethods}}
             }
         );
         return await response.blob();
@@ -90,7 +90,7 @@ export class {{classname}} extends BaseAPI {
             {{~/if}},
             { {{~#hasHeaderParams}}
                 ...params.headers,{{/hasHeaderParams}}{{#hasAuthMethods}}
-                ...params.security?.headers(){{/hasAuthMethods}}
+                ...params.security?.headers(),{{/hasAuthMethods}}
             }
         );
         {{~/if}}

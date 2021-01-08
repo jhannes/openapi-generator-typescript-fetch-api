@@ -257,12 +257,12 @@ export const servers: Record<string, ApplicationApis> = {
     "current": {
         caseWorkersApi: new CaseWorkersApi("/api"),
         casesApi: new CasesApi("/api"),
-        exposuresApi: new ExposuresApi("/api")
+        exposuresApi: new ExposuresApi("/api"),
     },
     "production": {
         caseWorkersApi: new CaseWorkersApi("https://infectiontracker.example.gov/api"),
         casesApi: new CasesApi("https://infectiontracker.example.gov/api"),
-        exposuresApi: new ExposuresApi("https://infectiontracker.example.gov/api")
-    }
+        exposuresApi: new ExposuresApi("https://infectiontracker.example.gov/api"),
+    },
 };
 

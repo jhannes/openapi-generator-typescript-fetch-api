@@ -11,14 +11,14 @@
  */
 
 export type AnyPartyDto =
-	{ type: 'person' } & PersonDto |
-	{ type: 'organization' } & OrganizationDto;
+	{ type: "person" } & PersonDto |
+	{ type: "organization" } & OrganizationDto;
 
 
 export type CreationErrorDto =
-	{ code: 'IllegalEmailAddressError' } & IllegalEmailAddressErrorDto |
-	{ code: 'DuplicateIdentifierError' } & DuplicateIdentifierErrorDto |
-	{ code: 'GeneralError' } & GeneralErrorDto;
+	{ code: "IllegalEmailAddressError" } & IllegalEmailAddressErrorDto |
+	{ code: "DuplicateIdentifierError" } & DuplicateIdentifierErrorDto |
+	{ code: "GeneralError" } & GeneralErrorDto;
 
 
 export interface DuplicateIdentifierErrorDto {
@@ -66,8 +66,8 @@ export interface PersonDto {
 }
 
 export type UpdateErrorDto =
-	{ code: 'IllegalEmailAddressError' } & IllegalEmailAddressErrorDto |
-	{ code: 'DuplicateIdentifierError' } & DuplicateIdentifierErrorDto |
-	{ code: 'GeneralError' } & GeneralErrorDto |
-	{ code: 'NotFoundError' } & NotFoundErrorDto;
+	{ code: "IllegalEmailAddressError" } & IllegalEmailAddressErrorDto |
+	{ code: "DuplicateIdentifierError" } & DuplicateIdentifierErrorDto |
+	{ code: "GeneralError" } & GeneralErrorDto |
+	{ code: "NotFoundError" } & NotFoundErrorDto;
 

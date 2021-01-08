@@ -17,9 +17,15 @@ export class BaseAPI {
 
     constructor(protected basePath: string = window.location.origin) {}
 
-    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: Record<string, string> = {}): Promise<any> {
+    protected async GET(
+        path: string,
+        queryParams: any,
+        requestBody: undefined,
+        headers: Record<string, string> = {}
+    ): Promise<any> {
         const result = await fetch(this.basePath + path + this.query(queryParams), {
-            credentials: "same-origin", headers
+            credentials: "same-origin",
+            headers,
         });
         return await this.handleResponse(result);
     }
@@ -104,7 +110,7 @@ export class BaseAPI {
         if (requestBody) {
             if (requestBody.contentType === "application/x-www-form-urlencoded") {
                 return Object.keys(requestBody.body)
-                    .map(key => key + '=' + encodeURIComponent(requestBody.body[key])).join("&");
+                    .map(key => key + "=" + encodeURIComponent(requestBody.body[key])).join("&");
             } else {
                 return JSON.stringify(requestBody.body);
             }

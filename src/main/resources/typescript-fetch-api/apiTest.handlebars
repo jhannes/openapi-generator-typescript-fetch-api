@@ -34,7 +34,7 @@ export function mockApplicationApis({
 
 export function mock{{classname}}(operations: {
     {{~#operation}}
-    {{nickname}}?: () => {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
+    {{nickname}}?: () => {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
     {{~/operation}}
 } = {}): {{classname}}Interface {
     return {

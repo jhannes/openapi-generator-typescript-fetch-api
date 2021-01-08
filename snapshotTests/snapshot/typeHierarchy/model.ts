@@ -11,8 +11,8 @@
  */
 
 export type AnyPetDto =
-	{ pet_type: 'Cat' } & CatDto |
-	{ pet_type: 'Dog' } & DogDto;
+	{ pet_type: "Cat" } & CatDto |
+	{ pet_type: "Dog" } & DogDto;
 
 
 export interface CatAllOfDto {

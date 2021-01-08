@@ -24,9 +24,9 @@ export const servers: Record<string, ApplicationApis> = {
 {{~#servers}}
     {{#if description}}"{{description}}"{{else}}default{{/if}}: {
     {{~#apiInfo}}{{#apis}}
-        {{classVarName}}Api: new {{classname}}("{{url}}"){{#unless @last}},{{/unless}}
+        {{classVarName}}Api: new {{classname}}("{{url}}"),
     {{~/apis}}{{/apiInfo}}
-    }{{#unless @last}},{{/unless}}
+    },
 {{~/servers}}
 };
 
@@ -37,7 +37,7 @@ export class {{name}} implements SecurityScheme {
 
     headers(): Record<string, string> {
         return {
-            "Authorization": `Bearer ${this.bearerToken}`
+            "Authorization": `Bearer ${this.bearerToken}`,
         }
     }
 {{~else if isBasicBasic}}
@@ -45,7 +45,7 @@ export class {{name}} implements SecurityScheme {
 
     headers(): Record<string, string> {
         return {
-            "Authorization": `Basic ${this.basicAuthorization}`
+            "Authorization": `Basic ${this.basicAuthorization}`,
         }
     }
 {{~else if isKeyInHeader}}
@@ -53,7 +53,7 @@ export class {{name}} implements SecurityScheme {
 
     headers(): Record<string, string> {
         return {
-            "Authorization": `Bearer ${this.name}`
+            "Authorization": `Bearer ${this.name}`,
         }
     }
 {{~else if isOAuth}}
@@ -61,7 +61,7 @@ export class {{name}} implements SecurityScheme {
 
     headers(): Record<string, string> {
         return {
-            "Authorization": `Bearer ${this.bearerToken}`
+            "Authorization": `Bearer ${this.bearerToken}`,
         }
     }
 {{~else}}

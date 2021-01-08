@@ -183,7 +183,7 @@ export class TestSampleData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sampleany(): any {
         return {
-            [this.randomString()]: this.randomString()
+            [this.randomString()]: this.randomString(),
         }
     }
 

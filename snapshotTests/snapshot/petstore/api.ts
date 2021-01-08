@@ -145,7 +145,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {},
             { body: params.petDto, contentType: "application/json" },
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -166,7 +166,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             undefined,
             {
                 ...params.headers,
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -185,7 +185,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             params && params.queryParams,
             undefined,
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -204,7 +204,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             params && params.queryParams,
             undefined,
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -223,7 +223,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {},
             undefined,
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -242,7 +242,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {},
             { body: params.petDto, contentType: "application/json" },
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -262,7 +262,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {},
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -282,7 +282,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {},
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -368,7 +368,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
             {},
             undefined,
             {
-                ...params.security?.headers()
+                ...params.security?.headers(),
             }
         );
     }
@@ -637,8 +637,8 @@ export const servers: Record<string, ApplicationApis> = {
     default: {
         petApi: new PetApi("http://petstore.swagger.io/v2"),
         storeApi: new StoreApi("http://petstore.swagger.io/v2"),
-        userApi: new UserApi("http://petstore.swagger.io/v2")
-    }
+        userApi: new UserApi("http://petstore.swagger.io/v2"),
+    },
 };
 
 
@@ -647,7 +647,7 @@ export class api_key implements SecurityScheme {
 
     headers(): Record<string, string> {
         return {
-            "Authorization": `Bearer ${this.name}`
+            "Authorization": `Bearer ${this.name}`,
         }
     }
 }
@@ -657,7 +657,7 @@ export class petstore_auth implements SecurityScheme {
 
     headers(): Record<string, string> {
         return {
-            "Authorization": `Bearer ${this.bearerToken}`
+            "Authorization": `Bearer ${this.bearerToken}`,
         }
     }
 }
