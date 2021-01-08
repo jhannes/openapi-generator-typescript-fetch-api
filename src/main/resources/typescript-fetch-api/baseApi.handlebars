@@ -1,11 +1,12 @@
 /* eslint @typescript-eslint/no-explicit-any: off */
+
 /* eslint @typescript-eslint/explicit-module-boundary-types: off */
 {{>licenseInfo}}
 
 export class BaseAPI {
 
     constructor(protected basePath: string = window.location.origin) {}
-{{#if hasAuthMethods}}{{#authMethods}}
+{{#authMethods}}
     private _{{name}}?: string;
 
     set{{name}}(value: string) {
@@ -25,8 +26,8 @@ export class BaseAPI {
         throw new Error("Unknown authorization scheme {{scheme}}");
         {{~/if}}
     }
-{{/authMethods}}{{/if}}
-    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: any = {}): Promise<any> {
+{{/authMethods}}
+    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: Record<string, string> = {}): Promise<any> {
         const result = await fetch(this.basePath + path + this.query(queryParams), {
             credentials: "same-origin", headers
         });
@@ -37,7 +38,7 @@ export class BaseAPI {
         path: string,
         queryParams: any,
         requestBody?: RequestBody,
-        headers: any = {}
+        headers: Record<string, string> = {}
     ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -56,7 +57,7 @@ export class BaseAPI {
         path: string,
         queryParams: any,
         requestBody?: RequestBody,
-        headers: any = {}
+        headers: Record<string, string> = {}
     ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -72,10 +73,10 @@ export class BaseAPI {
     }
 
     protected async PATCH(
-            path: string,
-            queryParams: any,
-            requestBody?: RequestBody,
-            headers: any = {}
+        path: string,
+        queryParams: any,
+        requestBody?: RequestBody,
+        headers: Record<string, string> = {}
     ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -94,7 +95,7 @@ export class BaseAPI {
         path: string,
         queryParams: any,
         requestBody?: RequestBody,
-        headers: any = {}
+        headers: Record<string, string> = {}
     ): Promise<void> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -109,7 +110,7 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected createRequestBody(requestBody?: RequestBody): string|undefined {
+    protected createRequestBody(requestBody?: RequestBody): string | undefined {
         if (requestBody) {
             if (requestBody.contentType === "application/x-www-form-urlencoded") {
                 return Object.keys(requestBody.body)
@@ -168,6 +169,7 @@ export interface RequestBody {
 export class HttpError extends Error {
     readonly response: Response;
     readonly body: any;
+
     constructor(response: Response, body?: any) {
         super(response.statusText);
         this.response = response;
@@ -211,3 +213,6 @@ export class RedirectedError extends HttpError {
     }
 }
 
+export interface SecurityScheme {
+    headers(): Record<string, string>;
+}

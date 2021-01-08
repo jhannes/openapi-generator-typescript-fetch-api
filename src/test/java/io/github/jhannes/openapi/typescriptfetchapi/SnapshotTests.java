@@ -10,15 +10,11 @@ import org.openapitools.codegen.config.CodegenConfigurator;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,8 +25,6 @@ import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class SnapshotTests {
-
-    public static final String NPM_PATH = "C:\\Program Files\\nodejs\\npm.cmd";
 
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
@@ -62,19 +56,10 @@ public class SnapshotTests {
             return dynamicTest("Snapshots for " + spec, () -> assertNull(e));
         }
         return dynamicContainer("Snapshots for " + spec, Stream.of(
-                //dynamicTest("Run npm build", () -> runNpmBuild(outputDir.resolve(getModelName(spec)))),
                 dynamicTest("Files", () -> compareFiles(outputDir, snapshotDir, getModelName(spec))),
                 dynamicContainer("File contents in " + outputDir, files.stream().map(file ->
                         dynamicTest("file " + outputDir.relativize(file), () -> diff(file, snapshotDir.resolve(outputDir.relativize(file))))
                 ))));
-    }
-
-    private void runNpmBuild(Path outputDir) throws IOException, InterruptedException {
-        Process npmInstall = Runtime.getRuntime().exec(new String[]{NPM_PATH, "install"}, new String[0], outputDir.toFile());
-        npmInstall.waitFor(10, TimeUnit.SECONDS);
-        transferTo(npmInstall.getInputStream(), System.out);
-        transferTo(npmInstall.getErrorStream(), System.err);
-        assertEquals(0, npmInstall.exitValue());
     }
 
     private void compareFiles(Path output, Path snapshotDir, String modelName) throws IOException {
@@ -133,19 +118,5 @@ public class SnapshotTests {
                         .forEach(File::delete);
             }
         }
-    }
-
-    private static final int DEFAULT_BUFFER_SIZE = 8192;
-
-    private static long transferTo(InputStream in, OutputStream out) throws IOException {
-        Objects.requireNonNull(out, "out");
-        long transferred = 0;
-        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-        int read;
-        while ((read = in.read(buffer, 0, DEFAULT_BUFFER_SIZE)) >= 0) {
-            out.write(buffer, 0, read);
-            transferred += read;
-        }
-        return transferred;
     }
 }

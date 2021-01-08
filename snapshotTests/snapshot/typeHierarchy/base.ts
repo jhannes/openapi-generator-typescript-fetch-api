@@ -1,4 +1,5 @@
 /* eslint @typescript-eslint/no-explicit-any: off */
+
 /* eslint @typescript-eslint/explicit-module-boundary-types: off */
 /**
  * Sample API
@@ -16,7 +17,7 @@ export class BaseAPI {
 
     constructor(protected basePath: string = window.location.origin) {}
 
-    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: any = {}): Promise<any> {
+    protected async GET(path: string, queryParams: any, requestBody: undefined, headers: Record<string, string> = {}): Promise<any> {
         const result = await fetch(this.basePath + path + this.query(queryParams), {
             credentials: "same-origin", headers
         });
@@ -27,7 +28,7 @@ export class BaseAPI {
         path: string,
         queryParams: any,
         requestBody?: RequestBody,
-        headers: any = {}
+        headers: Record<string, string> = {}
     ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -46,7 +47,7 @@ export class BaseAPI {
         path: string,
         queryParams: any,
         requestBody?: RequestBody,
-        headers: any = {}
+        headers: Record<string, string> = {}
     ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -62,10 +63,10 @@ export class BaseAPI {
     }
 
     protected async PATCH(
-            path: string,
-            queryParams: any,
-            requestBody?: RequestBody,
-            headers: any = {}
+        path: string,
+        queryParams: any,
+        requestBody?: RequestBody,
+        headers: Record<string, string> = {}
     ): Promise<any> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -84,7 +85,7 @@ export class BaseAPI {
         path: string,
         queryParams: any,
         requestBody?: RequestBody,
-        headers: any = {}
+        headers: Record<string, string> = {}
     ): Promise<void> {
         const body = this.createRequestBody(requestBody);
         if (requestBody) {
@@ -99,7 +100,7 @@ export class BaseAPI {
         return await this.handleResponse(result);
     }
 
-    protected createRequestBody(requestBody?: RequestBody): string|undefined {
+    protected createRequestBody(requestBody?: RequestBody): string | undefined {
         if (requestBody) {
             if (requestBody.contentType === "application/x-www-form-urlencoded") {
                 return Object.keys(requestBody.body)
@@ -158,6 +159,7 @@ export interface RequestBody {
 export class HttpError extends Error {
     readonly response: Response;
     readonly body: any;
+
     constructor(response: Response, body?: any) {
         super(response.statusText);
         this.response = response;
@@ -201,3 +203,6 @@ export class RedirectedError extends HttpError {
     }
 }
 
+export interface SecurityScheme {
+    headers(): Record<string, string>;
+}

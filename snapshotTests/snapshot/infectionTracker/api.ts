@@ -19,7 +19,7 @@ import {
     UserRoleDto,
 } from "./model";
 
-import { BaseAPI } from "./base";
+import { BaseAPI, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     caseWorkersApi: CaseWorkersApiInterface;
@@ -44,7 +44,7 @@ export interface CaseWorkersApiInterface {
      * @throws {HttpError}
      * @memberof CaseWorkersApi
      */
-    registerCaseWorker(params?: {
+    registerCaseWorker(params: {
         caseWorkerDto?: CaseWorkerDto;
     }): Promise<void>;
 }
@@ -62,7 +62,9 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
         return await this.GET(
             "/api/caseWorkers",
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -76,7 +78,9 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
         return await this.POST(
             "/api/caseWorkers",
             {},
-            { body: params.caseWorkerDto, contentType: "application/json" }
+            { body: params.caseWorkerDto, contentType: "application/json" },
+            {
+            }
         );
     }
 }
@@ -90,7 +94,7 @@ export interface CasesApiInterface {
      * @throws {HttpError}
      * @memberof CasesApi
      */
-    getCaseDetails(params?: {
+    getCaseDetails(params: {
         pathParams: { caseId: string };
     }): Promise<InfectionDto>;
     /**
@@ -106,7 +110,7 @@ export interface CasesApiInterface {
      * @throws {HttpError}
      * @memberof CasesApi
      */
-    newCase(params?: {
+    newCase(params: {
         infectionInformationDto?: InfectionInformationDto;
     }): Promise<void>;
     /**
@@ -115,7 +119,7 @@ export interface CasesApiInterface {
      * @throws {HttpError}
      * @memberof CasesApi
      */
-    registerExposure(params?: {
+    registerExposure(params: {
         pathParams: { caseId: string };
         exposureDto?: ExposureDto;
     }): Promise<void>;
@@ -136,7 +140,9 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         return await this.GET(
             this.path("/api/cases/{caseId}", params.pathParams),
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -148,7 +154,9 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         return await this.GET(
             "/api/cases",
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -162,7 +170,9 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         return await this.POST(
             "/api/cases",
             {},
-            { body: params.infectionInformationDto, contentType: "application/json" }
+            { body: params.infectionInformationDto, contentType: "application/json" },
+            {
+            }
         );
     }
     /**
@@ -177,7 +187,9 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         return await this.POST(
             this.path("/api/cases/{caseId}/exposures", params.pathParams),
             {},
-            { body: params.exposureDto, contentType: "application/json" }
+            { body: params.exposureDto, contentType: "application/json" },
+            {
+            }
         );
     }
 }
@@ -198,7 +210,7 @@ export interface ExposuresApiInterface {
      * @throws {HttpError}
      * @memberof ExposuresApi
      */
-    updateExposure(params?: {
+    updateExposure(params: {
         pathParams: { exposureId: string };
         exposureDto?: ExposureDto;
     }): Promise<void>;
@@ -217,7 +229,9 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
         return await this.GET(
             "/api/exposures",
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -232,24 +246,23 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
         return await this.PUT(
             this.path("/api/exposures/{exposureId}", params.pathParams),
             {},
-            { body: params.exposureDto, contentType: "application/json" }
+            { body: params.exposureDto, contentType: "application/json" },
+            {
+            }
         );
     }
 }
 
-export const servers: ApplicationApis[] = [
-    // current
-    {
+export const servers: Record<string, ApplicationApis> = {
+    "current": {
         caseWorkersApi: new CaseWorkersApi("/api"),
         casesApi: new CasesApi("/api"),
-        exposuresApi: new ExposuresApi("/api"),
+        exposuresApi: new ExposuresApi("/api")
     },
-
-    // production
-    {
+    "production": {
         caseWorkersApi: new CaseWorkersApi("https://infectiontracker.example.gov/api"),
         casesApi: new CasesApi("https://infectiontracker.example.gov/api"),
-        exposuresApi: new ExposuresApi("https://infectiontracker.example.gov/api"),
-    },
-];
+        exposuresApi: new ExposuresApi("https://infectiontracker.example.gov/api")
+    }
+};
 

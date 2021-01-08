@@ -20,7 +20,7 @@ import {
     PetDto,
 } from "./model";
 
-import { BaseAPI } from "./base";
+import { BaseAPI, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     defaultApi: DefaultApiInterface;
@@ -36,7 +36,7 @@ export interface DefaultApiInterface {
      * @throws {HttpError}
      * @memberof DefaultApi
      */
-    petsPatch(params?: {
+    petsPatch(params: {
         anyPetDto?: AnyPetDto;
     }): Promise<void>;
 }
@@ -56,20 +56,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         return await this.PATCH(
             "/pets",
             {},
-            { body: params.anyPetDto, contentType: "application/json" }
+            { body: params.anyPetDto, contentType: "application/json" },
+            {
+            }
         );
     }
 }
 
-export const servers: ApplicationApis[] = [
-    // Optional server description, e.g. Main (production) server
-    {
-        defaultApi: new DefaultApi("http://api.example.com/v1"),
+export const servers: Record<string, ApplicationApis> = {
+    "Optional server description, e.g. Main (production) server": {
+        defaultApi: new DefaultApi("http://api.example.com/v1")
     },
-
-    // Optional server description, e.g. Internal staging server for testing
-    {
-        defaultApi: new DefaultApi("http://staging-api.example.com"),
-    },
-];
+    "Optional server description, e.g. Internal staging server for testing": {
+        defaultApi: new DefaultApi("http://staging-api.example.com")
+    }
+};
 

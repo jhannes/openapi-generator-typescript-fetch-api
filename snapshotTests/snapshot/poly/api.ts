@@ -23,7 +23,7 @@ import {
     UpdateErrorDto,
 } from "./model";
 
-import { BaseAPI } from "./base";
+import { BaseAPI, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     defaultApi: DefaultApiInterface;
@@ -46,7 +46,7 @@ export interface DefaultApiInterface {
      * @throws {HttpError}
      * @memberof DefaultApi
      */
-    partiesIdPut(params?: {
+    partiesIdPut(params: {
         pathParams: { id: string };
         anyPartyDto?: AnyPartyDto;
     }): Promise<void>;
@@ -56,7 +56,7 @@ export interface DefaultApiInterface {
      * @throws {HttpError}
      * @memberof DefaultApi
      */
-    partiesPost(params?: {
+    partiesPost(params: {
         anyPartyDto?: AnyPartyDto;
     }): Promise<void>;
 }
@@ -74,7 +74,9 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         return await this.GET(
             "/parties",
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -89,7 +91,9 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         return await this.PUT(
             this.path("/parties/{id}", params.pathParams),
             {},
-            { body: params.anyPartyDto, contentType: "application/json" }
+            { body: params.anyPartyDto, contentType: "application/json" },
+            {
+            }
         );
     }
     /**
@@ -103,14 +107,16 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         return await this.POST(
             "/parties",
             {},
-            { body: params.anyPartyDto, contentType: "application/json" }
+            { body: params.anyPartyDto, contentType: "application/json" },
+            {
+            }
         );
     }
 }
 
-export const servers: ApplicationApis[] = [
-    {
-        defaultApi: new DefaultApi("/"),
-    },
-];
+export const servers: Record<string, ApplicationApis> = {
+    default: {
+        defaultApi: new DefaultApi("/")
+    }
+};
 

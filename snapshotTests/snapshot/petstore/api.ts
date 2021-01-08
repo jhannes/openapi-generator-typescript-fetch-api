@@ -21,7 +21,7 @@ import {
     UserDto,
 } from "./model";
 
-import { BaseAPI } from "./base";
+import { BaseAPI, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     petApi: PetApiInterface;
@@ -40,8 +40,9 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    addPet(params?: {
+    addPet(params: {
         petDto?: PetDto;
+        security: petstore_auth;
     }): Promise<void>;
     /**
      *
@@ -50,8 +51,10 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    deletePet(params?: {
+    deletePet(params: {
         pathParams: { petId: number };
+        headers: { "api_key": string };
+        security: petstore_auth;
     }): Promise<void>;
     /**
      *
@@ -60,8 +63,9 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    findPetsByStatus(params?: {
+    findPetsByStatus(params: {
         queryParams?: { status?: Array<"available" | "pending" | "sold">,  };
+        security: petstore_auth;
     }): Promise<Array<PetDto>>;
     /**
      *
@@ -70,8 +74,9 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    findPetsByTags(params?: {
+    findPetsByTags(params: {
         queryParams?: { tags?: Array<string>,  };
+        security: petstore_auth;
     }): Promise<Array<PetDto>>;
     /**
      *
@@ -80,8 +85,9 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    getPetById(params?: {
+    getPetById(params: {
         pathParams: { petId: number };
+        security: api_key;
     }): Promise<PetDto>;
     /**
      *
@@ -90,8 +96,9 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    updatePet(params?: {
+    updatePet(params: {
         petDto?: PetDto;
+        security: petstore_auth;
     }): Promise<void>;
     /**
      *
@@ -100,9 +107,10 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    updatePetWithForm(params?: {
+    updatePetWithForm(params: {
         pathParams: { petId: string };
         formParams: { name: string; status: string; }
+        security: petstore_auth;
     }): Promise<void>;
     /**
      *
@@ -111,9 +119,10 @@ export interface PetApiInterface {
      * @throws {HttpError}
      * @memberof PetApi
      */
-    uploadFile(params?: {
+    uploadFile(params: {
         pathParams: { petId: number };
         formParams: { additionalMetadata: string; file: Blob; }
+        security: petstore_auth;
     }): Promise<void>;
 }
 
@@ -129,12 +138,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async addPet(params: {
         petDto?: PetDto;
+        security: petstore_auth;
     }): Promise<void> {
         return await this.POST(
             "/pet",
             {},
             { body: params.petDto, contentType: "application/json" },
-            this.petstore_auth()
+            {
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -145,12 +157,17 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async deletePet(params: {
         pathParams: { petId: number };
+        headers: { "api_key": string };
+        security: petstore_auth;
     }): Promise<void> {
         return await this.DELETE(
             this.path("/pet/{petId}", params.pathParams),
             {},
             undefined,
-            this.petstore_auth()
+            {
+                ...params.headers,
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -161,12 +178,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async findPetsByStatus(params: {
         queryParams?: { status?: Array<"available" | "pending" | "sold">,  };
+        security: petstore_auth;
     }): Promise<Array<PetDto>> {
         return await this.GET(
             "/pet/findByStatus",
             params && params.queryParams,
             undefined,
-            this.petstore_auth()
+            {
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -177,12 +197,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async findPetsByTags(params: {
         queryParams?: { tags?: Array<string>,  };
+        security: petstore_auth;
     }): Promise<Array<PetDto>> {
         return await this.GET(
             "/pet/findByTags",
             params && params.queryParams,
             undefined,
-            this.petstore_auth()
+            {
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -193,12 +216,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async getPetById(params: {
         pathParams: { petId: number };
+        security: api_key;
     }): Promise<PetDto> {
         return await this.GET(
             this.path("/pet/{petId}", params.pathParams),
             {},
             undefined,
-            this.api_key()
+            {
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -209,12 +235,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async updatePet(params: {
         petDto?: PetDto;
+        security: petstore_auth;
     }): Promise<void> {
         return await this.PUT(
             "/pet",
             {},
             { body: params.petDto, contentType: "application/json" },
-            this.petstore_auth()
+            {
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -226,12 +255,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async updatePetWithForm(params: {
         pathParams: { petId: string };
         formParams: { name: string; status: string; }
+        security: petstore_auth;
     }): Promise<void> {
         return await this.POST(
             this.path("/pet/{petId}", params.pathParams),
             {},
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
-            this.petstore_auth()
+            {
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -243,12 +275,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async uploadFile(params: {
         pathParams: { petId: number };
         formParams: { additionalMetadata: string; file: Blob; }
+        security: petstore_auth;
     }): Promise<void> {
         return await this.POST(
             this.path("/pet/{petId}/uploadImage", params.pathParams),
             {},
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
-            this.petstore_auth()
+            {
+                ...params.security?.headers()
+            }
         );
     }
 }
@@ -263,7 +298,7 @@ export interface StoreApiInterface {
      * @throws {HttpError}
      * @memberof StoreApi
      */
-    deleteOrder(params?: {
+    deleteOrder(params: {
         pathParams: { orderId: string };
     }): Promise<void>;
     /**
@@ -273,7 +308,9 @@ export interface StoreApiInterface {
      * @throws {HttpError}
      * @memberof StoreApi
      */
-    getInventory(): Promise<{ [key: string]: number; }>;
+    getInventory(params: {
+        security: api_key;
+    }): Promise<{ [key: string]: number; }>;
     /**
      *
      * @summary Find purchase order by ID
@@ -281,7 +318,7 @@ export interface StoreApiInterface {
      * @throws {HttpError}
      * @memberof StoreApi
      */
-    getOrderById(params?: {
+    getOrderById(params: {
         pathParams: { orderId: string };
     }): Promise<OrderDto>;
     /**
@@ -291,7 +328,7 @@ export interface StoreApiInterface {
      * @throws {HttpError}
      * @memberof StoreApi
      */
-    placeOrder(params?: {
+    placeOrder(params: {
         orderDto?: OrderDto;
     }): Promise<OrderDto>;
 }
@@ -312,7 +349,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         return await this.DELETE(
             this.path("/store/order/{orderId}", params.pathParams),
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -321,12 +360,16 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async getInventory(): Promise<{ [key: string]: number; }> {
+    public async getInventory(params: {
+        security: api_key;
+    }): Promise<{ [key: string]: number; }> {
         return await this.GET(
             "/store/inventory",
             {},
             undefined,
-            this.api_key()
+            {
+                ...params.security?.headers()
+            }
         );
     }
     /**
@@ -341,7 +384,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         return await this.GET(
             this.path("/store/order/{orderId}", params.pathParams),
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -356,7 +401,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         return await this.POST(
             "/store/order",
             {},
-            { body: params.orderDto, contentType: "application/json" }
+            { body: params.orderDto, contentType: "application/json" },
+            {
+            }
         );
     }
 }
@@ -371,7 +418,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      * @memberof UserApi
      */
-    createUser(params?: {
+    createUser(params: {
         userDto?: UserDto;
     }): Promise<void>;
     /**
@@ -381,7 +428,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      * @memberof UserApi
      */
-    createUsersWithArrayInput(params?: {
+    createUsersWithArrayInput(params: {
         userDto?: Array<UserDto>;
     }): Promise<void>;
     /**
@@ -391,7 +438,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      * @memberof UserApi
      */
-    createUsersWithListInput(params?: {
+    createUsersWithListInput(params: {
         userDto?: Array<UserDto>;
     }): Promise<void>;
     /**
@@ -401,7 +448,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      * @memberof UserApi
      */
-    deleteUser(params?: {
+    deleteUser(params: {
         pathParams: { username: string };
     }): Promise<void>;
     /**
@@ -411,7 +458,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      * @memberof UserApi
      */
-    getUserByName(params?: {
+    getUserByName(params: {
         pathParams: { username: string };
     }): Promise<UserDto>;
     /**
@@ -421,7 +468,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      * @memberof UserApi
      */
-    loginUser(params?: {
+    loginUser(params: {
         queryParams?: { username?: string, password?: string,  };
     }): Promise<string>;
     /**
@@ -439,7 +486,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      * @memberof UserApi
      */
-    updateUser(params?: {
+    updateUser(params: {
         pathParams: { username: string };
         userDto?: UserDto;
     }): Promise<void>;
@@ -461,7 +508,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.POST(
             "/user",
             {},
-            { body: params.userDto, contentType: "application/json" }
+            { body: params.userDto, contentType: "application/json" },
+            {
+            }
         );
     }
     /**
@@ -476,7 +525,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.POST(
             "/user/createWithArray",
             {},
-            { body: params.userDto, contentType: "application/json" }
+            { body: params.userDto, contentType: "application/json" },
+            {
+            }
         );
     }
     /**
@@ -491,7 +542,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.POST(
             "/user/createWithList",
             {},
-            { body: params.userDto, contentType: "application/json" }
+            { body: params.userDto, contentType: "application/json" },
+            {
+            }
         );
     }
     /**
@@ -506,7 +559,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.DELETE(
             this.path("/user/{username}", params.pathParams),
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -521,7 +576,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.GET(
             this.path("/user/{username}", params.pathParams),
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -536,7 +593,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.GET(
             "/user/login",
             params && params.queryParams,
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -549,7 +608,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.GET(
             "/user/logout",
             {},
-            undefined
+            undefined,
+            {
+            }
         );
     }
     /**
@@ -565,16 +626,38 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         return await this.PUT(
             this.path("/user/{username}", params.pathParams),
             {},
-            { body: params.userDto, contentType: "application/json" }
+            { body: params.userDto, contentType: "application/json" },
+            {
+            }
         );
     }
 }
 
-export const servers: ApplicationApis[] = [
-    {
+export const servers: Record<string, ApplicationApis> = {
+    default: {
         petApi: new PetApi("http://petstore.swagger.io/v2"),
         storeApi: new StoreApi("http://petstore.swagger.io/v2"),
-        userApi: new UserApi("http://petstore.swagger.io/v2"),
-    },
-];
+        userApi: new UserApi("http://petstore.swagger.io/v2")
+    }
+};
 
+
+export class api_key implements SecurityScheme {
+    constructor(private name: string) {}
+
+    headers(): Record<string, string> {
+        return {
+            "Authorization": `Bearer ${this.name}`
+        }
+    }
+}
+
+export class petstore_auth implements SecurityScheme {
+    constructor(private bearerToken: string) {}
+
+    headers(): Record<string, string> {
+        return {
+            "Authorization": `Bearer ${this.bearerToken}`
+        }
+    }
+}

@@ -9,7 +9,7 @@ import {
 {{~/models}}
 } from "./model";
 
-import { BaseAPI } from "./base";
+import { BaseAPI, SecurityScheme } from "./base";
 
 {{#withInterfaces~}}
 export interface ApplicationApis {
@@ -20,14 +20,54 @@ export interface ApplicationApis {
 {{~/withInterfaces}}
 {{#apiInfo}}{{#apis}}{{>apiInner}}{{/apis}}{{/apiInfo}}
 
-export const servers: ApplicationApis[] = [{{#servers}}
-    {{~#description}}
-    // {{description}}
-    {{~/description}}
-    {
+export const servers: Record<string, ApplicationApis> = {
+{{~#servers}}
+    {{#if description}}"{{description}}"{{else}}default{{/if}}: {
     {{~#apiInfo}}{{#apis}}
-        {{classVarName}}Api: new {{classname}}("{{url}}"),
+        {{classVarName}}Api: new {{classname}}("{{url}}"){{#unless @last}},{{/unless}}
     {{~/apis}}{{/apiInfo}}
-    },
-{{/servers}}];
+    }{{#unless @last}},{{/unless}}
+{{~/servers}}
+};
 
+{{#authMethods}}
+export class {{name}} implements SecurityScheme {
+{{~#if isBasicBearer}}
+    constructor(private bearerToken: string) {}
+
+    headers(): Record<string, string> {
+        return {
+            "Authorization": `Bearer ${this.bearerToken}`
+        }
+    }
+{{~else if isBasicBasic}}
+    constructor(private basicAuthorization: string) {}
+
+    headers(): Record<string, string> {
+        return {
+            "Authorization": `Basic ${this.basicAuthorization}`
+        }
+    }
+{{~else if isKeyInHeader}}
+    constructor(private name: string) {}
+
+    headers(): Record<string, string> {
+        return {
+            "Authorization": `Bearer ${this.name}`
+        }
+    }
+{{~else if isOAuth}}
+    constructor(private bearerToken: string) {}
+
+    headers(): Record<string, string> {
+        return {
+            "Authorization": `Bearer ${this.bearerToken}`
+        }
+    }
+{{~else}}
+    constructor() {
+        throw new Error("Unknown authorization scheme {{scheme}}");
+    }
+{{~/if}}
+}
+{{/authMethods~}}

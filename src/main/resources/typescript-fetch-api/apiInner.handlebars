@@ -17,12 +17,16 @@ export interface {{classname}}Interface {
      * @throws {HttpError}
      * @memberof {{classname}}
      */
-    {{nickname}}({{#hasParams}}params?: { {{~#pathParams.0}}
+    {{nickname}}({{#if hasParams}}params: { {{~#pathParams.0}}
         pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/pathParams.0}}{{#queryParams.0}}
         queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/queryParams.0}}{{#bodyParam}}
         {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
-        formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}
-    }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
+        formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
+        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}}};{{/hasHeaderParams}}{{#authMethods}}{{#if @first}}
+        security: {{name}};{{/if}}{{/authMethods}}
+    }{{else if hasAuthMethods}}params: {
+        security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
+    }{{/if}}): {{#if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
 {{~/operation}}
 }
 {{/operations}}{{~/withInterfaces}}
@@ -46,12 +50,16 @@ export class {{classname}} extends BaseAPI {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async {{nickname}}({{#hasParams}}params{{^allParams}}?{{/allParams}}: { {{~#pathParams.0}}
+    public async {{nickname}}({{#if hasParams}}params{{^allParams}}?{{/allParams}}: { {{~#pathParams.0}}
         pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/pathParams.0}}{{#queryParams.0}}
         queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/queryParams.0}}{{#bodyParam}}
         {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
-        formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}
-    }{{/hasParams}}): {{#if returnType}}Promise<{{{returnType}}}>{{else if isResponseFile}}Promise<Blob>{{else}}Promise<void>{{/if}} {
+        formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
+        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#authMethods}}{{#if @first}}
+        security: {{name}};{{/if}}{{/authMethods}}
+    }{{else if hasAuthMethods}}params: {
+        security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
+    }{{/if}}): {{#if returnType}}Promise<{{{returnType}}}>{{else if isResponseFile}}Promise<Blob>{{else}}Promise<void>{{/if}} {
         {{~#if isResponseFile}}
         const response: Response = await this.{{httpMethod}}(
             {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
@@ -62,8 +70,11 @@ export class {{classname}} extends BaseAPI {
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
             {{~else}}
             undefined
-            {{~/if}}{{#authMethods}}{{#if @first}},
-            this.{{name}}(){{/if}}{{/authMethods}}
+            {{~/if}},
+            { {{~#hasHeaderParams}}
+                ...params.headers,{{/hasHeaderParams}}{{#hasAuthMethods}}
+                ...params.security?.headers(){{/hasAuthMethods}}
+            }
         );
         return await response.blob();
         {{~else}}
@@ -76,8 +87,11 @@ export class {{classname}} extends BaseAPI {
             { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
             {{~else}}
             undefined
-            {{~/if}}{{#authMethods}}{{#if @first}},
-            this.{{name}}(){{/if}}{{/authMethods}}
+            {{~/if}},
+            { {{~#hasHeaderParams}}
+                ...params.headers,{{/hasHeaderParams}}{{#hasAuthMethods}}
+                ...params.security?.headers(){{/hasAuthMethods}}
+            }
         );
         {{~/if}}
     }
