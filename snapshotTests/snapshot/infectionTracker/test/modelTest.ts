@@ -2,9 +2,11 @@ import {
     CaseWorkerDto,
     ExposureDto,
     ExposureDtoStatusDtoEnum,
+    ExposureDtoStatusDtoEnumValues,
     InfectionDto,
     InfectionInformationDto,
     UserRoleDto,
+    UserRoleDtoValues,
 } from "../model";
 
 export class Random {
@@ -357,14 +359,7 @@ export class TestSampleData {
             status: this.generate(
                 template?.status,
                 { containerClass, propertyName: "status", example: "null", isNullable: false },
-                () =>
-                    this.pickOne([
-                        ExposureDtoStatusDtoEnum.Unidentified,
-                        ExposureDtoStatusDtoEnum.Identified,
-                        ExposureDtoStatusDtoEnum.Contacted,
-                        ExposureDtoStatusDtoEnum.Tested,
-                        ExposureDtoStatusDtoEnum.Infected,
-                    ])
+                () => this.pickOne(ExposureDtoStatusDtoEnumValues)
             ),
         };
     }
@@ -457,11 +452,7 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        return this.pickOne([
-            UserRoleDto.Administrator,
-            UserRoleDto.Interviewer,
-            UserRoleDto.Followup,
-        ]);
+        return this.pickOne(UserRoleDtoValues);
     }
 
     sampleArrayUserRoleDto(length?: number): Array<UserRoleDto> {

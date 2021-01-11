@@ -1,12 +1,17 @@
-/**{{#description}}
- * {{{description}}}{{/description}}
- * @export
- * @enum {string}
- */
-export enum {{classname}} {
+{{#description}}/**
+ * {{{description}}}
+ */{{/description}}
+export type {{classname}} =
 {{~#allowableValues}}
 {{~#enumVars}}
-    {{{name}}} = {{{value}}},
+    | {{{value}}}{{#if @last}};{{/if}}
 {{~/enumVars}}
 {{~/allowableValues}}
-}
+
+export const {{classname}}Values: {{classname}}[] = [
+{{~#allowableValues}}
+    {{~#enumVars}}
+    {{{value}}},
+    {{~/enumVars}}
+{{~/allowableValues}}
+];

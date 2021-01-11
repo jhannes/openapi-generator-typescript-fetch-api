@@ -51,11 +51,16 @@ export interface OrderDto {
 /**
  * Order Status
  */
-export enum OrderDtoStatusDtoEnum {
-    Placed = "placed",
-    Approved = "approved",
-    Delivered = "delivered",
-}
+export type OrderDtoStatusDtoEnum =
+    | "placed"
+    | "approved"
+    | "delivered";
+
+export const OrderDtoStatusDtoEnumValues: OrderDtoStatusDtoEnum[] = [
+    "placed",
+    "approved",
+    "delivered",
+];
 
 export interface PetDto {
     id?: number;
@@ -71,11 +76,16 @@ export interface PetDto {
 /**
  * pet status in the store
  */
-export enum PetDtoStatusDtoEnum {
-    Available = "available",
-    Pending = "pending",
-    Sold = "sold",
-}
+export type PetDtoStatusDtoEnum =
+    | "available"
+    | "pending"
+    | "sold";
+
+export const PetDtoStatusDtoEnumValues: PetDtoStatusDtoEnum[] = [
+    "available",
+    "pending",
+    "sold",
+];
 
 export interface TagDto {
     id?: number;

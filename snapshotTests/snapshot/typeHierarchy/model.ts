@@ -30,24 +30,36 @@ export interface DogAllOfDto {
     breed?: DogAllOfDtoBreedDtoEnum;
 }
 
-export enum DogAllOfDtoBreedDtoEnum {
-    Dingo = "Dingo",
-    Husky = "Husky",
-    Retriever = "Retriever",
-    Shepherd = "Shepherd",
-}
+export type DogAllOfDtoBreedDtoEnum =
+    | "Dingo"
+    | "Husky"
+    | "Retriever"
+    | "Shepherd";
+
+export const DogAllOfDtoBreedDtoEnumValues: DogAllOfDtoBreedDtoEnum[] = [
+    "Dingo",
+    "Husky",
+    "Retriever",
+    "Shepherd",
+];
 
 export interface DogDto extends PetDto {
     bark?: boolean;
     breed?: DogDtoBreedDtoEnum;
 }
 
-export enum DogDtoBreedDtoEnum {
-    Dingo = "Dingo",
-    Husky = "Husky",
-    Retriever = "Retriever",
-    Shepherd = "Shepherd",
-}
+export type DogDtoBreedDtoEnum =
+    | "Dingo"
+    | "Husky"
+    | "Retriever"
+    | "Shepherd";
+
+export const DogDtoBreedDtoEnumValues: DogDtoBreedDtoEnum[] = [
+    "Dingo",
+    "Husky",
+    "Retriever",
+    "Shepherd",
+];
 
 export interface PetDto {
     pet_type: string;

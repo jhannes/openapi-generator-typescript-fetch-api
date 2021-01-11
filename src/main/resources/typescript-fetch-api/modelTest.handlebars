@@ -2,10 +2,14 @@ import {
 {{~#models}}
 {{~#model}}
     {{classname}},
+    {{~#isEnum}}
+    {{classname}}Values,
+    {{~/isEnum}}
 {{~^oneOf}}
 {{~#vars}}
     {{~#isEnum}}{{~^isContainer}}
     {{datatypeWithEnum}},
+    {{datatypeWithEnum}}Values,
     {{~/isContainer}}{{~/isEnum}}
 {{~/vars}}
 {{~/oneOf}}
@@ -270,13 +274,7 @@ export class TestSampleData {
             return this.sampleModelProperties[containerClass](this);
         }
 {{~#if isEnum}}
-        return this.pickOne([
-        {{~#allowableValues}}
-            {{~#enumVars}}
-            {{classname}}.{{{name}}},
-            {{~/enumVars}}
-        {{~/allowableValues}}
-        ]);
+        return this.pickOne({{classname}}Values);
 {{~else}}
         return {
 {{~#allVars}}
@@ -292,11 +290,7 @@ export class TestSampleData {
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
-                () =>
-                    {{^isContainer}}this.pickOne([{{#allowableValues}}{{#enumVars}}
-                        {{datatypeWithEnum}}.{{{name}}},
-                {{~/enumVars}}{{/allowableValues}}
-                    ]){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne([{{#allowableValues}}{{#enumVars}}{{datatypeWithEnum}}.{{{name}}}{{#unless @last}},{{/unless}}{{/enumVars}}{{/allowableValues}}]){{/mostInnerItems}}{{/isContainer}}
+                () => {{^isContainer}}this.pickOne({{datatypeWithEnum}}Values){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne({{datatypeWithEnum}}Values){{/mostInnerItems}}{{/isContainer}}
             ),
 {{~/isEnum}}
 {{~/isString}}

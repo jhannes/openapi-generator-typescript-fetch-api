@@ -37,13 +37,20 @@ export interface ExposureDto {
     status: ExposureDtoStatusDtoEnum;
 }
 
-export enum ExposureDtoStatusDtoEnum {
-    Unidentified = "unidentified",
-    Identified = "identified",
-    Contacted = "contacted",
-    Tested = "tested",
-    Infected = "infected",
-}
+export type ExposureDtoStatusDtoEnum =
+    | "unidentified"
+    | "identified"
+    | "contacted"
+    | "tested"
+    | "infected";
+
+export const ExposureDtoStatusDtoEnumValues: ExposureDtoStatusDtoEnum[] = [
+    "unidentified",
+    "identified",
+    "contacted",
+    "tested",
+    "infected",
+];
 
 export interface InfectionDto {
     readonly id?: string;
@@ -60,12 +67,14 @@ export interface InfectionInformationDto {
      */
     notes?: string;
 }
-/**
- * @export
- * @enum {string}
- */
-export enum UserRoleDto {
-    Administrator = "administrator",
-    Interviewer = "interviewer",
-    Followup = "followup",
-}
+
+export type UserRoleDto =
+    | "administrator"
+    | "interviewer"
+    | "followup";
+
+export const UserRoleDtoValues: UserRoleDto[] = [
+    "administrator",
+    "interviewer",
+    "followup",
+];

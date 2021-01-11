@@ -4,8 +4,10 @@ import {
     CatDto,
     DogAllOfDto,
     DogAllOfDtoBreedDtoEnum,
+    DogAllOfDtoBreedDtoEnumValues,
     DogDto,
     DogDtoBreedDtoEnum,
+    DogDtoBreedDtoEnumValues,
     PetDto,
 } from "../model";
 
@@ -364,13 +366,7 @@ export class TestSampleData {
             breed: this.generate(
                 template?.breed,
                 { containerClass, propertyName: "breed", example: "null", isNullable: false },
-                () =>
-                    this.pickOne([
-                        DogAllOfDtoBreedDtoEnum.Dingo,
-                        DogAllOfDtoBreedDtoEnum.Husky,
-                        DogAllOfDtoBreedDtoEnum.Retriever,
-                        DogAllOfDtoBreedDtoEnum.Shepherd,
-                    ])
+                () => this.pickOne(DogAllOfDtoBreedDtoEnumValues)
             ),
         };
     }
@@ -414,13 +410,7 @@ export class TestSampleData {
             breed: this.generate(
                 template?.breed,
                 { containerClass, propertyName: "breed", example: "null", isNullable: false },
-                () =>
-                    this.pickOne([
-                        DogDtoBreedDtoEnum.Dingo,
-                        DogDtoBreedDtoEnum.Husky,
-                        DogDtoBreedDtoEnum.Retriever,
-                        DogDtoBreedDtoEnum.Shepherd,
-                    ])
+                () => this.pickOne(DogDtoBreedDtoEnumValues)
             ),
         };
     }

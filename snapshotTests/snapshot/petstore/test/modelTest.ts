@@ -4,8 +4,10 @@ import {
     InlineObjectDto,
     OrderDto,
     OrderDtoStatusDtoEnum,
+    OrderDtoStatusDtoEnumValues,
     PetDto,
     PetDtoStatusDtoEnum,
+    PetDtoStatusDtoEnumValues,
     TagDto,
     UserDto,
 } from "../model";
@@ -403,12 +405,7 @@ export class TestSampleData {
             status: this.generate(
                 template?.status,
                 { containerClass, propertyName: "status", example: "null", isNullable: false },
-                () =>
-                    this.pickOne([
-                        OrderDtoStatusDtoEnum.Placed,
-                        OrderDtoStatusDtoEnum.Approved,
-                        OrderDtoStatusDtoEnum.Delivered,
-                    ])
+                () => this.pickOne(OrderDtoStatusDtoEnumValues)
             ),
             complete: this.generate(
                 template?.complete,
@@ -462,12 +459,7 @@ export class TestSampleData {
             status: this.generate(
                 template?.status,
                 { containerClass, propertyName: "status", example: "null", isNullable: false },
-                () =>
-                    this.pickOne([
-                        PetDtoStatusDtoEnum.Available,
-                        PetDtoStatusDtoEnum.Pending,
-                        PetDtoStatusDtoEnum.Sold,
-                    ])
+                () => this.pickOne(PetDtoStatusDtoEnumValues)
             ),
         };
     }

@@ -20,16 +20,21 @@ export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
 }
 
 {{~#hasEnums}}{{~#vars}}{{~#isEnum}}
-{{#description~}}
-/**
+{{#description}}/**
  * {{{description}}}
- */
-{{~/description}}
-export enum {{enumName}} {
+ */{{/description}}
+export type {{enumName}} =
+{{~#allowableValues}}
+{{~#enumVars}}
+    | {{{value}}}{{#if @last}};{{/if}}
+{{~/enumVars}}
+{{~/allowableValues}}
+
+export const {{enumName}}Values: {{enumName}}[] = [
 {{~#allowableValues}}
     {{~#enumVars}}
-    {{{name}}} = {{{value}}},
+    {{{value}}},
     {{~/enumVars}}
 {{~/allowableValues}}
-}
+];
 {{~/isEnum}}{{~/vars}}{{~/hasEnums}}
