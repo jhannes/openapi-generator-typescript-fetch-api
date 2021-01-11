@@ -1,8 +1,9 @@
-/localSnapshotTests/
 /target/
 *.iml
 .idea
+/localSnapshotTests/
 /snapshotTests/output/
+/snapshotTests/verify/
 pom.xml.releaseBackup
 release.properties
 node_modules/
