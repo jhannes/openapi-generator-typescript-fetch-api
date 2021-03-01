@@ -87,7 +87,7 @@ export interface PetApiInterface {
      */
     getPetById(params: {
         pathParams: { petId: number };
-        security: api_key;
+        security: api_key | petstore_auth;
     }): Promise<PetDto>;
     /**
      *
@@ -216,7 +216,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async getPetById(params: {
         pathParams: { petId: number };
-        security: api_key;
+        security: api_key | petstore_auth;
     }): Promise<PetDto> {
         return await this.GET(
             this.path("/pet/{petId}", params.pathParams),
