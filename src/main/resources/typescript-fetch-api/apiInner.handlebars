@@ -23,7 +23,7 @@ export interface {{classname}}Interface {
         {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
         headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}}};{{/hasHeaderParams}}{{#authMethods}}{{#if @first}}
-        security: {{name}};{{/if}}{{/authMethods}}
+        security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
     }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
@@ -56,7 +56,7 @@ export class {{classname}} extends BaseAPI {
         {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
         headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#authMethods}}{{#if @first}}
-        security: {{name}};{{/if}}{{/authMethods}}
+        security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
     }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
