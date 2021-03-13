@@ -29,10 +29,10 @@
         "@typescript-eslint/parser": "^4.12.0",
         "eslint-config-prettier": "^7.1.0",
         "eslint-plugin-prettier": "^3.3.1"
-    }{{#npmRepository}},
+    }{{#if npmRepository}},
     "publishConfig": {
         "registry": "{{npmRepository}}"
-    }{{/npmRepository}},
+    }{{/if}},
     "eslintConfig": {
         "root": true,
         "parser": "@typescript-eslint/parser",

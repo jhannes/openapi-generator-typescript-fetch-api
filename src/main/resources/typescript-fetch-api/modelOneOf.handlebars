@@ -1,8 +1,8 @@
-{{~#description}}
+{{~#if description}}
 /**
  * {{{description}}}
  */
-{{~/description}}
+{{~/if}}
 export type {{classname}} ={{#discriminator}}
 {{~#mappedModels}}
 	{ {{discriminator.propertyName}}: "{{mappingName}}" } & {{modelName}}{{#unless @last}} |{{/unless}}{{/mappedModels}}

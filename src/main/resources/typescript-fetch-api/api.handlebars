@@ -30,7 +30,7 @@ export const servers: Record<string, ApplicationApis> = {
 {{~/servers}}
 };
 
-{{#authMethods}}
+{{#if authMethods}}{{#authMethods}}
 {{~#unless (eq scheme 'none')}}
 export class {{name}} implements SecurityScheme {
 {{~#if isBasicBearer}}
@@ -72,4 +72,4 @@ export class {{name}} implements SecurityScheme {
 {{~/if}}
 }
 {{/unless~}}
-{{/authMethods~}}
+{{/authMethods~}}{{/if}}

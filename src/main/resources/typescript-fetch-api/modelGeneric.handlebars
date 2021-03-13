@@ -1,28 +1,28 @@
-{{~#description}}
+{{~#if description}}
 /**
  * {{{description}}}
  */
-{{~/description}}
-export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
+{{~/if}}
+export interface {{classname}} {{#if parent}}extends {{{parent}}} {{/if}}{
 
-{{~#additionalPropertiesType}}
+{{~#if additionalPropertiesType}}
     [key: string]: {{{additionalPropertiesType}}}{{#hasVars}} | any{{/hasVars}};
 
-{{/additionalPropertiesType~}}
+{{/if~}}
 {{~#vars}}
-    {{~#description}}
+    {{~#if description}}
     /**
      * {{{description}}}
      */
-    {{~/description}}
+    {{~/if}}
     {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{#isReadOnly}}?{{/isReadOnly}}{{/required}}: {{#if isEnum}}{{{datatypeWithEnum}}}{{else if isFile}}Blob{{else}}{{{dataType}}}{{/if}}{{#isNullable}} | null{{/isNullable}};
 {{~/vars}}
 }
 
 {{~#hasEnums}}{{~#vars}}{{~#isEnum}}
-{{#description}}/**
+{{#if description}}/**
  * {{{description}}}
- */{{/description}}
+ */{{/if}}
 export type {{enumName}} =
 {{~#allowableValues}}
 {{~#enumVars}}

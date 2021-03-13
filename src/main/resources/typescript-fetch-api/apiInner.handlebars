@@ -2,28 +2,28 @@
 {{~#operations}}
 /**
  * {{classname}} - object-oriented interface
-{{~#description}}
+{{~#if description}}
  * {{{description}}}
-{{~/description}}
+{{~/if}}
  */
 export interface {{classname}}Interface {
 {{~#operation}}
     /**
      *
-     {{~#summary}}
+     {{~#if summary}}
      * @summary {{summary}}
-     {{~/summary}}
+     {{~/if}}
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      * @memberof {{classname}}
      */
-    {{nickname}}({{#if hasParams}}params: { {{~#pathParams.0}}
-        pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/pathParams.0}}{{#queryParams.0}}
-        queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/queryParams.0}}{{#bodyParam}}
-        {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
+    {{nickname}}({{#if hasParams}}params: { {{~#if pathParams.0}}
+        pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/if}}{{#if queryParams.0}}
+        queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/if}}{{#if bodyParam}}{{#bodyParam}}
+        {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{/if}}{{#hasFormParams}}
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
-        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}}};{{/hasHeaderParams}}{{#authMethods}}{{#if @first}}
-        security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
+        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}}};{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
+        security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
     }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
@@ -32,8 +32,8 @@ export interface {{classname}}Interface {
 {{/operations}}{{~/withInterfaces}}
 {{~#operations}}
 /**
- * {{classname}} - object-oriented interface{{#description}}
- * {{{description}}}{{/description}}
+ * {{classname}} - object-oriented interface{{#if description}}
+ * {{{description}}}{{/if}}
  */
 {{~#withInterfaces}}
 export class {{classname}} extends BaseAPI implements {{classname}}Interface {
@@ -44,19 +44,19 @@ export class {{classname}} extends BaseAPI {
 {{~#operation}}
     /**
      *
-     {{~#summary}}
+     {{~#if summary}}
      * @summary {{&summary}}
-     {{~/summary}}
+     {{~/if}}
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async {{nickname}}({{#if hasParams}}params{{^allParams}}?{{/allParams}}: { {{~#pathParams.0}}
-        pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/pathParams.0}}{{#queryParams.0}}
-        queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/queryParams.0}}{{#bodyParam}}
-        {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{#hasFormParams}}
+    public async {{nickname}}({{#if hasParams}}params{{^allParams}}?{{/allParams}}: { {{~#if pathParams.0}}
+        pathParams: { {{#pathParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#unless @last}}, {{/unless}}{{/pathParams}} };{{/if}}{{#if queryParams.0}}
+        queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/if}}{{#if bodyParam}}{{#bodyParam}}
+        {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{/if}}{{#hasFormParams}}
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
-        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#authMethods}}{{#if @first}}
-        security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
+        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
+        security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
     }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
