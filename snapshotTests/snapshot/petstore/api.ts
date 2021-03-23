@@ -633,7 +633,10 @@ export class UserApi extends BaseAPI implements UserApiInterface {
     }
 }
 
-export const servers: Record<string, ApplicationApis> = {
+type ServerNames =
+    | "default";
+
+export const servers: Record<ServerNames, ApplicationApis> = {
     default: {
         petApi: new PetApi("http://petstore.swagger.io/v2"),
         storeApi: new StoreApi("http://petstore.swagger.io/v2"),

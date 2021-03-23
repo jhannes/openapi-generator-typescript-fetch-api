@@ -63,7 +63,11 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 }
 
-export const servers: Record<string, ApplicationApis> = {
+type ServerNames =
+    | "Optional server description, e.g. Main (production) server"
+    | "Optional server description, e.g. Internal staging server for testing";
+
+export const servers: Record<ServerNames, ApplicationApis> = {
     "Optional server description, e.g. Main (production) server": {
         defaultApi: new DefaultApi("http://api.example.com/v1"),
     },
