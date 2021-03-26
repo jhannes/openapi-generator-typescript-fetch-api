@@ -253,7 +253,11 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
     }
 }
 
-export const servers: Record<string, ApplicationApis> = {
+type ServerNames =
+    | "current"
+    | "production";
+
+export const servers: Record<ServerNames, ApplicationApis> = {
     "current": {
         caseWorkersApi: new CaseWorkersApi("/api"),
         casesApi: new CasesApi("/api"),

@@ -20,7 +20,12 @@ export interface ApplicationApis {
 {{~/withInterfaces}}
 {{#apiInfo}}{{#apis}}{{>apiInner}}{{/apis}}{{/apiInfo}}
 
-export const servers: Record<string, ApplicationApis> = {
+type ServerNames =
+{{~#servers}}
+    | "{{#if description}}{{description}}{{else}}default{{/if}}"
+{{~/servers}};
+
+export const servers: Record<ServerNames, ApplicationApis> = {
 {{~#servers}}
     {{#if description}}"{{description}}"{{else}}default{{/if}}: {
     {{~#apiInfo}}{{#apis}}
