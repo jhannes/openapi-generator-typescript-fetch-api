@@ -38,15 +38,7 @@ export const servers: Record<ServerNames, ApplicationApis> = {
 {{#if authMethods}}{{#authMethods}}
 {{~#unless (eq scheme 'none')}}
 export class {{name}} implements SecurityScheme {
-{{~#if isBasicBearer}}
-    constructor(private bearerToken: string) {}
-
-    headers(): Record<string, string> {
-        return {
-            "Authorization": `Bearer ${this.bearerToken}`,
-        }
-    }
-{{~else if isBasicBasic}}
+{{~#if isBasicBasic}}
     constructor(private basicAuthorization: string) {}
 
     headers(): Record<string, string> {
@@ -54,25 +46,13 @@ export class {{name}} implements SecurityScheme {
             "Authorization": `Basic ${this.basicAuthorization}`,
         }
     }
-{{~else if isKeyInHeader}}
-    constructor(private name: string) {}
-
-    headers(): Record<string, string> {
-        return {
-            "Authorization": `Bearer ${this.name}`,
-        }
-    }
-{{~else if isOAuth}}
+{{~else}}
     constructor(private bearerToken: string) {}
 
     headers(): Record<string, string> {
         return {
             "Authorization": `Bearer ${this.bearerToken}`,
         }
-    }
-{{~else}}
-    constructor() {
-        throw new Error("Unknown authorization scheme {{scheme}}");
     }
 {{~/if}}
 }
