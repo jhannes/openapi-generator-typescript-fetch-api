@@ -60,7 +60,7 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
      */
     public async listCaseWorkers(): Promise<CaseWorkerDto> {
         return await this.GET(
-            "/api/caseWorkers",
+            this.basePath + "/api/caseWorkers",
             undefined,
             {}
         );
@@ -74,7 +74,7 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
         caseWorkerDto?: CaseWorkerDto;
     }): Promise<void> {
         return await this.POST(
-            "/api/caseWorkers",
+            this.basePath + "/api/caseWorkers",
             JSON.stringify(params.caseWorkerDto),
             {
                 "Content-Type": "application/json",
@@ -148,7 +148,7 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
      */
     public async listCases(): Promise<InfectionDto> {
         return await this.GET(
-            "/api/cases",
+            this.basePath + "/api/cases",
             undefined,
             {}
         );
@@ -162,7 +162,7 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         infectionInformationDto?: InfectionInformationDto;
     }): Promise<void> {
         return await this.POST(
-            "/api/cases",
+            this.basePath + "/api/cases",
             JSON.stringify(params.infectionInformationDto),
             {
                 "Content-Type": "application/json",
@@ -221,7 +221,7 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
      */
     public async listExposures(): Promise<ExposureDto> {
         return await this.GET(
-            "/api/exposures",
+            this.basePath + "/api/exposures",
             undefined,
             {}
         );

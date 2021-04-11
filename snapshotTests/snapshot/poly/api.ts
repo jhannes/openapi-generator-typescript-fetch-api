@@ -72,7 +72,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async partiesGet(): Promise<AnyPartyDto> {
         return await this.GET(
-            "/parties",
+            this.basePath + "/parties",
             undefined,
             {}
         );
@@ -103,7 +103,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         anyPartyDto?: AnyPartyDto;
     }): Promise<void> {
         return await this.POST(
-            "/parties",
+            this.basePath + "/parties",
             JSON.stringify(params.anyPartyDto),
             {
                 "Content-Type": "application/json",

@@ -73,7 +73,7 @@ export class {{classname}} extends BaseAPI {
                 {{baseName}}: { delimiter: "{{#if (eq style "spaceDelimited")}} {{else if (eq style "pipeDelimited")}}|{{else}},{{/if}}" },
             {{else if (not isExplode)}}
                 {{baseName}}: { explode: false },
-            {{/if}}{{/queryParams~}} }{{/if}}){{else}}"{{{path}}}"{{/if}},
+            {{/if}}{{/queryParams~}} }{{/if}}){{else}}this.basePath + "{{{path}}}"{{/if}},
             {{~#if bodyParam}}
             JSON.stringify(params.{{bodyParam.paramName}})
             {{~else if hasFormParams}}

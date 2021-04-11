@@ -141,7 +141,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<void> {
         return await this.POST(
-            "/pet",
+            this.basePath + "/pet",
             JSON.stringify(params.petDto),
             {
                 ...params.security?.headers(),
@@ -230,7 +230,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<void> {
         return await this.PUT(
-            "/pet",
+            this.basePath + "/pet",
             JSON.stringify(params.petDto),
             {
                 ...params.security?.headers(),
@@ -354,7 +354,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         security: api_key;
     }): Promise<{ [key: string]: number; }> {
         return await this.GET(
-            "/store/inventory",
+            this.basePath + "/store/inventory",
             undefined,
             {
                 ...params.security?.headers(),}
@@ -385,7 +385,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         orderDto?: OrderDto;
     }): Promise<OrderDto> {
         return await this.POST(
-            "/store/order",
+            this.basePath + "/store/order",
             JSON.stringify(params.orderDto),
             {
                 "Content-Type": "application/json",
@@ -492,7 +492,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         userDto?: UserDto;
     }): Promise<void> {
         return await this.POST(
-            "/user",
+            this.basePath + "/user",
             JSON.stringify(params.userDto),
             {
                 "Content-Type": "application/json",
@@ -509,7 +509,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         userDto?: Array<UserDto>;
     }): Promise<void> {
         return await this.POST(
-            "/user/createWithArray",
+            this.basePath + "/user/createWithArray",
             JSON.stringify(params.userDto),
             {
                 "Content-Type": "application/json",
@@ -526,7 +526,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         userDto?: Array<UserDto>;
     }): Promise<void> {
         return await this.POST(
-            "/user/createWithList",
+            this.basePath + "/user/createWithList",
             JSON.stringify(params.userDto),
             {
                 "Content-Type": "application/json",
@@ -586,7 +586,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async logoutUser(): Promise<void> {
         return await this.GET(
-            "/user/logout",
+            this.basePath + "/user/logout",
             undefined,
             {}
         );

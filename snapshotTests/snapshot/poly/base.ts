@@ -16,9 +16,9 @@
 export class BaseAPI {
 
     constructor(protected basePath: string = window.location.origin, protected requestOptions?: {
-        credentials: RequestCredentials,
-        headers: Record<string, string>,
-        mode: RequestMode
+        credentials?: RequestCredentials,
+        headers?: Record<string, string>,
+        mode?: RequestMode
     } | undefined) {}
 
     protected async GET(
@@ -128,7 +128,9 @@ export class BaseAPI {
         queryOptions?: QueryOptions
     ): string {
         return (
-            this.expandPathTemplate(pathTemplate, params) + this.query(queryParams, queryOptions)
+            this.basePath +
+            this.expandPathTemplate(pathTemplate, params) +
+            this.query(queryParams, queryOptions)
         );
     }
 
