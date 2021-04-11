@@ -107,7 +107,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }): Promise<PetDto> {
         return await this.GET(
             this.url("/{storeId}/pets", params.pathParams, params?.queryParams, {
-                status: { explode: true, style: "spaceDelimited" },
+                status: { delimiter: " " },
             }),
             undefined,
             {}

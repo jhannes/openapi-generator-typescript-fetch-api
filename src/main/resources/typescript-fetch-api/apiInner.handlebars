@@ -66,11 +66,11 @@ export class {{classname}} extends BaseAPI {
         return await this.{{httpMethod}}(
         {{~/if}}
             {{#if pathParams}}this.url("{{{path}}}", params.pathParams{{#if hasQueryParams}}, params?.queryParams, { {{~#queryParams}}{{#if (not (eq style "form"))}}
-                {{baseName}}: { explode: {{isExplode}}, style: "{{style}}" },
+                {{baseName}}: { delimiter: "{{#if (eq style "spaceDelimited")}} {{else if (eq style "pipeDelimited")}}|{{else}},{{/if}}" },
             {{else if (not isExplode)}}
                 {{baseName}}: { explode: false },
             {{/if}}{{/queryParams~}} }{{/if}}){{else if queryParams}}this.url("{{{path}}}", {}{{#if hasQueryParams}}, params?.queryParams, { {{~#queryParams}}{{#if (not (eq style "form"))}}
-                {{baseName}}: { explode: {{isExplode}}, style: "{{style}}" },
+                {{baseName}}: { delimiter: "{{#if (eq style "spaceDelimited")}} {{else if (eq style "pipeDelimited")}}|{{else}},{{/if}}" },
             {{else if (not isExplode)}}
                 {{baseName}}: { explode: false },
             {{/if}}{{/queryParams~}} }{{/if}}){{else}}"{{{path}}}"{{/if}},

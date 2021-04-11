@@ -120,15 +120,28 @@ export class BaseAPI {
         if (!queryParams || !Object.keys(queryParams).length) {
             return "";
         }
-        const query = Object.keys(queryParams)
-            .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(queryParams[k].toString()))
-            .join("&");
+        const query = new URLSearchParams();
+        for (const key of Object.keys(queryParams)) {
+            const value = queryParams[key];
+            if (Array.isArray(value)) {
+                const options = queryOptions ? queryOptions[key] : undefined;
+                if (!options || options.explode) {
+                    for (const item of value) {
+                        query.append(key, item);
+                    }
+                } else {
+                    query.append(key, value.join(options.delimiter || ","));
+                }
+            } else if (value !== undefined) {
+                query.append(key, value.toString());
+            }
+        }
         return "?" + query;
     }
 }
 
 type QueryParams = Record<string, string | string[] | Date | boolean>;
-type QueryOptions = Record<string, { explode?: boolean; style?: "form" | "spaceDelimited" | "pipeDelimited" }>;
+type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|" }>;
 
 export class HttpError extends Error {
     readonly response: Response;
