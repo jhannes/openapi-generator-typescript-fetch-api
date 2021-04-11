@@ -1,5 +1,15 @@
 # OpenAPI Generator for TypeScript client library using Fetch API and API interfaces
 
+## Features
+
+* Generates code that resembles plain `fetch` calls
+* Supports `anyOf`-polymorphism with union types and discriminators
+* Implements `enum` with union types
+* Supports `query` parameter options `explode` and `style`
+* Supports `securitySchemes`
+* Support blob response types
+* Generated code have no eslint or prettier warnings except long lines
+
 ## Overview
 
 This is a plugin to [OpenApi Generator](https://openapi-generator.tech/) which generates Typescript client libraries from openapi specifications using the native `fetch` method. The generated code has no dependencies.
@@ -39,11 +49,11 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<void> {
         return await this.POST(
-            "/pet",
-            {},
-            {body: params.petDto, contentType: "application/json"},
+            this.basePath + "/pet",
+            JSON.stringify(params.petDto),
             {
                 ...params.security?.headers(),
+                "Content-Type": "application/json",
             }
         );
     }
