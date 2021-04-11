@@ -25,7 +25,7 @@ export interface {{classname}}Interface {
         headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}}};{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
-        security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
+        security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
     }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
 {{~/operation}}
 }
@@ -58,41 +58,37 @@ export class {{classname}} extends BaseAPI {
         headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
-        security: {{#authMethods}}{{#if @first}}{{name}};{{/if}}{{/authMethods}}
+        security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
     }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
         {{~#if isResponseFile}}
         const response: Response = await this.{{httpMethod}}(
-            {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
-            {{#if queryParams}}params && params.queryParams{{else}}{}{{/if}},
-            {{~#if bodyParam}}
-            { body: params.{{bodyParam.paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes}}{{#if @first}}"{{{mediaType}}}"{{/if}}{{/consumes}} }
-            {{~else if hasFormParams}}
-            { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
-            {{~else}}
-            undefined
-            {{~/if}},
-            { {{~#hasHeaderParams}}
-                ...params.headers,{{/hasHeaderParams}}{{#hasAuthMethods}}
-                ...params.security?.headers(),{{/hasAuthMethods}}
-            }
-        );
-        return await response.blob();
         {{~else}}
         return await this.{{httpMethod}}(
-            {{#if pathParams}}this.path("{{{path}}}", params.pathParams){{else}}"{{{path}}}"{{/if}},
-            {{#if queryParams}}params && params.queryParams{{else}}{}{{/if}},
+        {{~/if}}
+            {{#if pathParams}}this.url("{{{path}}}", params.pathParams{{#if hasQueryParams}}, params?.queryParams, { {{~#queryParams}}{{#if (not (eq style "form"))}}
+                {{baseName}}: { explode: {{isExplode}}, style: "{{style}}" },
+            {{else if (not isExplode)}}
+                {{baseName}}: { explode: false },
+            {{/if}}{{/queryParams~}} }{{/if}}){{else if queryParams}}this.url("{{{path}}}", {}{{#if hasQueryParams}}, params?.queryParams, { {{~#queryParams}}{{#if (not (eq style "form"))}}
+                {{baseName}}: { explode: {{isExplode}}, style: "{{style}}" },
+            {{else if (not isExplode)}}
+                {{baseName}}: { explode: false },
+            {{/if}}{{/queryParams~}} }{{/if}}){{else}}"{{{path}}}"{{/if}},
             {{~#if bodyParam}}
-            { body: params.{{bodyParam.paramName}}, contentType: {{^consumes}}"application/json"{{/consumes}}{{#consumes}}{{#if @first}}"{{{mediaType}}}"{{/if}}{{/consumes}} }
+            JSON.stringify(params.{{bodyParam.paramName}})
             {{~else if hasFormParams}}
-            { body: params.formParams, contentType: "application/x-www-form-urlencoded" }
+            this.formData(params.formParams)
             {{~else}}
             undefined
             {{~/if}},
-            { {{~#hasHeaderParams}}
-                ...params.headers,{{/hasHeaderParams}}{{#hasAuthMethods}}
-                ...params.security?.headers(),{{/hasAuthMethods}}
-            }
+            { {{~#hasAuthMethods}}
+                ...params.security?.headers(),{{/hasAuthMethods}}{{#hasHeaderParams}}
+                ...params.headers,{{/hasHeaderParams}}{{#if hasConsumes}}
+                "Content-Type": {{^consumes}}"application/json"{{/consumes}}{{#consumes}}{{#if @first}}"{{{mediaType}}}"{{/if}}{{/consumes}},
+            {{/if~}} }
         );
+        {{~#if isResponseFile}}
+        return await response.blob();
         {{~/if}}
     }
 {{~/operation}}

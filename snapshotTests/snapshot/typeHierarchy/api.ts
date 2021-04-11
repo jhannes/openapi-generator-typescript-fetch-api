@@ -55,9 +55,9 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }): Promise<void> {
         return await this.PATCH(
             "/pets",
-            {},
-            { body: params.anyPetDto, contentType: "application/json" },
+            JSON.stringify(params.anyPetDto),
             {
+                "Content-Type": "application/json",
             }
         );
     }

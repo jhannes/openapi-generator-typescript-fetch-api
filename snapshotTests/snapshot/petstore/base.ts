@@ -14,107 +14,76 @@
  */
 
 export class BaseAPI {
-
     constructor(protected basePath: string = window.location.origin) {}
 
     protected async GET(
-        path: string,
-        queryParams: any,
+        url: string,
         requestBody: undefined,
         headers: Record<string, string> = {}
     ): Promise<any> {
-        const result = await fetch(this.basePath + path + this.query(queryParams), {
-            credentials: "same-origin",
-            headers,
-        });
-        return await this.handleResponse(result);
+        return await this.fetch(url, { headers });
     }
 
     protected async PUT(
-        path: string,
-        queryParams: any,
-        requestBody?: RequestBody,
+        url: string,
+        body?: BodyInit,
         headers: Record<string, string> = {}
     ): Promise<any> {
-        const body = this.createRequestBody(requestBody);
-        if (requestBody) {
-            headers["Content-Type"] = requestBody.contentType;
-        }
-        const result = await fetch(this.basePath + path + this.query(queryParams), {
+        return await this.fetch(url, {
             method: "PUT",
-            credentials: "same-origin",
             headers,
             body,
         });
-        return await this.handleResponse(result);
     }
 
     protected async POST(
-        path: string,
-        queryParams: any,
-        requestBody?: RequestBody,
+        url: string,
+        body?: BodyInit,
         headers: Record<string, string> = {}
     ): Promise<any> {
-        const body = this.createRequestBody(requestBody);
-        if (requestBody) {
-            headers["Content-Type"] = requestBody.contentType;
-        }
-        const result = await fetch(this.basePath + path + this.query(queryParams), {
+        return await this.fetch(url, {
             method: "POST",
-            credentials: "same-origin",
             headers,
             body,
         });
-        return await this.handleResponse(result);
     }
 
     protected async PATCH(
-        path: string,
-        queryParams: any,
-        requestBody?: RequestBody,
+        url: string,
+        body?: BodyInit,
         headers: Record<string, string> = {}
     ): Promise<any> {
-        const body = this.createRequestBody(requestBody);
-        if (requestBody) {
-            headers["Content-Type"] = requestBody.contentType;
-        }
-        const result = await fetch(this.basePath + path + this.query(queryParams), {
+        return await this.fetch(url, {
             method: "PATCH",
-            credentials: "same-origin",
             headers,
             body,
         });
-        return await this.handleResponse(result);
     }
 
     protected async DELETE(
-        path: string,
-        queryParams: any,
-        requestBody?: RequestBody,
+        url: string,
+        body?: BodyInit,
         headers: Record<string, string> = {}
     ): Promise<void> {
-        const body = this.createRequestBody(requestBody);
-        if (requestBody) {
-            headers["Content-Type"] = requestBody.contentType;
-        }
-        const result = await fetch(this.basePath + path + this.query(queryParams), {
+        return await this.fetch(url, {
             method: "DELETE",
-            credentials: "same-origin",
             headers,
             body,
+        });
+    }
+
+    protected async fetch(url: string, options: RequestInit): Promise<any> {
+        const result = await fetch(url, {
+            credentials: "same-origin",
+            ...options,
         });
         return await this.handleResponse(result);
     }
 
-    protected createRequestBody(requestBody?: RequestBody): string | undefined {
-        if (requestBody) {
-            if (requestBody.contentType === "application/x-www-form-urlencoded") {
-                return Object.keys(requestBody.body)
-                    .map(key => key + "=" + encodeURIComponent(requestBody.body[key])).join("&");
-            } else {
-                return JSON.stringify(requestBody.body);
-            }
-        }
+    protected formData(form: any): string {
+        return Object.keys(form)
+            .map((key) => key + "=" + encodeURIComponent(form[key]))
+            .join("&");
     }
 
     protected async handleResponse(response: Response): Promise<any> {
@@ -142,25 +111,34 @@ export class BaseAPI {
         }
     }
 
-    protected path(pathTemplate: string, params: any): string {
+    protected url(
+        pathTemplate: string,
+        params: any,
+        queryParams?: QueryParams,
+        queryOptions?: QueryOptions
+    ): string {
+        return (
+            this.expandPathTemplate(pathTemplate, params) + this.query(queryParams, queryOptions)
+        );
+    }
+
+    private expandPathTemplate(pathTemplate: string, params: any): string {
         return pathTemplate.replace(/{(\w+)}/g, (match, g) => params[g]);
     }
 
-    protected query(queryParams: any): string {
+    protected query(queryParams?: QueryParams, queryOptions?: QueryOptions): string {
         if (!queryParams || !Object.keys(queryParams).length) {
             return "";
         }
         const query = Object.keys(queryParams)
-            .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(queryParams[k]))
+            .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(queryParams[k].toString()))
             .join("&");
         return "?" + query;
     }
 }
 
-export interface RequestBody {
-    body: any;
-    contentType: string;
-}
+type QueryParams = Record<string, string | string[] | Date | boolean>;
+type QueryOptions = Record<string, { explode?: boolean; style?: "form" | "spaceDelimited" | "pipeDelimited" }>;
 
 export class HttpError extends Error {
     readonly response: Response;

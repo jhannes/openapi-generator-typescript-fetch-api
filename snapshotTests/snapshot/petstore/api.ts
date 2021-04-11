@@ -142,10 +142,10 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     }): Promise<void> {
         return await this.POST(
             "/pet",
-            {},
-            { body: params.petDto, contentType: "application/json" },
+            JSON.stringify(params.petDto),
             {
                 ...params.security?.headers(),
+                "Content-Type": "application/json",
             }
         );
     }
@@ -161,13 +161,11 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<void> {
         return await this.DELETE(
-            this.path("/pet/{petId}", params.pathParams),
-            {},
+            this.url("/pet/{petId}", params.pathParams),
             undefined,
             {
-                ...params.headers,
                 ...params.security?.headers(),
-            }
+                ...params.headers,}
         );
     }
     /**
@@ -181,12 +179,10 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<Array<PetDto>> {
         return await this.GET(
-            "/pet/findByStatus",
-            params && params.queryParams,
+            this.url("/pet/findByStatus", {}, params?.queryParams, {}),
             undefined,
             {
-                ...params.security?.headers(),
-            }
+                ...params.security?.headers(),}
         );
     }
     /**
@@ -200,12 +196,10 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<Array<PetDto>> {
         return await this.GET(
-            "/pet/findByTags",
-            params && params.queryParams,
+            this.url("/pet/findByTags", {}, params?.queryParams, {}),
             undefined,
             {
-                ...params.security?.headers(),
-            }
+                ...params.security?.headers(),}
         );
     }
     /**
@@ -219,12 +213,10 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: api_key | petstore_auth;
     }): Promise<PetDto> {
         return await this.GET(
-            this.path("/pet/{petId}", params.pathParams),
-            {},
+            this.url("/pet/{petId}", params.pathParams),
             undefined,
             {
-                ...params.security?.headers(),
-            }
+                ...params.security?.headers(),}
         );
     }
     /**
@@ -239,10 +231,10 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     }): Promise<void> {
         return await this.PUT(
             "/pet",
-            {},
-            { body: params.petDto, contentType: "application/json" },
+            JSON.stringify(params.petDto),
             {
                 ...params.security?.headers(),
+                "Content-Type": "application/json",
             }
         );
     }
@@ -258,11 +250,11 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<void> {
         return await this.POST(
-            this.path("/pet/{petId}", params.pathParams),
-            {},
-            { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
+            this.url("/pet/{petId}", params.pathParams),
+            this.formData(params.formParams),
             {
                 ...params.security?.headers(),
+                "Content-Type": "application/x-www-form-urlencoded",
             }
         );
     }
@@ -278,11 +270,11 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         security: petstore_auth;
     }): Promise<void> {
         return await this.POST(
-            this.path("/pet/{petId}/uploadImage", params.pathParams),
-            {},
-            { body: params.formParams, contentType: "application/x-www-form-urlencoded" },
+            this.url("/pet/{petId}/uploadImage", params.pathParams),
+            this.formData(params.formParams),
             {
                 ...params.security?.headers(),
+                "Content-Type": "multipart/form-data",
             }
         );
     }
@@ -347,11 +339,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         pathParams: { orderId: string };
     }): Promise<void> {
         return await this.DELETE(
-            this.path("/store/order/{orderId}", params.pathParams),
-            {},
+            this.url("/store/order/{orderId}", params.pathParams),
             undefined,
-            {
-            }
+            {}
         );
     }
     /**
@@ -365,11 +355,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
     }): Promise<{ [key: string]: number; }> {
         return await this.GET(
             "/store/inventory",
-            {},
             undefined,
             {
-                ...params.security?.headers(),
-            }
+                ...params.security?.headers(),}
         );
     }
     /**
@@ -382,11 +370,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         pathParams: { orderId: string };
     }): Promise<OrderDto> {
         return await this.GET(
-            this.path("/store/order/{orderId}", params.pathParams),
-            {},
+            this.url("/store/order/{orderId}", params.pathParams),
             undefined,
-            {
-            }
+            {}
         );
     }
     /**
@@ -400,9 +386,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
     }): Promise<OrderDto> {
         return await this.POST(
             "/store/order",
-            {},
-            { body: params.orderDto, contentType: "application/json" },
+            JSON.stringify(params.orderDto),
             {
+                "Content-Type": "application/json",
             }
         );
     }
@@ -507,9 +493,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
     }): Promise<void> {
         return await this.POST(
             "/user",
-            {},
-            { body: params.userDto, contentType: "application/json" },
+            JSON.stringify(params.userDto),
             {
+                "Content-Type": "application/json",
             }
         );
     }
@@ -524,9 +510,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
     }): Promise<void> {
         return await this.POST(
             "/user/createWithArray",
-            {},
-            { body: params.userDto, contentType: "application/json" },
+            JSON.stringify(params.userDto),
             {
+                "Content-Type": "application/json",
             }
         );
     }
@@ -541,9 +527,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
     }): Promise<void> {
         return await this.POST(
             "/user/createWithList",
-            {},
-            { body: params.userDto, contentType: "application/json" },
+            JSON.stringify(params.userDto),
             {
+                "Content-Type": "application/json",
             }
         );
     }
@@ -557,11 +543,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         pathParams: { username: string };
     }): Promise<void> {
         return await this.DELETE(
-            this.path("/user/{username}", params.pathParams),
-            {},
+            this.url("/user/{username}", params.pathParams),
             undefined,
-            {
-            }
+            {}
         );
     }
     /**
@@ -574,11 +558,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         pathParams: { username: string };
     }): Promise<UserDto> {
         return await this.GET(
-            this.path("/user/{username}", params.pathParams),
-            {},
+            this.url("/user/{username}", params.pathParams),
             undefined,
-            {
-            }
+            {}
         );
     }
     /**
@@ -591,11 +573,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         queryParams?: { username?: string, password?: string,  };
     }): Promise<string> {
         return await this.GET(
-            "/user/login",
-            params && params.queryParams,
+            this.url("/user/login", {}, params?.queryParams, {}),
             undefined,
-            {
-            }
+            {}
         );
     }
     /**
@@ -607,10 +587,8 @@ export class UserApi extends BaseAPI implements UserApiInterface {
     public async logoutUser(): Promise<void> {
         return await this.GET(
             "/user/logout",
-            {},
             undefined,
-            {
-            }
+            {}
         );
     }
     /**
@@ -624,10 +602,10 @@ export class UserApi extends BaseAPI implements UserApiInterface {
         userDto?: UserDto;
     }): Promise<void> {
         return await this.PUT(
-            this.path("/user/{username}", params.pathParams),
-            {},
-            { body: params.userDto, contentType: "application/json" },
+            this.url("/user/{username}", params.pathParams),
+            JSON.stringify(params.userDto),
             {
+                "Content-Type": "application/json",
             }
         );
     }
@@ -646,11 +624,11 @@ export const servers: Record<ServerNames, ApplicationApis> = {
 
 
 export class api_key implements SecurityScheme {
-    constructor(private name: string) {}
+    constructor(private bearerToken: string) {}
 
     headers(): Record<string, string> {
         return {
-            "Authorization": `Bearer ${this.name}`,
+            "Authorization": `Bearer ${this.bearerToken}`,
         }
     }
 }

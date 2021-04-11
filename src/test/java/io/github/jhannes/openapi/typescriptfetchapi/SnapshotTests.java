@@ -47,7 +47,11 @@ public class SnapshotTests {
     }
 
     private DynamicNode createTestsForSpec(Path spec, String generatorName, Path outputDir, Path snapshotDir) {
-        generate(spec, generatorName, outputDir, getModelName(spec));
+        try {
+            generate(spec, generatorName, outputDir, getModelName(spec));
+        } catch (Exception e) {
+            return dynamicTest("Generator for " + spec, () -> assertNull(e));
+        }
 
         List<Path> files;
         try (Stream<Path> list = Files.walk(outputDir.resolve(getModelName(spec)))) {
