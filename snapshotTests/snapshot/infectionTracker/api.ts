@@ -33,7 +33,6 @@ export interface ApplicationApis {
 export interface CaseWorkersApiInterface {
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      * @memberof CaseWorkersApi
      */
@@ -55,14 +54,11 @@ export interface CaseWorkersApiInterface {
 export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     public async listCaseWorkers(): Promise<CaseWorkerDto> {
-        return await this.GET(
-            this.basePath + "/api/caseWorkers",
-            undefined,
-            {}
+        return await this.fetch(
+            this.basePath + "/api/caseWorkers"
         );
     }
     /**
@@ -73,11 +69,14 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
     public async registerCaseWorker(params: {
         caseWorkerDto?: CaseWorkerDto;
     }): Promise<void> {
-        return await this.POST(
+        return await this.fetch(
             this.basePath + "/api/caseWorkers",
-            JSON.stringify(params.caseWorkerDto),
             {
-                "Content-Type": "application/json",
+                method: "POST",
+                body: JSON.stringify(params.caseWorkerDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             }
         );
     }
@@ -97,7 +96,6 @@ export interface CasesApiInterface {
     }): Promise<InfectionDto>;
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      * @memberof CasesApi
      */
@@ -135,22 +133,17 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
     public async getCaseDetails(params: {
         pathParams: { caseId: string };
     }): Promise<InfectionDto> {
-        return await this.GET(
-            this.url("/api/cases/{caseId}", params.pathParams),
-            undefined,
-            {}
+        return await this.fetch(
+            this.url("/api/cases/{caseId}", params.pathParams)
         );
     }
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     public async listCases(): Promise<InfectionDto> {
-        return await this.GET(
-            this.basePath + "/api/cases",
-            undefined,
-            {}
+        return await this.fetch(
+            this.basePath + "/api/cases"
         );
     }
     /**
@@ -161,11 +154,14 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
     public async newCase(params: {
         infectionInformationDto?: InfectionInformationDto;
     }): Promise<void> {
-        return await this.POST(
+        return await this.fetch(
             this.basePath + "/api/cases",
-            JSON.stringify(params.infectionInformationDto),
             {
-                "Content-Type": "application/json",
+                method: "POST",
+                body: JSON.stringify(params.infectionInformationDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             }
         );
     }
@@ -178,11 +174,14 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         pathParams: { caseId: string };
         exposureDto?: ExposureDto;
     }): Promise<void> {
-        return await this.POST(
+        return await this.fetch(
             this.url("/api/cases/{caseId}/exposures", params.pathParams),
-            JSON.stringify(params.exposureDto),
             {
-                "Content-Type": "application/json",
+                method: "POST",
+                body: JSON.stringify(params.exposureDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             }
         );
     }
@@ -193,7 +192,6 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
 export interface ExposuresApiInterface {
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      * @memberof ExposuresApi
      */
@@ -216,14 +214,11 @@ export interface ExposuresApiInterface {
 export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     public async listExposures(): Promise<ExposureDto> {
-        return await this.GET(
-            this.basePath + "/api/exposures",
-            undefined,
-            {}
+        return await this.fetch(
+            this.basePath + "/api/exposures"
         );
     }
     /**
@@ -235,11 +230,14 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
         pathParams: { exposureId: string };
         exposureDto?: ExposureDto;
     }): Promise<void> {
-        return await this.PUT(
+        return await this.fetch(
             this.url("/api/exposures/{exposureId}", params.pathParams),
-            JSON.stringify(params.exposureDto),
             {
-                "Content-Type": "application/json",
+                method: "PUT",
+                body: JSON.stringify(params.exposureDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             }
         );
     }

@@ -71,11 +71,14 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         pathParams: { storeId: string };
         petDto?: PetDto;
     }): Promise<void> {
-        return await this.POST(
+        return await this.fetch(
             this.url("/{storeId}/pets", params.pathParams),
-            JSON.stringify(params.petDto),
             {
-                "Content-Type": "application/json",
+                method: "POST",
+                body: JSON.stringify(params.petDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             }
         );
     }
@@ -88,11 +91,14 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         pathParams: { petId: string };
         formParams: { name: string; status: string; }
     }): Promise<void> {
-        return await this.POST(
+        return await this.fetch(
             this.url("/pets/{petId}", params.pathParams),
-            this.formData(params.formParams),
             {
-                "Content-Type": "application/x-www-form-urlencoded",
+                method: "POST",
+                body: this.formData(params.formParams),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
             }
         );
     }
@@ -105,12 +111,10 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         pathParams: { storeId: string };
         queryParams?: { status?: Array<string>, tags?: Array<string>, bornAfter?: Date,  };
     }): Promise<PetDto> {
-        return await this.GET(
+        return await this.fetch(
             this.url("/{storeId}/pets", params.pathParams, params?.queryParams, {
                 status: { delimiter: " " },
-            }),
-            undefined,
-            {}
+            })
         );
     }
 }

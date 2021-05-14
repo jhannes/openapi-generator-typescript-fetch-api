@@ -14,7 +14,7 @@
 
 This is a plugin to [OpenApi Generator](https://openapi-generator.tech/) which generates Typescript client libraries from openapi specifications using the native `fetch` method. The generated code has no dependencies.
 
-The output contains both interfaces and classes for each `tag` in the input specification, for example:
+The output contains both interfaces and classes for each `tag` in the input specification, [for example](https://github.com/jhannes/openapi-generator-typescript-fetch-api/blob/main/snapshotTests/snapshot/petstore/api.ts):
 
 ```typescript
 /**
@@ -48,12 +48,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         petDto?: PetDto;
         security: petstore_auth;
     }): Promise<void> {
-        return await this.POST(
+        return await this.fetch(
             this.basePath + "/pet",
-            JSON.stringify(params.petDto),
             {
-                ...params.security?.headers(),
-                "Content-Type": "application/json",
+                method: "POST",
+                body: JSON.stringify(params.petDto),
+                headers: {
+                    ...params.security?.headers(),
+                    "Content-Type": "application/json",
+                }
             }
         );
     }
@@ -78,7 +81,7 @@ try {
 
 ### Generated test support code
 
-To facilitate testing, the code ships which interface test stubs and test generators. For example:
+To facilitate testing, the code ships which interface test stubs and test generators. [For example](https://github.com/jhannes/openapi-generator-typescript-fetch-api/blob/main/snapshotTests/snapshot/petstore/test/modelTest.ts):
 
 ```typescript
 export function mockPetApi(operations: {

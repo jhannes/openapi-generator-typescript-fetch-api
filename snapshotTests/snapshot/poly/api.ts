@@ -35,7 +35,6 @@ export interface ApplicationApis {
 export interface DefaultApiInterface {
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      * @memberof DefaultApi
      */
@@ -67,14 +66,11 @@ export interface DefaultApiInterface {
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     /**
      *
-     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     public async partiesGet(): Promise<AnyPartyDto> {
-        return await this.GET(
-            this.basePath + "/parties",
-            undefined,
-            {}
+        return await this.fetch(
+            this.basePath + "/parties"
         );
     }
     /**
@@ -86,11 +82,14 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         pathParams: { id: string };
         anyPartyDto?: AnyPartyDto;
     }): Promise<void> {
-        return await this.PUT(
+        return await this.fetch(
             this.url("/parties/{id}", params.pathParams),
-            JSON.stringify(params.anyPartyDto),
             {
-                "Content-Type": "application/json",
+                method: "PUT",
+                body: JSON.stringify(params.anyPartyDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             }
         );
     }
@@ -102,11 +101,14 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     public async partiesPost(params: {
         anyPartyDto?: AnyPartyDto;
     }): Promise<void> {
-        return await this.POST(
+        return await this.fetch(
             this.basePath + "/parties",
-            JSON.stringify(params.anyPartyDto),
             {
-                "Content-Type": "application/json",
+                method: "POST",
+                body: JSON.stringify(params.anyPartyDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             }
         );
     }

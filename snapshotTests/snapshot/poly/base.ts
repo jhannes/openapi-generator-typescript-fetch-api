@@ -21,63 +21,7 @@ export class BaseAPI {
         mode?: RequestMode
     } | undefined) {}
 
-    protected async GET(
-        url: string,
-        requestBody: undefined,
-        headers: Record<string, string|undefined> = {}
-    ): Promise<any> {
-        return await this.fetch(url, { headers: this.removeEmpty(headers) });
-    }
-
-    protected async PUT(
-        url: string,
-        body?: BodyInit,
-        headers: Record<string, string|undefined> = {}
-    ): Promise<any> {
-        return await this.fetch(url, {
-            method: "PUT",
-            headers: this.removeEmpty(headers),
-            body,
-        });
-    }
-
-    protected async POST(
-        url: string,
-        body?: BodyInit,
-        headers: Record<string, string|undefined> = {}
-    ): Promise<any> {
-        return await this.fetch(url, {
-            method: "POST",
-            headers: this.removeEmpty(headers),
-            body,
-        });
-    }
-
-    protected async PATCH(
-        url: string,
-        body?: BodyInit,
-        headers: Record<string, string|undefined> = {}
-    ): Promise<any> {
-        return await this.fetch(url, {
-            method: "PATCH",
-            headers: this.removeEmpty(headers),
-            body,
-        });
-    }
-
-    protected async DELETE(
-        url: string,
-        body?: BodyInit,
-        headers: Record<string, string|undefined> = {}
-    ): Promise<void> {
-        return await this.fetch(url, {
-            method: "DELETE",
-            headers: this.removeEmpty(headers),
-            body,
-        });
-    }
-
-    protected async fetch(url: string, options: RequestInit): Promise<any> {
+    protected async fetch(url: string, options: RequestInit = {}): Promise<any> {
         const result = await fetch(url, {
             credentials: this.requestOptions?.credentials || "same-origin",
             mode: this.requestOptions?.mode,
