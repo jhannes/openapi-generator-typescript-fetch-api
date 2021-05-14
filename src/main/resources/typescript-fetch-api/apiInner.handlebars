@@ -22,7 +22,7 @@ export interface {{classname}}Interface {
         queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/if}}{{#if bodyParam}}{{#bodyParam}}
         {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{/if}}{{#hasFormParams}}
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
-        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}}};{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
+        headers: { {{#headerParams}}"{{baseName}}"{{^required}}?{{/required}}: string{{#unless @last}},{{/unless}} {{/headerParams~}}};{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
@@ -55,7 +55,7 @@ export class {{classname}} extends BaseAPI {
         queryParams?: { {{#queryParams}}{{baseName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/queryParams}} };{{/if}}{{#if bodyParam}}{{#bodyParam}}
         {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/bodyParam}}{{/if}}{{#hasFormParams}}
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
-        headers: { {{#headerParams}}"{{baseName}}": string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
+        headers: { {{#headerParams}}"{{baseName}}"{{^required}}?{{/required}}: string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}

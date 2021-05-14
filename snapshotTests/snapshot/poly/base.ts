@@ -24,19 +24,19 @@ export class BaseAPI {
     protected async GET(
         url: string,
         requestBody: undefined,
-        headers: Record<string, string> = {}
+        headers: Record<string, string|undefined> = {}
     ): Promise<any> {
-        return await this.fetch(url, { headers });
+        return await this.fetch(url, { headers: this.removeEmpty(headers) });
     }
 
     protected async PUT(
         url: string,
         body?: BodyInit,
-        headers: Record<string, string> = {}
+        headers: Record<string, string|undefined> = {}
     ): Promise<any> {
         return await this.fetch(url, {
             method: "PUT",
-            headers,
+            headers: this.removeEmpty(headers),
             body,
         });
     }
@@ -44,11 +44,11 @@ export class BaseAPI {
     protected async POST(
         url: string,
         body?: BodyInit,
-        headers: Record<string, string> = {}
+        headers: Record<string, string|undefined> = {}
     ): Promise<any> {
         return await this.fetch(url, {
             method: "POST",
-            headers,
+            headers: this.removeEmpty(headers),
             body,
         });
     }
@@ -56,11 +56,11 @@ export class BaseAPI {
     protected async PATCH(
         url: string,
         body?: BodyInit,
-        headers: Record<string, string> = {}
+        headers: Record<string, string|undefined> = {}
     ): Promise<any> {
         return await this.fetch(url, {
             method: "PATCH",
-            headers,
+            headers: this.removeEmpty(headers),
             body,
         });
     }
@@ -68,11 +68,11 @@ export class BaseAPI {
     protected async DELETE(
         url: string,
         body?: BodyInit,
-        headers: Record<string, string> = {}
+        headers: Record<string, string|undefined> = {}
     ): Promise<void> {
         return await this.fetch(url, {
             method: "DELETE",
-            headers,
+            headers: this.removeEmpty(headers),
             body,
         });
     }
@@ -134,6 +134,11 @@ export class BaseAPI {
         );
     }
 
+    protected removeEmpty(obj: Record<string, string | undefined>): Record<string, string> {
+        return Object.fromEntries(Object.entries(obj)
+            .filter(([, v]) => v != null)) as Record<string, string>;
+    }
+
     private expandPathTemplate(pathTemplate: string, params: any): string {
         return pathTemplate.replace(/{(\w+)}/g, (match, g) => params[g]);
     }
@@ -162,7 +167,7 @@ export class BaseAPI {
     }
 }
 
-type QueryParams = Record<string, string | string[] | Date | boolean>;
+type QueryParams = Record<string, string | string[] | Date | boolean | undefined>;
 type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|" }>;
 
 export class HttpError extends Error {

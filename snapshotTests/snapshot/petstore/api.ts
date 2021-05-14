@@ -53,7 +53,7 @@ export interface PetApiInterface {
      */
     deletePet(params: {
         pathParams: { petId: number };
-        headers: { "api_key": string };
+        headers: { "api_key"?: string };
         security: petstore_auth;
     }): Promise<void>;
     /**
@@ -157,7 +157,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async deletePet(params: {
         pathParams: { petId: number };
-        headers: { "api_key": string };
+        headers: { "api_key"?: string };
         security: petstore_auth;
     }): Promise<void> {
         return await this.DELETE(
