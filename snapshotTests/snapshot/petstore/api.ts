@@ -38,7 +38,6 @@ export interface PetApiInterface {
      * @summary Add a new pet to the store
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     addPet(params: {
         petDto?: PetDto;
@@ -49,7 +48,6 @@ export interface PetApiInterface {
      * @summary Deletes a pet
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     deletePet(params: {
         pathParams: { petId: number };
@@ -61,10 +59,9 @@ export interface PetApiInterface {
      * @summary Finds Pets by status
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     findPetsByStatus(params: {
-        queryParams?: { status?: Array<"available" | "pending" | "sold">,  };
+        queryParams?: { status?: Array<"available" | "pending" | "sold">, };
         security: petstore_auth;
     }): Promise<Array<PetDto>>;
     /**
@@ -72,10 +69,9 @@ export interface PetApiInterface {
      * @summary Finds Pets by tags
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     findPetsByTags(params: {
-        queryParams?: { tags?: Array<string>,  };
+        queryParams?: { tags?: Array<string>, };
         security: petstore_auth;
     }): Promise<Array<PetDto>>;
     /**
@@ -83,7 +79,6 @@ export interface PetApiInterface {
      * @summary Find pet by ID
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     getPetById(params: {
         pathParams: { petId: number };
@@ -94,7 +89,6 @@ export interface PetApiInterface {
      * @summary Update an existing pet
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     updatePet(params: {
         petDto?: PetDto;
@@ -105,7 +99,6 @@ export interface PetApiInterface {
      * @summary Updates a pet in the store with form data
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     updatePetWithForm(params: {
         pathParams: { petId: string };
@@ -117,7 +110,6 @@ export interface PetApiInterface {
      * @summary uploads an image
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     uploadFile(params: {
         pathParams: { petId: number };
@@ -309,7 +301,6 @@ export interface StoreApiInterface {
      * @summary Delete purchase order by ID
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof StoreApi
      */
     deleteOrder(params: {
         pathParams: { orderId: string };
@@ -318,7 +309,6 @@ export interface StoreApiInterface {
      *
      * @summary Returns pet inventories by status
      * @throws {HttpError}
-     * @memberof StoreApi
      */
     getInventory(params: {
         security: api_key;
@@ -328,7 +318,6 @@ export interface StoreApiInterface {
      * @summary Find purchase order by ID
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof StoreApi
      */
     getOrderById(params: {
         pathParams: { orderId: string };
@@ -338,7 +327,6 @@ export interface StoreApiInterface {
      * @summary Place an order for a pet
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof StoreApi
      */
     placeOrder(params: {
         orderDto?: OrderDto;
@@ -425,7 +413,6 @@ export interface UserApiInterface {
      * @summary Create user
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof UserApi
      */
     createUser(params: {
         userDto?: UserDto;
@@ -435,7 +422,6 @@ export interface UserApiInterface {
      * @summary Creates list of users with given input array
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof UserApi
      */
     createUsersWithArrayInput(params: {
         userDto?: Array<UserDto>;
@@ -445,7 +431,6 @@ export interface UserApiInterface {
      * @summary Creates list of users with given input array
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof UserApi
      */
     createUsersWithListInput(params: {
         userDto?: Array<UserDto>;
@@ -455,7 +440,6 @@ export interface UserApiInterface {
      * @summary Delete user
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof UserApi
      */
     deleteUser(params: {
         pathParams: { username: string };
@@ -465,7 +449,6 @@ export interface UserApiInterface {
      * @summary Get user by user name
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof UserApi
      */
     getUserByName(params: {
         pathParams: { username: string };
@@ -475,16 +458,14 @@ export interface UserApiInterface {
      * @summary Logs user into the system
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof UserApi
      */
     loginUser(params: {
-        queryParams?: { username?: string, password?: string,  };
+        queryParams?: { username?: string, password?: string, };
     }): Promise<string>;
     /**
      *
      * @summary Logs out current logged in user session
      * @throws {HttpError}
-     * @memberof UserApi
      */
     logoutUser(): Promise<void>;
     /**
@@ -492,7 +473,6 @@ export interface UserApiInterface {
      * @summary Updated user
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof UserApi
      */
     updateUser(params: {
         pathParams: { username: string };

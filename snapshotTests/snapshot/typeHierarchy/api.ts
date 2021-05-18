@@ -34,7 +34,6 @@ export interface DefaultApiInterface {
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof DefaultApi
      */
     petsPatch(params: {
         anyPetDto?: AnyPetDto;

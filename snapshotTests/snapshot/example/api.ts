@@ -30,7 +30,6 @@ export interface DefaultApiInterface {
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof DefaultApi
      */
     addPet(params: {
         pathParams: { storeId: string };
@@ -40,7 +39,6 @@ export interface DefaultApiInterface {
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof DefaultApi
      */
     addPetWithForm(params: {
         pathParams: { petId: string };
@@ -50,11 +48,10 @@ export interface DefaultApiInterface {
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof DefaultApi
      */
     listPets(params: {
         pathParams: { storeId: string };
-        queryParams?: { status?: Array<string>, tags?: Array<string>, bornAfter?: Date,  };
+        queryParams?: { status?: Array<string>, tags?: Array<string>, bornAfter?: Date, };
     }): Promise<PetDto>;
 }
 

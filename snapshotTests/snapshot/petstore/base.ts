@@ -78,7 +78,7 @@ export class BaseAPI {
         );
     }
 
-    protected removeEmpty(obj: Record<string, string | undefined>): Record<string, string> {
+    protected removeEmpty(obj: Record<string, string | undefined> = {}): Record<string, string> {
         return Object.fromEntries(Object.entries(obj)
             .filter(([, v]) => v != null)) as Record<string, string>;
     }

@@ -34,14 +34,12 @@ export interface CaseWorkersApiInterface {
     /**
      *
      * @throws {HttpError}
-     * @memberof CaseWorkersApi
      */
     listCaseWorkers(): Promise<CaseWorkerDto>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof CaseWorkersApi
      */
     registerCaseWorker(params: {
         caseWorkerDto?: CaseWorkerDto;
@@ -89,7 +87,6 @@ export interface CasesApiInterface {
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof CasesApi
      */
     getCaseDetails(params: {
         pathParams: { caseId: string };
@@ -97,14 +94,12 @@ export interface CasesApiInterface {
     /**
      *
      * @throws {HttpError}
-     * @memberof CasesApi
      */
     listCases(): Promise<InfectionDto>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof CasesApi
      */
     newCase(params: {
         infectionInformationDto?: InfectionInformationDto;
@@ -113,7 +108,6 @@ export interface CasesApiInterface {
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof CasesApi
      */
     registerExposure(params: {
         pathParams: { caseId: string };
@@ -193,14 +187,12 @@ export interface ExposuresApiInterface {
     /**
      *
      * @throws {HttpError}
-     * @memberof ExposuresApi
      */
     listExposures(): Promise<ExposureDto>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof ExposuresApi
      */
     updateExposure(params: {
         pathParams: { exposureId: string };

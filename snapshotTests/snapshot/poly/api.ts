@@ -36,14 +36,12 @@ export interface DefaultApiInterface {
     /**
      *
      * @throws {HttpError}
-     * @memberof DefaultApi
      */
     partiesGet(): Promise<AnyPartyDto>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof DefaultApi
      */
     partiesIdPut(params: {
         pathParams: { id: string };
@@ -53,7 +51,6 @@ export interface DefaultApiInterface {
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof DefaultApi
      */
     partiesPost(params: {
         anyPartyDto?: AnyPartyDto;
