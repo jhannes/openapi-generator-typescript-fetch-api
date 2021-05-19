@@ -217,8 +217,7 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
     }): Promise<ExposureDto> {
         return await this.fetch(
             this.url("/api/exposures", {}, params?.queryParams, {
-                exposureDate: { delimiter: "|" },
-            })
+                exposureDate: { delimiter: "|", format: "date" },})
         );
     }
     /**

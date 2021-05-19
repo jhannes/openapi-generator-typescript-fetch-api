@@ -111,6 +111,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
         return await this.fetch(
             this.url("/{storeId}/pets", params.pathParams, params?.queryParams, {
                 status: { delimiter: " " },
+                bornAfter: { format: "date" },
             })
         );
     }

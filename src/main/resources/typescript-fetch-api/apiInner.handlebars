@@ -65,9 +65,11 @@ export class {{classname}} extends BaseAPI {
         return await this.fetch(
         {{~/if}}
             {{#if (or pathParams queryParams)}}this.url("{{{path}}}"{{#if pathParams}}, params.pathParams{{else}}, {}{{/if}}{{#if hasQueryParams}}, params?.queryParams, { {{~#queryParams}}{{#if (not (eq style "form"))}}
-                {{baseName}}: { delimiter: "{{#if (eq style "spaceDelimited")}} {{else if (eq style "pipeDelimited")}}|{{else}},{{/if}}" },
-            {{else if (not isExplode)}}
-                {{baseName}}: { explode: false },
+                {{baseName}}: { delimiter: "{{#if (eq style "spaceDelimited")}} {{else if (eq style "pipeDelimited")}}|{{else}},{{/if}}"{{#if (eq dataFormat "date")}}, format: "{{dataFormat}}"{{/if}} },
+            {{~else if (not isExplode)}}
+                {{baseName}}: { explode: false{{#if (eq dataFormat "date")}}, format: "{{dataFormat}}"{{/if}} },
+            {{else if (eq dataFormat "date")}}
+                {{baseName}}: { format: "{{dataFormat}}" },
             {{/if}}{{/queryParams~}} }{{/if}}){{else}}this.basePath + "{{{path}}}"{{/if}}{{#if (or (neq httpMethod "GET") hasAuthMethods hasHeaderParams)}},
             { {{~#if (neq httpMethod 'GET')}}
                 method: "{{httpMethod}}",

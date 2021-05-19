@@ -64,7 +64,7 @@ export class BaseAPI {
         return (
             this.basePath +
             this.expandPathTemplate(pathTemplate, params) +
-            this.query(queryParams, queryOptions)
+            this.query(queryParams || {}, queryOptions || {})
         );
     }
 
@@ -77,22 +77,30 @@ export class BaseAPI {
         return pathTemplate.replace(/{(\w+)}/g, (match, g) => params[g]);
     }
 
-    protected query(queryParams?: QueryParams, queryOptions?: QueryOptions): string {
-        if (!queryParams || !Object.keys(queryParams).length) {
+    protected query(queryParams: QueryParams, queryOptions: QueryOptions): string {
+        if (!Object.keys(queryParams).length) {
             return "";
         }
         const query = new URLSearchParams();
         for (const key of Object.keys(queryParams)) {
             const value = queryParams[key];
+            const options = queryOptions[key];
             if (Array.isArray(value)) {
-                const options = queryOptions ? queryOptions[key] : undefined;
-                if (!options || options.explode) {
+                if (!options?.explode) {
                     for (const item of value) {
-                        query.append(key, item instanceof Date ? item.toISOString() : item);
+                        if (item instanceof Date) {
+                            query.append(key, options?.format === "date" ? item.toISOString().substr(0, 10) : item.toISOString());
+                        } else {
+                            query.append(key, item);
+                        }
                     }
+                } else if (options?.format === "date") {
+                    query.append(key, (value as Array<Date>).map(item => item.toISOString().substr(0,10)).join(options.delimiter || ","));
                 } else {
                     query.append(key, value.join(options.delimiter || ","));
                 }
+            } else if (value instanceof Date) {
+                query.append(key, options?.format === "date" ? value.toISOString().substr(0, 10) : value.toISOString());
             } else if (value !== undefined) {
                 query.append(key, value.toString());
             }
@@ -102,7 +110,7 @@ export class BaseAPI {
 }
 
 type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | undefined>;
-type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|" }>;
+type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|", format?: "date" }>;
 
 export class HttpError extends Error {
     readonly response: Response;
