@@ -419,6 +419,16 @@
         "summary": "Returns pet inventories by status",
         "description": "Returns a map of status codes to quantities",
         "operationId": "getInventory",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "effectiveDateTime",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "successful operation",

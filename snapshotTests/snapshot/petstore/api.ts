@@ -308,9 +308,11 @@ export interface StoreApiInterface {
     /**
      *
      * @summary Returns pet inventories by status
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     getInventory(params: {
+        queryParams?: { effectiveDateTime?: Date, };
         security: api_key;
     }): Promise<{ [key: string]: number; }>;
     /**
@@ -356,13 +358,15 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
     /**
      *
      * @summary Returns pet inventories by status
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     public async getInventory(params: {
+        queryParams?: { effectiveDateTime?: Date,  };
         security: api_key;
     }): Promise<{ [key: string]: number; }> {
         return await this.fetch(
-            this.basePath + "/store/inventory",
+            this.url("/store/inventory", {}, params?.queryParams, {}),
             {
                 headers: {
                     ...params.security?.headers(),

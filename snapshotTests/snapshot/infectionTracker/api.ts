@@ -186,9 +186,12 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
 export interface ExposuresApiInterface {
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    listExposures(): Promise<ExposureDto>;
+    listExposures(params: {
+        queryParams?: { exposureDate?: Array<Date>, };
+    }): Promise<ExposureDto>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -206,11 +209,16 @@ export interface ExposuresApiInterface {
 export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async listExposures(): Promise<ExposureDto> {
+    public async listExposures(params: {
+        queryParams?: { exposureDate?: Array<Date>,  };
+    }): Promise<ExposureDto> {
         return await this.fetch(
-            this.basePath + "/api/exposures"
+            this.url("/api/exposures", {}, params?.queryParams, {
+                exposureDate: { delimiter: "|" },
+            })
         );
     }
     /**

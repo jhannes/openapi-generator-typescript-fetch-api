@@ -88,7 +88,7 @@ export class BaseAPI {
                 const options = queryOptions ? queryOptions[key] : undefined;
                 if (!options || options.explode) {
                     for (const item of value) {
-                        query.append(key, item);
+                        query.append(key, item instanceof Date ? item.toISOString() : item);
                     }
                 } else {
                     query.append(key, value.join(options.delimiter || ","));
@@ -101,7 +101,7 @@ export class BaseAPI {
     }
 }
 
-type QueryParams = Record<string, string | string[] | Date | boolean | undefined>;
+type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | undefined>;
 type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|" }>;
 
 export class HttpError extends Error {

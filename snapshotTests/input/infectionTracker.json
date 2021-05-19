@@ -140,6 +140,21 @@
         "tags": [
           "Exposures"
         ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "exposureDate",
+            "explode": false,
+            "style": "pipeDelimited",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List exposures that the case worker can follow up",
