@@ -116,7 +116,7 @@ type ServerNames =
 
 export const servers: Record<ServerNames, ApplicationApis> = {
     default: {
-        defaultApi: new DefaultApi("/"),
+        defaultApi: new DefaultApi(""),
     },
 };
 

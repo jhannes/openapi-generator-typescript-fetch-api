@@ -13,8 +13,6 @@
 
 import {
     CategoryDto,
-    InlineObject1Dto,
-    InlineObjectDto,
     OrderDto,
     PetDto,
     TagDto,

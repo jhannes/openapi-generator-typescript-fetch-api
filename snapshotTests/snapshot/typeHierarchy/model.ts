@@ -27,16 +27,16 @@ export interface CatDto extends PetDto {
 
 export interface DogAllOfDto {
     bark?: boolean;
-    breed?: DogAllOfDtoBreedDtoEnum;
+    breed?: DogAllOfDtoBreedEnum;
 }
 
-export type DogAllOfDtoBreedDtoEnum =
+export type DogAllOfDtoBreedEnum =
     | "Dingo"
     | "Husky"
     | "Retriever"
     | "Shepherd";
 
-export const DogAllOfDtoBreedDtoEnumValues: DogAllOfDtoBreedDtoEnum[] = [
+export const DogAllOfDtoBreedEnumValues: DogAllOfDtoBreedEnum[] = [
     "Dingo",
     "Husky",
     "Retriever",
@@ -45,16 +45,16 @@ export const DogAllOfDtoBreedDtoEnumValues: DogAllOfDtoBreedDtoEnum[] = [
 
 export interface DogDto extends PetDto {
     bark?: boolean;
-    breed?: DogDtoBreedDtoEnum;
+    breed?: DogDtoBreedEnum;
 }
 
-export type DogDtoBreedDtoEnum =
+export type DogDtoBreedEnum =
     | "Dingo"
     | "Husky"
     | "Retriever"
     | "Shepherd";
 
-export const DogDtoBreedDtoEnumValues: DogDtoBreedDtoEnum[] = [
+export const DogDtoBreedEnumValues: DogDtoBreedEnum[] = [
     "Dingo",
     "Husky",
     "Retriever",

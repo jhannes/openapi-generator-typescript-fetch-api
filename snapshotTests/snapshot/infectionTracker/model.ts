@@ -34,17 +34,17 @@ export interface ExposureDto {
      * The id of the case worker assigned to follow up this person
      */
     caseWorker?: string;
-    status: ExposureDtoStatusDtoEnum;
+    status: ExposureDtoStatusEnum;
 }
 
-export type ExposureDtoStatusDtoEnum =
+export type ExposureDtoStatusEnum =
     | "unidentified"
     | "identified"
     | "contacted"
     | "tested"
     | "infected";
 
-export const ExposureDtoStatusDtoEnumValues: ExposureDtoStatusDtoEnum[] = [
+export const ExposureDtoStatusEnumValues: ExposureDtoStatusEnum[] = [
     "unidentified",
     "identified",
     "contacted",

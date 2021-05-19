@@ -1,6 +1,5 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
-import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.CliOption;
@@ -14,7 +13,6 @@ import org.openapitools.codegen.languages.AbstractTypeScriptClientCodegen;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
 import org.openapitools.codegen.meta.features.SecurityFeature;
 import org.openapitools.codegen.templating.HandlebarsEngineAdapter;
-import org.openapitools.codegen.utils.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -234,13 +232,6 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             }
         }
         return result;
-    }
-
-
-    @Override
-    protected void addAdditionPropertiesToCodeGenModel(CodegenModel codegenModel, Schema schema) {
-        codegenModel.additionalPropertiesType = getTypeDeclaration(ModelUtils.getAdditionalProperties(schema));
-        addImport(codegenModel, codegenModel.additionalPropertiesType);
     }
 
     @Override

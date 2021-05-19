@@ -11,8 +11,8 @@
  */
 
 export type AnyPartyDto =
-	{ type: "person" } & PersonDto |
-	{ type: "organization" } & OrganizationDto;
+	{ type: "organization" } & OrganizationDto |
+	{ type: "person" } & PersonDto;
 
 
 export type CreationErrorDto =

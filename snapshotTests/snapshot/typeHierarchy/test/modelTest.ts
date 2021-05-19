@@ -3,11 +3,11 @@ import {
     CatAllOfDto,
     CatDto,
     DogAllOfDto,
-    DogAllOfDtoBreedDtoEnum,
-    DogAllOfDtoBreedDtoEnumValues,
+    DogAllOfDtoBreedEnum,
+    DogAllOfDtoBreedEnumValues,
     DogDto,
-    DogDtoBreedDtoEnum,
-    DogDtoBreedDtoEnumValues,
+    DogDtoBreedEnum,
+    DogDtoBreedEnumValues,
     PetDto,
 } from "../model";
 
@@ -366,7 +366,7 @@ export class TestSampleData {
             breed: this.generate(
                 template?.breed,
                 { containerClass, propertyName: "breed", example: "null", isNullable: false },
-                () => this.pickOne(DogAllOfDtoBreedDtoEnumValues)
+                () => this.pickOne(DogAllOfDtoBreedEnumValues)
             ),
         };
     }
@@ -410,7 +410,7 @@ export class TestSampleData {
             breed: this.generate(
                 template?.breed,
                 { containerClass, propertyName: "breed", example: "null", isNullable: false },
-                () => this.pickOne(DogDtoBreedDtoEnumValues)
+                () => this.pickOne(DogDtoBreedEnumValues)
             ),
         };
     }

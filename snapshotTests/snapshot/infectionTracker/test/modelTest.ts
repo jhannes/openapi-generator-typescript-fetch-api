@@ -1,8 +1,8 @@
 import {
     CaseWorkerDto,
     ExposureDto,
-    ExposureDtoStatusDtoEnum,
-    ExposureDtoStatusDtoEnumValues,
+    ExposureDtoStatusEnum,
+    ExposureDtoStatusEnumValues,
     InfectionDto,
     InfectionInformationDto,
     UserRoleDto,
@@ -359,7 +359,7 @@ export class TestSampleData {
             status: this.generate(
                 template?.status,
                 { containerClass, propertyName: "status", example: "null", isNullable: false },
-                () => this.pickOne(ExposureDtoStatusDtoEnumValues)
+                () => this.pickOne(ExposureDtoStatusEnumValues)
             ),
         };
     }
