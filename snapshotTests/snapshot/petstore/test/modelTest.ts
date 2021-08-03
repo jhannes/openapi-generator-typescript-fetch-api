@@ -1,13 +1,11 @@
 import {
     CategoryDto,
-    InlineObject1Dto,
-    InlineObjectDto,
     OrderDto,
-    OrderDtoStatusDtoEnum,
-    OrderDtoStatusDtoEnumValues,
+    OrderDtoStatusEnum,
+    OrderDtoStatusEnumValues,
     PetDto,
-    PetDtoStatusDtoEnum,
-    PetDtoStatusDtoEnumValues,
+    PetDtoStatusEnum,
+    PetDtoStatusEnumValues,
     TagDto,
     UserDto,
 } from "../model";
@@ -66,8 +64,6 @@ type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
 
 export interface SampleModelFactories {
     CategoryDto?: ModelFactory<CategoryDto>;
-    InlineObject1Dto?: ModelFactory<InlineObject1Dto>;
-    InlineObjectDto?: ModelFactory<InlineObjectDto>;
     OrderDto?: ModelFactory<OrderDto>;
     PetDto?: ModelFactory<PetDto>;
     TagDto?: ModelFactory<TagDto>;
@@ -260,14 +256,6 @@ export class TestSampleData {
                 return this.sampleCategoryDto();
             case "Array<CategoryDto>":
                 return this.sampleArrayCategoryDto();
-            case "InlineObject1Dto":
-                return this.sampleInlineObject1Dto();
-            case "Array<InlineObject1Dto>":
-                return this.sampleArrayInlineObject1Dto();
-            case "InlineObjectDto":
-                return this.sampleInlineObjectDto();
-            case "Array<InlineObjectDto>":
-                return this.sampleArrayInlineObjectDto();
             case "OrderDto":
                 return this.sampleOrderDto();
             case "Array<OrderDto>":
@@ -318,64 +306,6 @@ export class TestSampleData {
         );
     }
 
-    sampleInlineObject1Dto(template?: Factory<InlineObject1Dto>): InlineObject1Dto {
-        const containerClass = "InlineObject1Dto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        return {
-            additionalMetadata: this.generate(
-                template?.additionalMetadata,
-                { containerClass, propertyName: "additionalMetadata", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            file: this.generate(
-                template?.file,
-                { containerClass, propertyName: "file", example: "null", isNullable: false },
-                () => this.sampleany()
-            ),
-        };
-    }
-
-    sampleArrayInlineObject1Dto(
-        template: Factory<InlineObject1Dto> = {},
-        length?: number
-    ): Array<InlineObject1Dto> {
-        return this.randomArray(
-            () => this.sampleInlineObject1Dto(template),
-            length ?? this.arrayLength()
-        );
-    }
-
-    sampleInlineObjectDto(template?: Factory<InlineObjectDto>): InlineObjectDto {
-        const containerClass = "InlineObjectDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        return {
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            status: this.generate(
-                template?.status,
-                { containerClass, propertyName: "status", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-        };
-    }
-
-    sampleArrayInlineObjectDto(
-        template: Factory<InlineObjectDto> = {},
-        length?: number
-    ): Array<InlineObjectDto> {
-        return this.randomArray(
-            () => this.sampleInlineObjectDto(template),
-            length ?? this.arrayLength()
-        );
-    }
-
     sampleOrderDto(template?: Factory<OrderDto>): OrderDto {
         const containerClass = "OrderDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
@@ -405,7 +335,7 @@ export class TestSampleData {
             status: this.generate(
                 template?.status,
                 { containerClass, propertyName: "status", example: "null", isNullable: false },
-                () => this.pickOne(OrderDtoStatusDtoEnumValues)
+                () => this.pickOne(OrderDtoStatusEnumValues)
             ),
             complete: this.generate(
                 template?.complete,
@@ -459,7 +389,7 @@ export class TestSampleData {
             status: this.generate(
                 template?.status,
                 { containerClass, propertyName: "status", example: "null", isNullable: false },
-                () => this.pickOne(PetDtoStatusDtoEnumValues)
+                () => this.pickOne(PetDtoStatusEnumValues)
             ),
         };
     }

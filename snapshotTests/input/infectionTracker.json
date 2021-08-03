@@ -153,6 +153,13 @@
                 "format": "date"
               }
             }
+          },
+          {
+            "in": "query",
+            "name": "maxCount",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {

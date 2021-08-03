@@ -52,17 +52,16 @@ public class VerifyOutputTests {
 
     private void runCommand(Path outputDir, String[] npmCommand) throws IOException, InterruptedException {
         Process command = Runtime.getRuntime().exec(npmCommand, null, outputDir.toFile());
-        System.out.println("Starting npm install in " + outputDir);
         startTransferThread(command.getInputStream(), System.out, outputDir + "-to-stdout");
         startTransferThread(command.getErrorStream(), System.err, outputDir + "-to-stderr");
-        command.waitFor(30, TimeUnit.SECONDS);
+        command.waitFor(60, TimeUnit.SECONDS);
         assertEquals(0, command.exitValue());
     }
 
     private void generate(Path file, String generatorName, Path output, String modelName) {
         final CodegenConfigurator configurator = new CodegenConfigurator()
                 .setGeneratorName(generatorName)
-                .setInputSpec(file.toString())
+                .setInputSpec(file.toString().replaceAll("\\\\", "/"))
                 .setModelNameSuffix("Dto")
                 .addAdditionalProperty("npmName", modelName)
                 .addAdditionalProperty("withInterfaces", "true")

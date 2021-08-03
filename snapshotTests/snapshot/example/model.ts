@@ -10,17 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface InlineObjectDto {
-    /**
-     * Updated name of the pet
-     */
-    name?: string;
-    /**
-     * Updated status of the pet
-     */
-    status?: string;
-}
-
 export interface PetDto {
     pet_type: string;
     name?: string;

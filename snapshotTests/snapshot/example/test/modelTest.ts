@@ -1,5 +1,4 @@
 import {
-    InlineObjectDto,
     PetDto,
 } from "../model";
 
@@ -56,7 +55,6 @@ type Factory<T> = {
 type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
 
 export interface SampleModelFactories {
-    InlineObjectDto?: ModelFactory<InlineObjectDto>;
     PetDto?: ModelFactory<PetDto>;
 }
 
@@ -242,10 +240,6 @@ export class TestSampleData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
         switch (modelName) {
-            case "InlineObjectDto":
-                return this.sampleInlineObjectDto();
-            case "Array<InlineObjectDto>":
-                return this.sampleArrayInlineObjectDto();
             case "PetDto":
                 return this.samplePetDto();
             case "Array<PetDto>":
@@ -253,35 +247,6 @@ export class TestSampleData {
             default:
                 throw new Error("Unknown type " + modelName);
         }
-    }
-
-    sampleInlineObjectDto(template?: Factory<InlineObjectDto>): InlineObjectDto {
-        const containerClass = "InlineObjectDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        return {
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            status: this.generate(
-                template?.status,
-                { containerClass, propertyName: "status", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-        };
-    }
-
-    sampleArrayInlineObjectDto(
-        template: Factory<InlineObjectDto> = {},
-        length?: number
-    ): Array<InlineObjectDto> {
-        return this.randomArray(
-            () => this.sampleInlineObjectDto(template),
-            length ?? this.arrayLength()
-        );
     }
 
     samplePetDto(template?: Factory<PetDto>): PetDto {

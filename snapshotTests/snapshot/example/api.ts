@@ -12,7 +12,6 @@
  */
 
 import {
-    InlineObjectDto,
     PetDto,
 } from "./model";
 

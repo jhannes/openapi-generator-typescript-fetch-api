@@ -15,28 +15,6 @@ export interface CategoryDto {
     name?: string;
 }
 
-export interface InlineObject1Dto {
-    /**
-     * Additional data to pass to server
-     */
-    additionalMetadata?: string;
-    /**
-     * file to upload
-     */
-    file?: Blob;
-}
-
-export interface InlineObjectDto {
-    /**
-     * Updated name of the pet
-     */
-    name?: string;
-    /**
-     * Updated status of the pet
-     */
-    status?: string;
-}
-
 export interface OrderDto {
     id?: number;
     petId?: number;
@@ -45,18 +23,18 @@ export interface OrderDto {
     /**
      * Order Status
      */
-    status?: OrderDtoStatusDtoEnum;
+    status?: OrderDtoStatusEnum;
     complete?: boolean;
 }
 /**
  * Order Status
  */
-export type OrderDtoStatusDtoEnum =
+export type OrderDtoStatusEnum =
     | "placed"
     | "approved"
     | "delivered";
 
-export const OrderDtoStatusDtoEnumValues: OrderDtoStatusDtoEnum[] = [
+export const OrderDtoStatusEnumValues: OrderDtoStatusEnum[] = [
     "placed",
     "approved",
     "delivered",
@@ -71,17 +49,17 @@ export interface PetDto {
     /**
      * pet status in the store
      */
-    status?: PetDtoStatusDtoEnum;
+    status?: PetDtoStatusEnum;
 }
 /**
  * pet status in the store
  */
-export type PetDtoStatusDtoEnum =
+export type PetDtoStatusEnum =
     | "available"
     | "pending"
     | "sold";
 
-export const PetDtoStatusDtoEnumValues: PetDtoStatusDtoEnum[] = [
+export const PetDtoStatusEnumValues: PetDtoStatusEnum[] = [
     "available",
     "pending",
     "sold",

@@ -50,6 +50,9 @@ export class BaseAPI {
             if (contentType && contentType.startsWith("application/json")) {
                 return response.json();
             }
+            if (response.status === 204) {
+                return undefined;
+            }
             return response;
         }
         const body: any =
@@ -119,7 +122,7 @@ export class BaseAPI {
     }
 }
 
-type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | undefined>;
+type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | number | undefined>;
 type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|", format?: "date" }>;
 
 export class HttpError extends Error {
