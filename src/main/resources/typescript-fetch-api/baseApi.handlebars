@@ -40,6 +40,9 @@ export class BaseAPI {
             if (contentType && contentType.startsWith("application/json")) {
                 return response.json();
             }
+            if (response.status === 204) {
+                return undefined;
+            }
             return response;
         }
         const body: any =
