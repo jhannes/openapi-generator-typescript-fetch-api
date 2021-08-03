@@ -122,7 +122,7 @@ export class BaseAPI {
     }
 }
 
-type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | undefined>;
+type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | number | undefined>;
 type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|", format?: "date" }>;
 
 export class HttpError extends Error {
