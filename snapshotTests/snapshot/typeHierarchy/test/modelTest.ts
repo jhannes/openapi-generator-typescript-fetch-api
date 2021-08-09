@@ -126,6 +126,10 @@ export class TestSampleData {
         return this.random.pickOne(options);
     }
 
+    pickOneString<T extends string>(options: Array<T>): T {
+        return this.random.pickOne(options);
+    }
+
     pickSome<T>(options: Array<T>): T[] {
         return this.random.pickSome(options);
     }
@@ -214,6 +218,10 @@ export class TestSampleData {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.sampleString());
     }
 
+    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+        return [];
+    }
+
     sampleArraynumber(length?: number): Array<number> {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.samplenumber());
     }
@@ -254,6 +262,10 @@ export class TestSampleData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
         switch (modelName) {
+            case "AnyPetDto":
+                return this.sampleAnyPetDto();
+            case "Array<AnyPetDto>":
+                return this.sampleArrayAnyPetDto();
             case "CatAllOfDto":
                 return this.sampleCatAllOfDto();
             case "Array<CatAllOfDto>":
@@ -277,6 +289,38 @@ export class TestSampleData {
             default:
                 throw new Error("Unknown type " + modelName);
         }
+    }
+
+    sampleAnyPetDto(
+        template?: Factory<CatDto & DogDto>
+    ): AnyPetDto {
+        const containerClass = "AnyPetDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        const pet_type = this.pickOneString(["Cat", "Dog"])
+        switch (pet_type) {
+            case "Cat":
+                return {
+                    ...this.sampleCatDto(template),
+                    pet_type
+                };
+            case "Dog":
+                return {
+                    ...this.sampleDogDto(template),
+                    pet_type
+                };
+        }
+    }
+
+    sampleArrayAnyPetDto(
+        template: Factory<CatDto & DogDto> = {},
+        length?: number
+    ): Array<AnyPetDto> {
+        return this.randomArray(
+            () => this.sampleAnyPetDto(template),
+            length ?? this.arrayLength()
+        );
     }
 
     sampleCatAllOfDto(template?: Factory<CatAllOfDto>): CatAllOfDto {

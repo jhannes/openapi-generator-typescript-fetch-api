@@ -129,6 +129,10 @@ export class TestSampleData {
         return this.random.pickOne(options);
     }
 
+    pickOneString<T extends string>(options: Array<T>): T {
+        return this.random.pickOne(options);
+    }
+
     pickSome<T>(options: Array<T>): T[] {
         return this.random.pickSome(options);
     }
@@ -261,16 +265,36 @@ export class TestSampleData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
         switch (modelName) {
-{{~#models}}{{#model}}{{^oneOf}}
+{{~#models}}{{#model}}
             case "{{classname}}":
                 return this.sample{{{classname}}}();
             case "Array<{{classname}}>":
-                return this.sampleArray{{classname}}();{{~/oneOf}}{{/model}}{{~/models}}
+                return this.sampleArray{{classname}}();{{/model}}{{~/models}}
             default:
                 throw new Error("Unknown type " + modelName);
         }
     }
-{{~#models}}{{~#model}}{{^oneOf}}
+{{~#models}}{{~#model}}{{~#if oneOf}}{{#discriminator}}
+
+    sample{{classname}}(
+        template?: Factory<{{#mappedModels}}{{modelName}}{{#unless @last}} & {{/unless}}{{/mappedModels}}>
+    ): {{classname}} {
+        const containerClass = "{{classname}}";
+        if ({{^isEnum}}!template && {{/isEnum}}typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        const {{propertyName}} = this.pickOneString([{{#mappedModels}}"{{mappingName}}"{{#unless @last}}, {{/unless}}{{/mappedModels}}])
+        switch ({{propertyName}}) {
+            {{~#mappedModels}}
+            case "{{mappingName}}":
+                return {
+                    ...this.sample{{modelName}}(template),
+                    {{discriminator.propertyName}}
+                };
+            {{~/mappedModels}}
+        }
+    }
+{{~/discriminator}}{{~else}}
 
     sample{{classname}}({{^isEnum}}template?: Factory<{{classname}}>{{/isEnum}}): {{classname}} {
         const containerClass = "{{classname}}";
@@ -327,9 +351,11 @@ export class TestSampleData {
         };
 {{~/if}}
     }
+{{~/if}}
 
-    sampleArray{{classname}}{{^isEnum}}(
-        template: Factory<{{classname}}> = {},
+    sampleArray{{classname}}{{^isEnum}}({{#if oneOf}}{{#discriminator}}
+        template: Factory<{{#mappedModels}}{{modelName}}{{#unless @last}} & {{/unless}}{{/mappedModels}}> = {},{{/discriminator}}{{else}}
+        template: Factory<{{classname}}> = {},{{/if}}
         length?: number
     ){{/isEnum}}{{#isEnum}}(length?: number){{/isEnum}}: Array<{{classname}}> {
         return this.randomArray(
@@ -337,7 +363,6 @@ export class TestSampleData {
             length ?? this.arrayLength()
         );
     }
-{{~/oneOf}}
 {{~/model}}
 {{~/models}}
 }

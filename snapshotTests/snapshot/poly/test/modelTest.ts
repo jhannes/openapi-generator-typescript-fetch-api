@@ -128,6 +128,10 @@ export class TestSampleData {
         return this.random.pickOne(options);
     }
 
+    pickOneString<T extends string>(options: Array<T>): T {
+        return this.random.pickOne(options);
+    }
+
     pickSome<T>(options: Array<T>): T[] {
         return this.random.pickSome(options);
     }
@@ -216,6 +220,10 @@ export class TestSampleData {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.sampleString());
     }
 
+    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+        return [];
+    }
+
     sampleArraynumber(length?: number): Array<number> {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.samplenumber());
     }
@@ -256,6 +264,14 @@ export class TestSampleData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
         switch (modelName) {
+            case "AnyPartyDto":
+                return this.sampleAnyPartyDto();
+            case "Array<AnyPartyDto>":
+                return this.sampleArrayAnyPartyDto();
+            case "CreationErrorDto":
+                return this.sampleCreationErrorDto();
+            case "Array<CreationErrorDto>":
+                return this.sampleArrayCreationErrorDto();
             case "DuplicateIdentifierErrorDto":
                 return this.sampleDuplicateIdentifierErrorDto();
             case "Array<DuplicateIdentifierErrorDto>":
@@ -280,9 +296,82 @@ export class TestSampleData {
                 return this.samplePersonDto();
             case "Array<PersonDto>":
                 return this.sampleArrayPersonDto();
+            case "UpdateErrorDto":
+                return this.sampleUpdateErrorDto();
+            case "Array<UpdateErrorDto>":
+                return this.sampleArrayUpdateErrorDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
+    }
+
+    sampleAnyPartyDto(
+        template?: Factory<OrganizationDto & PersonDto>
+    ): AnyPartyDto {
+        const containerClass = "AnyPartyDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        const type = this.pickOneString(["organization", "person"])
+        switch (type) {
+            case "organization":
+                return {
+                    ...this.sampleOrganizationDto(template),
+                    type
+                };
+            case "person":
+                return {
+                    ...this.samplePersonDto(template),
+                    type
+                };
+        }
+    }
+
+    sampleArrayAnyPartyDto(
+        template: Factory<OrganizationDto & PersonDto> = {},
+        length?: number
+    ): Array<AnyPartyDto> {
+        return this.randomArray(
+            () => this.sampleAnyPartyDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleCreationErrorDto(
+        template?: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto>
+    ): CreationErrorDto {
+        const containerClass = "CreationErrorDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        const code = this.pickOneString(["IllegalEmailAddressError", "DuplicateIdentifierError", "GeneralError"])
+        switch (code) {
+            case "IllegalEmailAddressError":
+                return {
+                    ...this.sampleIllegalEmailAddressErrorDto(template),
+                    code
+                };
+            case "DuplicateIdentifierError":
+                return {
+                    ...this.sampleDuplicateIdentifierErrorDto(template),
+                    code
+                };
+            case "GeneralError":
+                return {
+                    ...this.sampleGeneralErrorDto(template),
+                    code
+                };
+        }
+    }
+
+    sampleArrayCreationErrorDto(
+        template: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto> = {},
+        length?: number
+    ): Array<CreationErrorDto> {
+        return this.randomArray(
+            () => this.sampleCreationErrorDto(template),
+            length ?? this.arrayLength()
+        );
     }
 
     sampleDuplicateIdentifierErrorDto(template?: Factory<DuplicateIdentifierErrorDto>): DuplicateIdentifierErrorDto {
@@ -525,6 +614,48 @@ export class TestSampleData {
     ): Array<PersonDto> {
         return this.randomArray(
             () => this.samplePersonDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleUpdateErrorDto(
+        template?: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto & NotFoundErrorDto>
+    ): UpdateErrorDto {
+        const containerClass = "UpdateErrorDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        const code = this.pickOneString(["IllegalEmailAddressError", "DuplicateIdentifierError", "GeneralError", "NotFoundError"])
+        switch (code) {
+            case "IllegalEmailAddressError":
+                return {
+                    ...this.sampleIllegalEmailAddressErrorDto(template),
+                    code
+                };
+            case "DuplicateIdentifierError":
+                return {
+                    ...this.sampleDuplicateIdentifierErrorDto(template),
+                    code
+                };
+            case "GeneralError":
+                return {
+                    ...this.sampleGeneralErrorDto(template),
+                    code
+                };
+            case "NotFoundError":
+                return {
+                    ...this.sampleNotFoundErrorDto(template),
+                    code
+                };
+        }
+    }
+
+    sampleArrayUpdateErrorDto(
+        template: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto & NotFoundErrorDto> = {},
+        length?: number
+    ): Array<UpdateErrorDto> {
+        return this.randomArray(
+            () => this.sampleUpdateErrorDto(template),
             length ?? this.arrayLength()
         );
     }

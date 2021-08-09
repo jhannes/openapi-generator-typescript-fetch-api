@@ -43,11 +43,13 @@ public class VerifyOutputTests {
         cleanDirectory(outputDir);
         return dynamicContainer(
                 "Verifications of " + testDir,
-                Files.list(inputDir).map(spec -> dynamicContainer("Verify " + spec, Arrays.asList(
-                        dynamicTest("Generate " + spec, () -> generate(spec, generatorName, outputDir, getModelName(spec))),
-                        dynamicTest("npm install " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "install"})),
-                        dynamicTest("npm build " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "run", "build"}))
-                ))));
+                Files.list(inputDir)
+                        .filter(p -> p.toFile().isFile())
+                        .map(spec -> dynamicContainer("Verify " + spec, Arrays.asList(
+                                dynamicTest("Generate " + spec, () -> generate(spec, generatorName, outputDir, getModelName(spec))),
+                                dynamicTest("npm install " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "install"})),
+                                dynamicTest("npm build " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "run", "build"}))
+                        ))));
     }
 
     private void runCommand(Path outputDir, String[] npmCommand) throws IOException, InterruptedException {

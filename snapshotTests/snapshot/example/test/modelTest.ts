@@ -112,6 +112,10 @@ export class TestSampleData {
         return this.random.pickOne(options);
     }
 
+    pickOneString<T extends string>(options: Array<T>): T {
+        return this.random.pickOne(options);
+    }
+
     pickSome<T>(options: Array<T>): T[] {
         return this.random.pickSome(options);
     }
@@ -198,6 +202,10 @@ export class TestSampleData {
 
     sampleArrayString(length?: number): Array<string> {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.sampleString());
+    }
+
+    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+        return [];
     }
 
     sampleArraynumber(length?: number): Array<number> {
