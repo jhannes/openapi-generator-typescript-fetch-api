@@ -217,6 +217,10 @@ export class TestSampleData {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.sampleString());
     }
 
+    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+        return [];
+    }
+
     sampleArraynumber(length?: number): Array<number> {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.samplenumber());
     }
@@ -259,7 +263,7 @@ export class TestSampleData {
         switch (modelName) {
 {{~#models}}{{#model}}{{^oneOf}}
             case "{{classname}}":
-                return this.sample{{classname}}();
+                return this.sample{{{classname}}}();
             case "Array<{{classname}}>":
                 return this.sampleArray{{classname}}();{{~/oneOf}}{{/model}}{{~/models}}
             default:
@@ -307,14 +311,14 @@ export class TestSampleData {
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
-                () => {{#items}}{{#isString}}this.sampleArrayString{{/isString}}{{^isString}}this.sampleArray{{dataType}}{{/isString}}{{/items}}()
+                () => {{#items}}{{#isString}}this.sampleArrayString{{/isString}}{{^isString}}this.sampleArray{{{dataType}}}{{/isString}}{{/items}}()
             ),
 {{~/isContainer}}
 {{~^isContainer}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
-                () => this.sample{{dataType}}()
+                () => this.sample{{{dataType}}}()
             ),
 {{~/isContainer}}
 {{~/isDateTime}}
