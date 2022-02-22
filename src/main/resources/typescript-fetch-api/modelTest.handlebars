@@ -9,9 +9,8 @@ import {
 {{~#vars}}
     {{~#isEnum}}{{~^isContainer}}
     {{datatypeWithEnum}},
-    {{datatypeWithEnum}}Values,
-    {{~/isContainer}}{{~/isEnum}}
-{{~/vars}}
+    {{datatypeWithEnum}}Values,{{~/isContainer}}{{~/isEnum}}
+{{~/vars~}}
 {{~/oneOf}}
 {{~/model}}
 {{~/models}}
@@ -312,41 +311,27 @@ export class TestSampleData {
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", isNullable: {{isNullable}} },
                 () => this.sampleString({{#if dataFormat}}"{{dataFormat}}"{{else}}""{{/if}}{{#example}}, "{{{example}}}"{{/example}})
-            ),
-{{~/isEnum}}
-{{~#isEnum}}
+            ),{{~/isEnum~}} {{~#isEnum}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => {{^isContainer}}this.pickOne({{datatypeWithEnum}}Values){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne({{datatypeWithEnum}}Values){{/mostInnerItems}}{{/isContainer}}
-            ),
-{{~/isEnum}}
-{{~/isString}}
-{{~#isDateTime}}
+            ),{{~/isEnum}}{{~/isString~}}{{~#isDateTime}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => this.sampleDate()
-            ),
-{{~/isDateTime}}
-{{~^isString}}
-{{~^isDateTime}}
-{{~#isContainer}}
+            ),{{~/isDateTime~}}{{~^isString~}}{{~^isDateTime~}}{{~#isContainer}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => {{#items}}{{#isString}}this.sampleArrayString{{/isString}}{{^isString}}this.sampleArray{{{dataType}}}{{/isString}}{{/items}}()
-            ),
-{{~/isContainer}}
-{{~^isContainer}}
+            ),{{~/isContainer~}}{{~^isContainer}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => this.sample{{{dataType}}}()
-            ),
-{{~/isContainer}}
-{{~/isDateTime}}
-{{~/isString}}
+            ),{{~/isContainer~}}{{~/isDateTime~}}{{~/isString~}}
 {{~/allVars}}
         };
 {{~/if}}

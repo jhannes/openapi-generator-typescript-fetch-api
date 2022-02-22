@@ -52,6 +52,9 @@ public class SnapshotTests {
         try {
             generate(spec, generatorName, outputDir, getModelName(spec));
         } catch (Exception e) {
+            if (e.getCause() != null) {
+                return dynamicTest("Generator for " + spec, () -> {throw e.getCause();});
+            }
             return dynamicTest("Generator for " + spec, () -> assertNull(e));
         }
 
