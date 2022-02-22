@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class VerifyOutputTests {
 
-    public static final String NPM_PATH = System.getProperty("os.name").startsWith("Windows") ? "npm.cmd" : "cmd";
+    public static final String NPM_PATH = System.getProperty("os.name").startsWith("Windows") ? "npm.cmd" : "npm";
 
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
