@@ -209,6 +209,23 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 model.put("hasReadOnly", codegenModel.allVars.stream().anyMatch(v -> v.isReadOnly));
                 model.put("hasWriteOnly", codegenModel.allVars.stream().anyMatch(v -> v.isWriteOnly));
 
+                for (CodegenProperty variable : codegenModel.vars) {
+                    if (variable.get_enum() != null && variable.get_enum().size() == 1) {
+                        variable.dataType = "\"" + variable.get_enum().get(0) + "\"";
+                        variable.isEnum = false;
+                        // This is abusing uniqueItems - we use it to note that there is only one enum alternative - i.e. the property is constant
+                        variable.setUniqueItems(true);
+                    }
+                }
+                for (CodegenProperty variable : codegenModel.allVars) {
+                    if (variable.get_enum() != null && variable.get_enum().size() == 1) {
+                        variable.dataType = "\"" + variable.get_enum().get(0) + "\"";
+                        variable.isEnum = false;
+                        // This is abusing uniqueItems - we use it to note that there is only one enum alternative - i.e. the property is constant
+                        variable.setUniqueItems(true);
+                    }
+                }
+
                 if (!codegenModel.oneOf.isEmpty()) {
                     if (codegenModel.discriminator.getMapping() == null) {
                         Set<CodegenDiscriminator.MappedModel> mappedModels = new HashSet<>();

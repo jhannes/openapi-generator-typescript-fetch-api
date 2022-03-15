@@ -19,7 +19,7 @@ export interface {{classname}} {{#if parent}}extends {{{parent}}} {{/if}}{
 {{~/vars}}
 }
 
-{{~#hasEnums}}{{~#vars}}{{~#isEnum}}
+{{~#vars}}{{~#isEnum}}
 {{#if description}}/**
  * {{{description}}}
  */{{/if}}
@@ -37,4 +37,4 @@ export const {{enumName}}Values: {{enumName}}[] = [
     {{~/enumVars}}
 {{~/allowableValues}}
 ];
-{{~/isEnum}}{{~/vars}}{{~/hasEnums}}
+{{~/isEnum}}{{~/vars}}

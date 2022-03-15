@@ -306,70 +306,76 @@ export class TestSampleData {
     }
 
     sampleAnyPartyDto(
-        template?: Factory<OrganizationDto & PersonDto>
+        factory?: (sampleData: TestSampleData) => AnyPartyDto
     ): AnyPartyDto {
         const containerClass = "AnyPartyDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+        if (factory) {
+            return factory(this);
+        }
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         const type = this.pickOneString(["organization", "person"])
         switch (type) {
             case "organization":
                 return {
-                    ...this.sampleOrganizationDto(template),
+                    ...this.sampleOrganizationDto(),
                     type
                 };
             case "person":
                 return {
-                    ...this.samplePersonDto(template),
+                    ...this.samplePersonDto(),
                     type
                 };
         }
     }
 
     sampleArrayAnyPartyDto(
-        template: Factory<OrganizationDto & PersonDto> = {},
+        factory?: (sampleData: TestSampleData) => AnyPartyDto,
         length?: number
     ): Array<AnyPartyDto> {
         return this.randomArray(
-            () => this.sampleAnyPartyDto(template),
+            () => this.sampleAnyPartyDto(factory),
             length ?? this.arrayLength()
         );
     }
 
     sampleCreationErrorDto(
-        template?: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto>
+        factory?: (sampleData: TestSampleData) => CreationErrorDto
     ): CreationErrorDto {
         const containerClass = "CreationErrorDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+        if (factory) {
+            return factory(this);
+        }
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         const code = this.pickOneString(["IllegalEmailAddressError", "DuplicateIdentifierError", "GeneralError"])
         switch (code) {
             case "IllegalEmailAddressError":
                 return {
-                    ...this.sampleIllegalEmailAddressErrorDto(template),
+                    ...this.sampleIllegalEmailAddressErrorDto(),
                     code
                 };
             case "DuplicateIdentifierError":
                 return {
-                    ...this.sampleDuplicateIdentifierErrorDto(template),
+                    ...this.sampleDuplicateIdentifierErrorDto(),
                     code
                 };
             case "GeneralError":
                 return {
-                    ...this.sampleGeneralErrorDto(template),
+                    ...this.sampleGeneralErrorDto(),
                     code
                 };
         }
     }
 
     sampleArrayCreationErrorDto(
-        template: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto> = {},
+        factory?: (sampleData: TestSampleData) => CreationErrorDto,
         length?: number
     ): Array<CreationErrorDto> {
         return this.randomArray(
-            () => this.sampleCreationErrorDto(template),
+            () => this.sampleCreationErrorDto(factory),
             length ?? this.arrayLength()
         );
     }
@@ -619,43 +625,46 @@ export class TestSampleData {
     }
 
     sampleUpdateErrorDto(
-        template?: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto & NotFoundErrorDto>
+        factory?: (sampleData: TestSampleData) => UpdateErrorDto
     ): UpdateErrorDto {
         const containerClass = "UpdateErrorDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+        if (factory) {
+            return factory(this);
+        }
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         const code = this.pickOneString(["IllegalEmailAddressError", "DuplicateIdentifierError", "GeneralError", "NotFoundError"])
         switch (code) {
             case "IllegalEmailAddressError":
                 return {
-                    ...this.sampleIllegalEmailAddressErrorDto(template),
+                    ...this.sampleIllegalEmailAddressErrorDto(),
                     code
                 };
             case "DuplicateIdentifierError":
                 return {
-                    ...this.sampleDuplicateIdentifierErrorDto(template),
+                    ...this.sampleDuplicateIdentifierErrorDto(),
                     code
                 };
             case "GeneralError":
                 return {
-                    ...this.sampleGeneralErrorDto(template),
+                    ...this.sampleGeneralErrorDto(),
                     code
                 };
             case "NotFoundError":
                 return {
-                    ...this.sampleNotFoundErrorDto(template),
+                    ...this.sampleNotFoundErrorDto(),
                     code
                 };
         }
     }
 
     sampleArrayUpdateErrorDto(
-        template: Factory<IllegalEmailAddressErrorDto & DuplicateIdentifierErrorDto & GeneralErrorDto & NotFoundErrorDto> = {},
+        factory?: (sampleData: TestSampleData) => UpdateErrorDto,
         length?: number
     ): Array<UpdateErrorDto> {
         return this.randomArray(
-            () => this.sampleUpdateErrorDto(template),
+            () => this.sampleUpdateErrorDto(factory),
             length ?? this.arrayLength()
         );
     }

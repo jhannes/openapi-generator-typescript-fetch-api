@@ -1,0 +1,19 @@
+openapi: 3.0.2
+info:
+  title: GeoJSON
+  description: GeoJSON
+  version: 0.1.9
+servers:
+  - url: /v1
+    description: Server
+paths:
+  /collection:
+    get:
+      operationId: getLocation
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/geojson.yaml#/GeometryCollection'

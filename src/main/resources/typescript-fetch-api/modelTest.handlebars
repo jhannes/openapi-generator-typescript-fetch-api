@@ -276,10 +276,13 @@ export class TestSampleData {
 {{~#models}}{{~#model}}{{~#if oneOf}}{{#discriminator}}
 
     sample{{classname}}(
-        template?: Factory<{{#mappedModels}}{{modelName}}{{#unless @last}} & {{/unless}}{{/mappedModels}}>
+        factory?: (sampleData: TestSampleData) => {{classname}}
     ): {{classname}} {
         const containerClass = "{{classname}}";
-        if ({{^isEnum}}!template && {{/isEnum}}typeof this.sampleModelProperties[containerClass] === "function") {
+        if (factory) {
+            return factory(this);
+        }
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         const {{propertyName}} = this.pickOneString([{{#mappedModels}}"{{mappingName}}"{{#unless @last}}, {{/unless}}{{/mappedModels}}])
@@ -287,7 +290,7 @@ export class TestSampleData {
             {{~#mappedModels}}
             case "{{mappingName}}":
                 return {
-                    ...this.sample{{modelName}}(template),
+                    ...this.sample{{modelName}}(),
                     {{discriminator.propertyName}}
                 };
             {{~/mappedModels}}
@@ -305,46 +308,46 @@ export class TestSampleData {
 {{~else}}
         return {
 {{~#allVars}}
-{{~#isString}}
-{{~^isEnum}}
-            {{name}}: this.generate(
-                template?.{{name}},
-                { containerClass, propertyName: "{{{name}}}", isNullable: {{isNullable}} },
-                () => this.sampleString({{#if dataFormat}}"{{dataFormat}}"{{else}}""{{/if}}{{#example}}, "{{{example}}}"{{/example}})
-            ),{{~/isEnum~}} {{~#isEnum}}
-            {{name}}: this.generate(
-                template?.{{name}},
-                { containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
-                () => {{^isContainer}}this.pickOne({{datatypeWithEnum}}Values){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne({{datatypeWithEnum}}Values){{/mostInnerItems}}{{/isContainer}}
-            ),{{~/isEnum}}{{~/isString~}}{{~#isDateTime}}
+{{~#if isDateTime}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => this.sampleDate()
-            ),{{~/isDateTime~}}{{~^isString~}}{{~^isDateTime~}}{{~#isContainer}}
+            ),{{~else if isContainer}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => {{#items}}{{#isString}}this.sampleArrayString{{/isString}}{{^isString}}this.sampleArray{{{dataType}}}{{/isString}}{{/items}}()
-            ),{{~/isContainer~}}{{~^isContainer}}
+            ),{{~else if uniqueItems}}
+            {{name}}: {{{dataType}}},{{~else if isEnum}}
+            {{name}}: this.generate(
+                template?.{{name}},
+                { containerClass, propertyName: "{{{name}}}"{{#example}}, example: "{{example}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
+                () => {{^isContainer}}this.pickOne({{datatypeWithEnum}}Values){{/isContainer}}{{#isContainer}}{{#mostInnerItems}}this.pickOne({{datatypeWithEnum}}Values){{/mostInnerItems}}{{/isContainer}}
+            ),{{~else if isString}}
+            {{name}}: this.generate(
+                template?.{{name}},
+                { containerClass, propertyName: "{{{name}}}", isNullable: {{isNullable}} },
+                () => this.sampleString({{#if dataFormat}}"{{dataFormat}}"{{else}}""{{/if}}{{#example}}, "{{{example}}}"{{/example}})
+            ),{{~else}}
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => this.sample{{{dataType}}}()
-            ),{{~/isContainer~}}{{~/isDateTime~}}{{~/isString~}}
+            ),{{~/if}}
 {{~/allVars}}
         };
 {{~/if}}
     }
 {{~/if}}
 
-    sampleArray{{classname}}{{^isEnum}}({{#if oneOf}}{{#discriminator}}
-        template: Factory<{{#mappedModels}}{{modelName}}{{#unless @last}} & {{/unless}}{{/mappedModels}}> = {},{{/discriminator}}{{else}}
+    sampleArray{{classname}}{{^isEnum}}({{#if oneOf}}
+        factory?: (sampleData: TestSampleData) => {{classname}},{{else}}
         template: Factory<{{classname}}> = {},{{/if}}
         length?: number
     ){{/isEnum}}{{#isEnum}}(length?: number){{/isEnum}}: Array<{{classname}}> {
         return this.randomArray(
-            () => this.sample{{classname}}({{^isEnum}}template{{/isEnum}}),
+            () => this.sample{{classname}}({{#if oneOf}}factory{{else}}{{^isEnum}}template{{/isEnum}}{{/if}}),
             length ?? this.arrayLength()
         );
     }
