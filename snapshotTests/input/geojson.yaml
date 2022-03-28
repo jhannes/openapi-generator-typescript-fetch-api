@@ -17,3 +17,23 @@ paths:
             application/json:
               schema:
                 $ref: './schemas/geojson.yaml#/GeometryCollection'
+  /geometry:
+    get:
+      operationId: getGeometry
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/geojson.yaml#/Geometry'
+  /polygon:
+    get:
+      operationId: getPolygon
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/geojson.yaml#/Polygon'

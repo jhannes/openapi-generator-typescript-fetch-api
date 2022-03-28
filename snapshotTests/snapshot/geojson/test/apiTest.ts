@@ -35,9 +35,13 @@ export function mockApplicationApis({
 }
 
 export function mockDefaultApi(operations: {
+    getGeometry?: () => Promise<GeometryDto>;
     getLocation?: () => Promise<GeometryCollectionDto>;
+    getPolygon?: () => Promise<PolygonDto>;
 } = {}): DefaultApiInterface {
     return {
+        getGeometry: operations.getGeometry || reject("DefaultApi.getGeometry"),
         getLocation: operations.getLocation || reject("DefaultApi.getLocation"),
+        getPolygon: operations.getPolygon || reject("DefaultApi.getPolygon"),
     };
 }

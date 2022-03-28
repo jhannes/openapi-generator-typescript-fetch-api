@@ -33,7 +33,17 @@ export interface DefaultApiInterface {
      *
      * @throws {HttpError}
      */
+    getGeometry(): Promise<GeometryDto>;
+    /**
+     *
+     * @throws {HttpError}
+     */
     getLocation(): Promise<GeometryCollectionDto>;
+    /**
+     *
+     * @throws {HttpError}
+     */
+    getPolygon(): Promise<PolygonDto>;
 }
 
 /**
@@ -44,9 +54,27 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      *
      * @throws {HttpError}
      */
+    public async getGeometry(): Promise<GeometryDto> {
+        return await this.fetch(
+            this.basePath + "/geometry"
+        );
+    }
+    /**
+     *
+     * @throws {HttpError}
+     */
     public async getLocation(): Promise<GeometryCollectionDto> {
         return await this.fetch(
             this.basePath + "/collection"
+        );
+    }
+    /**
+     *
+     * @throws {HttpError}
+     */
+    public async getPolygon(): Promise<PolygonDto> {
+        return await this.fetch(
+            this.basePath + "/polygon"
         );
     }
 }
