@@ -60,10 +60,17 @@ public class VerifyOutputTests {
         assertEquals(0, command.exitValue());
     }
 
-    private void generate(Path file, String generatorName, Path output, String modelName) {
+    private void generate(Path spec, String generatorName, Path output, String modelName) {
+        try {
+            if (spec.getFileName().toString().endsWith(".link")) {
+                spec = Paths.get(Files.readAllLines(spec).get(0));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         final CodegenConfigurator configurator = new CodegenConfigurator()
                 .setGeneratorName(generatorName)
-                .setInputSpec(file.toString().replaceAll("\\\\", "/"))
+                .setInputSpec(spec.toString().replaceAll("\\\\", "/"))
                 .setModelNameSuffix("Dto")
                 .addAdditionalProperty("npmName", modelName)
                 .addAdditionalProperty("withInterfaces", "true")

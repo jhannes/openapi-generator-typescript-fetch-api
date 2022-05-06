@@ -228,7 +228,7 @@ export class TestSampleData {
         generator?: () => any
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ): any {
-        if (template) {
+        if (template != undefined) {
             return typeof template === "function" ? template(this) : template;
         }
         if (propertyDefinition) {
@@ -237,11 +237,11 @@ export class TestSampleData {
                 const propertyFactory = this.sampleModelProperties[containerClass][propertyName];
                 if (propertyFactory && typeof propertyFactory === "function") {
                     return propertyFactory(this);
-                } else if (propertyFactory) {
+                } else if (propertyFactory !== undefined) {
                     return propertyFactory;
                 }
             }
-            if (this.samplePropertyValues[propertyName]) {
+            if (this.samplePropertyValues[propertyName] !== undefined) {
                 return this.samplePropertyValues[propertyName](this);
             }
             if (example && example !== "null") return example;
