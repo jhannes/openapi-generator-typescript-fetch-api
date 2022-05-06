@@ -12,11 +12,12 @@
  */
 
 import {
-    AnyPetDto,
+    AddressDto,
     CatAllOfDto,
     CatDto,
     DogAllOfDto,
     DogDto,
+    PetBaseDto,
     PetDto,
 } from "../model";
 
@@ -36,9 +37,9 @@ export function mockApplicationApis({
 }
 
 export function mockDefaultApi(operations: {
-    petsPatch?: () => Promise<void>;
+    petsPost?: () => Promise<void>;
 } = {}): DefaultApiInterface {
     return {
-        petsPatch: operations.petsPatch || reject("DefaultApi.petsPatch"),
+        petsPost: operations.petsPost || reject("DefaultApi.petsPost"),
     };
 }

@@ -10,33 +10,50 @@ servers:
     description: Optional server description, e.g. Internal staging server for testing
 paths:
   /pets:
-    patch:
+    post:
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AnyPet'
+              $ref: '#/components/schemas/Pet'
       responses:
         '200':
           description: Updated
 components:
   schemas:
-    Pet:
-      type: object
+    Address:
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      required:
+        - city
+        - country
+    PetBase:
       required:
         - pet_type
       properties:
+        id:
+          type: string
+          readOnly: true
         pet_type:
           type: string
         name:
           type: string
         birth_date:
           type: string
+        ownerAddress:
+          $ref: '#/components/schemas/Address'
       discriminator:
         propertyName: pet_type
     Dog:     # "Dog" is a value for the pet_type property (the discriminator value)
       allOf: # Combines the main `Pet` schema with `Dog`-specific properties
-        - $ref: '#/components/schemas/Pet'
+        - $ref: '#/components/schemas/PetBase'
         - type: object
           # all other properties specific to a `Dog`
           properties:
@@ -45,12 +62,9 @@ components:
             breed:
               type: string
               enum: [Dingo, Husky, Retriever, Shepherd]
-          discriminator:
-            propertyName: pet_type
-      x-discriminator-value: 'ADog'
     Cat:     # "Cat" is a value for the pet_type property (the discriminator value)
       allOf: # Combines the main `Pet` schema with `Cat`-specific properties
-        - $ref: '#/components/schemas/Pet'
+        - $ref: '#/components/schemas/PetBase'
         - type: object
           # all other properties specific to a `Cat`
           properties:
@@ -58,10 +72,8 @@ components:
               type: boolean
             age:
               type: integer
-          discriminator:
-            propertyName: pet_type
-      x-discriminator-value: 'ACat'
-    AnyPet:
+              readOnly: true
+    Pet:
       oneOf:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'

@@ -12,11 +12,12 @@
  */
 
 import {
-    AnyPetDto,
+    AddressDto,
     CatAllOfDto,
     CatDto,
     DogAllOfDto,
     DogDto,
+    PetBaseDto,
     PetDto,
 } from "./model";
 
@@ -35,8 +36,8 @@ export interface DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    petsPatch(params: {
-        anyPetDto?: AnyPetDto;
+    petsPost(params: {
+        petDto?: PetDto;
     }): Promise<void>;
 }
 
@@ -49,14 +50,14 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async petsPatch(params: {
-        anyPetDto?: AnyPetDto;
+    public async petsPost(params: {
+        petDto?: PetDto;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/pets",
             {
-                method: "PATCH",
-                body: JSON.stringify(params.anyPetDto),
+                method: "POST",
+                body: JSON.stringify(params.petDto),
                 headers: {
                     "Content-Type": "application/json",
                 }

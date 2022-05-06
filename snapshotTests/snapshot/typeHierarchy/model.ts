@@ -10,19 +10,21 @@
  * Do not edit the class manually.
  */
 
-export type AnyPetDto =
-	{ pet_type: "Cat" } & CatDto |
-	{ pet_type: "Dog" } & DogDto;
-
+export interface AddressDto {
+    addressLine1?: string;
+    addressLine2?: string;
+    city: string;
+    country: string;
+}
 
 export interface CatAllOfDto {
     hunts?: boolean;
-    age?: number;
+    readonly age?: number;
 }
 
-export interface CatDto extends PetDto {
+export interface CatDto extends PetBaseDto {
     hunts?: boolean;
-    age?: number;
+    readonly age?: number;
 }
 
 export interface DogAllOfDto {
@@ -43,7 +45,7 @@ export const DogAllOfDtoBreedEnumValues: DogAllOfDtoBreedEnum[] = [
     "Shepherd",
 ];
 
-export interface DogDto extends PetDto {
+export interface DogDto extends PetBaseDto {
     bark?: boolean;
     breed?: DogDtoBreedEnum;
 }
@@ -61,8 +63,15 @@ export const DogDtoBreedEnumValues: DogDtoBreedEnum[] = [
     "Shepherd",
 ];
 
-export interface PetDto {
+export interface PetBaseDto {
+    readonly id?: string;
     pet_type: string;
     name?: string;
     birth_date?: string;
+    ownerAddress?: AddressDto;
 }
+
+export type PetDto =
+	{ pet_type: "Cat" } & CatDto |
+	{ pet_type: "Dog" } & DogDto;
+

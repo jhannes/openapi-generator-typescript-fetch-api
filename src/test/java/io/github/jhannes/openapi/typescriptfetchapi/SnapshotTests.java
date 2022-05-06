@@ -1,7 +1,6 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
-import difflib.DiffUtils;
-import difflib.Patch;
+import difflib.*;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
 import org.openapitools.codegen.ClientOptInput;
@@ -18,9 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -91,10 +89,27 @@ public class SnapshotTests {
         return Files.isRegularFile(path) && !path.toString().endsWith(".jar");
     }
 
-    private void diff(Path file, Path snapshot) throws IOException {
+    private static void diff(Path file, Path snapshot) throws IOException {
         assertTrue(Files.exists(snapshot), "Missing " + snapshot);
         Patch<String> diff = DiffUtils.diff(Files.readAllLines(file), Files.readAllLines(snapshot));
-        assertEquals("", diff.getDeltas().stream().map(Object::toString).collect(Collectors.joining("\n")));
+        if (!diff.getDeltas().isEmpty()) {
+            List<Delta<String>> significantDiff = diff.getDeltas().stream().filter(delta -> !whitespaceOnly(delta)).collect(Collectors.toList());
+            if (significantDiff.isEmpty()) {
+                fail("whitespace difference: " + diff.getDeltas());
+            } else {
+                fail("significant difference: " + significantDiff.stream().map(Object::toString).collect(Collectors.joining("\n")));
+            }
+        }
+    }
+
+    private static boolean whitespaceOnly(Delta<String> delta) {
+        if (delta instanceof InsertDelta) {
+            return delta.getRevised().getLines().stream().allMatch(s -> s == null || s.trim().length() == 0);
+        } else if (delta instanceof DeleteDelta) {
+            return delta.getOriginal().getLines().stream().allMatch(s -> s == null || s.trim().length() == 0);
+        } else {
+            return false;
+        }
     }
 
     private void generate(Path file, String generatorName, Path output, String modelName) {
