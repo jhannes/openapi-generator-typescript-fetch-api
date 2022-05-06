@@ -3,6 +3,8 @@ import {
     ExposureDto,
     ExposureDtoStatusEnum,
     ExposureDtoStatusEnumValues,
+    ExposureDtoDelayAfterInfectionEnum,
+    ExposureDtoDelayAfterInfectionEnumValues,
     InfectionDto,
     InfectionInformationDto,
     UserRoleDto,
@@ -368,6 +370,11 @@ export class TestSampleData {
                 template?.status,
                 { containerClass, propertyName: "status", example: "null", isNullable: false },
                 () => this.pickOne(ExposureDtoStatusEnumValues)
+            ),
+            delayAfterInfection: this.generate(
+                template?.delayAfterInfection,
+                { containerClass, propertyName: "delayAfterInfection", example: "null", isNullable: false },
+                () => this.pickOne(ExposureDtoDelayAfterInfectionEnumValues)
             ),
         };
     }

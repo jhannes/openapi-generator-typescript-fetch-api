@@ -35,6 +35,7 @@ export interface ExposureDto {
      */
     caseWorker?: string;
     status: ExposureDtoStatusEnum;
+    delayAfterInfection?: ExposureDtoDelayAfterInfectionEnum;
 }
 
 export type ExposureDtoStatusEnum =
@@ -50,6 +51,23 @@ export const ExposureDtoStatusEnumValues: ExposureDtoStatusEnum[] = [
     "contacted",
     "tested",
     "infected",
+];
+
+export type ExposureDtoDelayAfterInfectionEnum =
+    | -1
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4;
+
+export const ExposureDtoDelayAfterInfectionEnumValues: ExposureDtoDelayAfterInfectionEnum[] = [
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
 ];
 
 export interface InfectionDto {
