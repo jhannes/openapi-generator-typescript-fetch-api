@@ -38,6 +38,11 @@ export interface IllegalEmailAddressErrorDto {
     validDomains: Array<string>;
 }
 
+export interface LogMessageDto {
+    message: string;
+    error?: unknown;
+}
+
 export interface NotFoundErrorDto {
     code: string;
     identifierValue?: string;

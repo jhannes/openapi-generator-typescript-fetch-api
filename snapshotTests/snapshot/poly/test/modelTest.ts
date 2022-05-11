@@ -4,6 +4,7 @@ import {
     DuplicateIdentifierErrorDto,
     GeneralErrorDto,
     IllegalEmailAddressErrorDto,
+    LogMessageDto,
     NotFoundErrorDto,
     OrganizationDto,
     PersonDto,
@@ -68,6 +69,7 @@ export interface SampleModelFactories {
     DuplicateIdentifierErrorDto?: ModelFactory<DuplicateIdentifierErrorDto>;
     GeneralErrorDto?: ModelFactory<GeneralErrorDto>;
     IllegalEmailAddressErrorDto?: ModelFactory<IllegalEmailAddressErrorDto>;
+    LogMessageDto?: ModelFactory<LogMessageDto>;
     NotFoundErrorDto?: ModelFactory<NotFoundErrorDto>;
     OrganizationDto?: ModelFactory<OrganizationDto>;
     PersonDto?: ModelFactory<PersonDto>;
@@ -191,8 +193,7 @@ export class TestSampleData {
         return this.nextInt(10000);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    sampleany(): any {
+    sampleunknown(): unknown {
         return {
             [this.randomString()]: this.randomString(),
         }
@@ -284,6 +285,10 @@ export class TestSampleData {
                 return this.sampleIllegalEmailAddressErrorDto();
             case "Array<IllegalEmailAddressErrorDto>":
                 return this.sampleArrayIllegalEmailAddressErrorDto();
+            case "LogMessageDto":
+                return this.sampleLogMessageDto();
+            case "Array<LogMessageDto>":
+                return this.sampleArrayLogMessageDto();
             case "NotFoundErrorDto":
                 return this.sampleNotFoundErrorDto();
             case "Array<NotFoundErrorDto>":
@@ -473,6 +478,35 @@ export class TestSampleData {
     ): Array<IllegalEmailAddressErrorDto> {
         return this.randomArray(
             () => this.sampleIllegalEmailAddressErrorDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleLogMessageDto(template?: Factory<LogMessageDto>): LogMessageDto {
+        const containerClass = "LogMessageDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            message: this.generate(
+                template?.message,
+                { containerClass, propertyName: "message", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            error: this.generate(
+                template?.error,
+                { containerClass, propertyName: "error", example: "null", isNullable: false },
+                () => this.sampleunknown()
+            ),
+        };
+    }
+
+    sampleArrayLogMessageDto(
+        template: Factory<LogMessageDto> = {},
+        length?: number
+    ): Array<LogMessageDto> {
+        return this.randomArray(
+            () => this.sampleLogMessageDto(template),
             length ?? this.arrayLength()
         );
     }

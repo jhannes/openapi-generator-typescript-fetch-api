@@ -216,6 +216,9 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         // This is abusing uniqueItems - we use it to note that there is only one enum alternative - i.e. the property is constant
                         variable.setUniqueItems(true);
                     }
+                    if (variable.dataType.equals("object")) {
+                        variable.dataType = variable.datatypeWithEnum = "unknown";
+                    }
                 }
                 for (CodegenProperty variable : codegenModel.allVars) {
                     if (variable.get_enum() != null && variable.get_enum().size() == 1) {
@@ -223,6 +226,9 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         variable.isEnum = false;
                         // This is abusing uniqueItems - we use it to note that there is only one enum alternative - i.e. the property is constant
                         variable.setUniqueItems(true);
+                    }
+                    if (variable.dataType.equals("object")) {
+                        variable.dataType = variable.datatypeWithEnum = "unknown";
                     }
                 }
 

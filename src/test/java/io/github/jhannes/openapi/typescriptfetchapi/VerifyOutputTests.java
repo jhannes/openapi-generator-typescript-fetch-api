@@ -1,5 +1,6 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
+import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
 import org.openapitools.codegen.ClientOptInput;
@@ -15,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -30,29 +30,34 @@ public class VerifyOutputTests {
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
         return Stream.of(
-                verify(Paths.get("snapshotTests"), "typescript-fetch-api", Paths.get("snapshotTests").resolve("verify")),
-                verify(Paths.get("localSnapshotTests"), "typescript-fetch-api", Paths.get("localSnapshotTests").resolve("verify"))
+                verify(SnapshotTests.SNAPSHOT_ROOT),
+                verify(SnapshotTests.LOCAL_SNAPSHOT_ROOT)
         );
     }
 
-    private DynamicNode verify(Path testDir, String generatorName, Path outputDir) throws IOException {
+    private DynamicNode verify(Path testDir) throws IOException {
         Path inputDir = testDir.resolve("input");
         if (!Files.isDirectory(inputDir)) {
             return dynamicTest("No test for " + testDir, () -> {});
         }
-        cleanDirectory(outputDir);
+        cleanDirectory(testDir.resolve("verify"));
         return dynamicContainer(
                 "Verifications of " + testDir,
                 Files.list(inputDir)
                         .filter(p -> p.toFile().isFile())
-                        .map(spec -> dynamicContainer("Verify " + spec, Arrays.asList(
-                                dynamicTest("Generate " + spec, () -> generate(spec, generatorName, outputDir, getModelName(spec))),
-                                dynamicTest("npm install " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "install"})),
-                                dynamicTest("npm build " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "run", "build"}))
-                        ))));
+                        .map(VerifyOutputTests::createTestsFromSpec));
     }
 
-    private void runCommand(Path outputDir, String[] npmCommand) throws IOException, InterruptedException {
+    static DynamicContainer createTestsFromSpec(Path spec) {
+        Path outputDir = spec.getParent().getParent().resolve("verify");
+        return dynamicContainer("Verify " + spec, Arrays.asList(
+                dynamicTest("Generate " + spec, () -> generate(spec, outputDir, getModelName(spec))),
+                dynamicTest("npm install " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "install"})),
+                dynamicTest("npm build " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "run", "build"}))
+        ));
+    }
+
+    private static void runCommand(Path outputDir, String[] npmCommand) throws IOException, InterruptedException {
         Process command = Runtime.getRuntime().exec(npmCommand, null, outputDir.toFile());
         startTransferThread(command.getInputStream(), System.out, outputDir + "-to-stdout");
         startTransferThread(command.getErrorStream(), System.err, outputDir + "-to-stderr");
@@ -60,7 +65,7 @@ public class VerifyOutputTests {
         assertEquals(0, command.exitValue());
     }
 
-    private void generate(Path spec, String generatorName, Path output, String modelName) {
+    static private void generate(Path spec, Path output, String modelName) {
         try {
             if (spec.getFileName().toString().endsWith(".link")) {
                 spec = Paths.get(Files.readAllLines(spec).get(0));
@@ -69,7 +74,7 @@ public class VerifyOutputTests {
             throw new RuntimeException(e);
         }
         final CodegenConfigurator configurator = new CodegenConfigurator()
-                .setGeneratorName(generatorName)
+                .setGeneratorName("typescript-fetch-api")
                 .setInputSpec(spec.toString().replaceAll("\\\\", "/"))
                 .setModelNameSuffix("Dto")
                 .addAdditionalProperty("npmName", modelName)
@@ -82,7 +87,7 @@ public class VerifyOutputTests {
         generator.opts(clientOptInput).generate();
     }
 
-    private String getModelName(Path file) {
+    private static String getModelName(Path file) {
         String filename = file.getFileName().toString();
         int lastDot = filename.lastIndexOf('.');
         return lastDot < 0 ? filename : filename.substring(0, lastDot);
@@ -99,7 +104,7 @@ public class VerifyOutputTests {
         }
     }
 
-    private void startTransferThread(InputStream input, OutputStream output, String threadName) {
+    private static void startTransferThread(InputStream input, OutputStream output, String threadName) {
         Thread transferThread = new Thread(() -> {
             try {
                 byte[] buffer = new byte[8192];

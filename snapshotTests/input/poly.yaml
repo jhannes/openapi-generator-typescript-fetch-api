@@ -54,6 +54,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateError'
+  /log:
+    post:
+      operationId: logMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogMessage'
+      responses:
+        200:
+          description: "Log message was saved"
 components:
   schemas:
     AnyParty:
@@ -181,3 +192,11 @@ components:
         - code
         - identitierValue
         - entityType
+    LogMessage:
+      properties:
+        message:
+          type: string
+        error:
+          type: object
+      required:
+        - message

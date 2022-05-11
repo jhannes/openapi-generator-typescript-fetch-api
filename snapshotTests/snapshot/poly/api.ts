@@ -17,6 +17,7 @@ import {
     DuplicateIdentifierErrorDto,
     GeneralErrorDto,
     IllegalEmailAddressErrorDto,
+    LogMessageDto,
     NotFoundErrorDto,
     OrganizationDto,
     PersonDto,
@@ -33,6 +34,14 @@ export interface ApplicationApis {
  * DefaultApi - object-oriented interface
  */
 export interface DefaultApiInterface {
+    /**
+     *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    logMessage(params: {
+        logMessageDto?: LogMessageDto;
+    }): Promise<void>;
     /**
      *
      * @throws {HttpError}
@@ -61,6 +70,25 @@ export interface DefaultApiInterface {
  * DefaultApi - object-oriented interface
  */
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
+    /**
+     *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    public async logMessage(params: {
+        logMessageDto?: LogMessageDto;
+    }): Promise<void> {
+        return await this.fetch(
+            this.basePath + "/log",
+            {
+                method: "POST",
+                body: JSON.stringify(params.logMessageDto),
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+        );
+    }
     /**
      *
      * @throws {HttpError}

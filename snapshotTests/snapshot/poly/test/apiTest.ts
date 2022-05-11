@@ -17,6 +17,7 @@ import {
     DuplicateIdentifierErrorDto,
     GeneralErrorDto,
     IllegalEmailAddressErrorDto,
+    LogMessageDto,
     NotFoundErrorDto,
     OrganizationDto,
     PersonDto,
@@ -39,11 +40,13 @@ export function mockApplicationApis({
 }
 
 export function mockDefaultApi(operations: {
+    logMessage?: () => Promise<void>;
     partiesGet?: () => Promise<AnyPartyDto>;
     partiesIdPut?: () => Promise<void>;
     partiesPost?: () => Promise<void>;
 } = {}): DefaultApiInterface {
     return {
+        logMessage: operations.logMessage || reject("DefaultApi.logMessage"),
         partiesGet: operations.partiesGet || reject("DefaultApi.partiesGet"),
         partiesIdPut: operations.partiesIdPut || reject("DefaultApi.partiesIdPut"),
         partiesPost: operations.partiesPost || reject("DefaultApi.partiesPost"),

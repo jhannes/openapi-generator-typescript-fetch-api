@@ -24,11 +24,14 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class SnapshotTests {
 
+    public static final Path SNAPSHOT_ROOT = Paths.get("snapshotTests");
+    public static final Path LOCAL_SNAPSHOT_ROOT = Paths.get("localSnapshotTests");
+
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
         return Stream.of(
-                snapshots(Paths.get("snapshotTests"), "typescript-fetch-api", Paths.get("snapshotTests").resolve("output"), Paths.get("snapshotTests").resolve("snapshot")),
-                snapshots(Paths.get("localSnapshotTests"), "typescript-fetch-api", Paths.get("localSnapshotTests").resolve("output"), Paths.get("localSnapshotTests").resolve("snapshot"))
+                snapshots(SNAPSHOT_ROOT, "typescript-fetch-api", Paths.get("snapshotTests").resolve("output"), Paths.get("snapshotTests").resolve("snapshot")),
+                snapshots(LOCAL_SNAPSHOT_ROOT, "typescript-fetch-api", Paths.get("localSnapshotTests").resolve("output"), Paths.get("localSnapshotTests").resolve("snapshot"))
         );
     }
 
