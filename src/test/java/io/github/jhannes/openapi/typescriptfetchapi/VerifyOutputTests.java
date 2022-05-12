@@ -45,10 +45,10 @@ public class VerifyOutputTests {
                 "Verifications of " + testDir,
                 Files.list(inputDir)
                         .filter(p -> p.toFile().isFile())
-                        .map(VerifyOutputTests::createTestsFromSpec));
+                        .map(VerifyOutputTests::createTestsForSpec));
     }
 
-    static DynamicContainer createTestsFromSpec(Path spec) {
+    static DynamicContainer createTestsForSpec(Path spec) {
         Path outputDir = spec.getParent().getParent().resolve("verify");
         return dynamicContainer("Verify " + spec, Arrays.asList(
                 dynamicTest("Generate " + spec, () -> generate(spec, outputDir, getModelName(spec))),

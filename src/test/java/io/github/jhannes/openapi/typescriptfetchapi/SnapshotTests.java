@@ -27,31 +27,29 @@ public class SnapshotTests {
     public static final Path SNAPSHOT_ROOT = Paths.get("snapshotTests");
     public static final Path LOCAL_SNAPSHOT_ROOT = Paths.get("localSnapshotTests");
 
+
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
-        return Stream.of(
-                snapshots(SNAPSHOT_ROOT, "typescript-fetch-api", Paths.get("snapshotTests").resolve("output"), Paths.get("snapshotTests").resolve("snapshot")),
-                snapshots(LOCAL_SNAPSHOT_ROOT, "typescript-fetch-api", Paths.get("localSnapshotTests").resolve("output"), Paths.get("localSnapshotTests").resolve("snapshot"))
-        );
+        return Stream.of(snapshots(SNAPSHOT_ROOT), snapshots(LOCAL_SNAPSHOT_ROOT));
     }
 
-    private DynamicNode snapshots(Path testDir, String generatorName, Path outputDir, Path snapshotDir) throws IOException {
+    private DynamicNode snapshots(Path testDir) throws IOException {
         Path inputDir = testDir.resolve("input");
         if (!Files.isDirectory(inputDir)) {
             return dynamicTest("No snapshots for " + testDir, () -> {});
         }
-        cleanDirectory(outputDir);
+        cleanDirectory(testDir.resolve("output"));
         return dynamicContainer(
                 "Snapshots of " + testDir,
-                Files.list(inputDir)
-                        .filter(p -> p.toFile().isFile())
-                        .map(spec -> createTestsForSpec(spec, generatorName, outputDir, snapshotDir))
+                Files.list(inputDir).filter(p -> p.toFile().isFile()).map(SnapshotTests::createTestsForSpec)
         );
     }
 
-    private DynamicNode createTestsForSpec(Path spec, String generatorName, Path outputDir, Path snapshotDir) {
+    static DynamicNode createTestsForSpec(Path spec) {
+        Path outputDir = spec.getParent().getParent().resolve("output");
+        Path snapshotDir = spec.getParent().getParent().resolve("snapshot");
         try {
-            generate(spec, generatorName, outputDir, getModelName(spec));
+            generate(spec, "typescript-fetch-api", outputDir, getModelName(spec));
         } catch (Exception e) {
             if (e.getCause() != null) {
                 return dynamicTest("Generator for " + spec, () -> {throw e.getCause();});
@@ -61,7 +59,7 @@ public class SnapshotTests {
 
         List<Path> files;
         try (Stream<Path> list = Files.walk(outputDir.resolve(getModelName(spec)))) {
-            files = list.filter(this::isTextOutput).collect(Collectors.toList());
+            files = list.filter(SnapshotTests::isTextOutput).collect(Collectors.toList());
         } catch (IOException e) {
             return dynamicTest("Snapshots for " + spec, () -> assertNull(e));
         }
@@ -72,7 +70,7 @@ public class SnapshotTests {
                 ))));
     }
 
-    private void compareFiles(Path output, Path snapshotDir, String modelName) throws IOException {
+    private static void compareFiles(Path output, Path snapshotDir, String modelName) throws IOException {
         String outputFiles = Files.walk(output.resolve(modelName))
                 .filter(file -> !file.startsWith(output.resolve(modelName).resolve("node_modules")))
                 .filter(file -> !file.startsWith(output.resolve(modelName).resolve("package-lock.json")))
@@ -88,7 +86,7 @@ public class SnapshotTests {
         assertEquals(snapshotFiles, outputFiles);
     }
 
-    private boolean isTextOutput(Path path) {
+    private static boolean isTextOutput(Path path) {
         return Files.isRegularFile(path) && !path.toString().endsWith(".jar");
     }
 
@@ -115,7 +113,7 @@ public class SnapshotTests {
         }
     }
 
-    private void generate(Path spec, String generatorName, Path output, String modelName) {
+    private static void generate(Path spec, String generatorName, Path output, String modelName) {
         try {
             if (spec.getFileName().toString().endsWith(".link")) {
                 spec = Paths.get(Files.readAllLines(spec).get(0));
@@ -137,14 +135,14 @@ public class SnapshotTests {
         generator.opts(clientOptInput).generate();
     }
 
-    private String getModelName(Path file) {
+    private static String getModelName(Path file) {
         String filename = file.getFileName().toString();
         int lastDot = filename.lastIndexOf('.');
         return lastDot < 0 ? filename : filename.substring(0, lastDot);
     }
 
 
-    private void cleanDirectory(Path directory) throws IOException {
+    static void cleanDirectory(Path directory) throws IOException {
         if (Files.isDirectory(directory)) {
             try (Stream<Path> walk = Files.walk(directory)) {
                 walk.sorted(Comparator.reverseOrder())

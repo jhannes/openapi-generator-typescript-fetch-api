@@ -116,49 +116,40 @@ type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | 
 type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|", format?: "date" }>;
 
 export class HttpError extends Error {
-    readonly response: Response;
-    readonly body: any;
-
-    constructor(response: Response, body?: any) {
-        super(response.statusText);
-        this.response = response;
-        this.body = body;
-        Object.setPrototypeOf(this, HttpError.prototype);
+    constructor(public readonly response: Response, public readonly body?: any) {
+        super(body?.message || response.statusText || response.status);
+        this.name = new.target.name;
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
 export class ServerError extends HttpError {
     constructor(response: Response, body: any) {
         super(response, body);
-        Object.setPrototypeOf(this, ServerError.prototype);
     }
 }
 
 export class RequestError extends HttpError {
     constructor(response: Response, body: any) {
         super(response, body);
-        Object.setPrototypeOf(this, RequestError.prototype);
     }
 }
 
 export class LoggedOutError extends RequestError {
     constructor(response: Response, body: any) {
         super(response, body);
-        Object.setPrototypeOf(this, LoggedOutError.prototype);
     }
 }
 
 export class NotFoundError extends RequestError {
     constructor(response: Response, body: any) {
         super(response, body);
-        Object.setPrototypeOf(this, NotFoundError.prototype);
     }
 }
 
 export class RedirectedError extends HttpError {
     constructor(response: Response) {
         super(response);
-        Object.setPrototypeOf(this, RedirectedError.prototype);
     }
 }
 
