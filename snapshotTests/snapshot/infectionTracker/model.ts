@@ -54,6 +54,7 @@ export const ExposureDtoStatusEnumValues: ExposureDtoStatusEnum[] = [
 ];
 
 export type ExposureDtoDelayAfterInfectionEnum =
+    | -2
     | -1
     | 0
     | 1
@@ -62,6 +63,7 @@ export type ExposureDtoDelayAfterInfectionEnum =
     | 4;
 
 export const ExposureDtoDelayAfterInfectionEnumValues: ExposureDtoDelayAfterInfectionEnum[] = [
+    -2,
     -1,
     0,
     1,

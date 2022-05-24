@@ -351,7 +351,7 @@
           },
           "delayAfterInfection": {
             "type": "integer",
-            "enum": [-1, 0, 1, 2, 3, 4]
+            "enum": [-2, -1, 0, 1, 2, 3, 4]
           }
         },
         "required": ["status"]

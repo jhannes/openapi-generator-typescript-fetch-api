@@ -13,6 +13,7 @@
 
 import {
     PetDto,
+    PetTypeDto,
 } from "./model";
 
 import { BaseAPI, SecurityScheme } from "./base";

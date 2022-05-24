@@ -1,5 +1,7 @@
 import {
     PetDto,
+    PetTypeDto,
+    PetTypeDtoValues,
 } from "../model";
 
 export class Random {
@@ -56,6 +58,7 @@ type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
 
 export interface SampleModelFactories {
     PetDto?: ModelFactory<PetDto>;
+    PetTypeDto?: ModelFactory<PetTypeDto>;
 }
 
 export interface SamplePropertyValues {
@@ -251,6 +254,10 @@ export class TestSampleData {
                 return this.samplePetDto();
             case "Array<PetDto>":
                 return this.sampleArrayPetDto();
+            case "PetTypeDto":
+                return this.samplePetTypeDto();
+            case "Array<PetTypeDto>":
+                return this.sampleArrayPetTypeDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
@@ -264,8 +271,8 @@ export class TestSampleData {
         return {
             pet_type: this.generate(
                 template?.pet_type,
-                { containerClass, propertyName: "pet_type", isNullable: false },
-                () => this.sampleString("", "null")
+                { containerClass, propertyName: "pet_type", example: "null", isNullable: false },
+                () => this.samplePetTypeDto()
             ),
             name: this.generate(
                 template?.name,
@@ -286,6 +293,21 @@ export class TestSampleData {
     ): Array<PetDto> {
         return this.randomArray(
             () => this.samplePetDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    samplePetTypeDto(): PetTypeDto {
+        const containerClass = "PetTypeDto";
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return this.pickOne(PetTypeDtoValues);
+    }
+
+    sampleArrayPetTypeDto(length?: number): Array<PetTypeDto> {
+        return this.randomArray(
+            () => this.samplePetTypeDto(),
             length ?? this.arrayLength()
         );
     }

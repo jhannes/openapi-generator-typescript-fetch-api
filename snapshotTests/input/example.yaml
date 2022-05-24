@@ -14,14 +14,14 @@ paths:
         - name: storeId
           in: path
           required: true
-          schema: 
+          schema:
             type: string
             format: uuid
         - name: status
           in: query
           style: spaceDelimited
           explode: true
-          schema: 
+          schema:
             type: array
             items:
               type: string
@@ -93,9 +93,15 @@ components:
         - pet_type
       properties:
         pet_type:
-          type: string
+          $ref: "#/components/schemas/PetType"
         name:
           type: string
         birth_date:
           type: string
           format: date
+    PetType:
+      type: string
+      enum:
+        - cat
+        - dog
+        - bird

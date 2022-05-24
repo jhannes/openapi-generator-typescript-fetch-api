@@ -56,7 +56,7 @@ export interface OrganizationDto {
     organizationId?: string;
     url?: string;
     email?: string;
-    emailDomains?: Array<string>;
+    readonly emailDomains?: Array<string>;
     phone?: string;
 }
 
