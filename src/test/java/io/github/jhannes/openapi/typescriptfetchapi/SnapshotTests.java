@@ -3,30 +3,19 @@ package io.github.jhannes.openapi.typescriptfetchapi;
 import difflib.*;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
-import org.openapitools.codegen.ClientOptInput;
-import org.openapitools.codegen.DefaultGenerator;
-import org.openapitools.codegen.config.CodegenConfigurator;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class SnapshotTests {
-
-    public static final Path SNAPSHOT_ROOT = Paths.get("snapshotTests");
-    public static final Path LOCAL_SNAPSHOT_ROOT = Paths.get("localSnapshotTests");
-
+public class SnapshotTests extends AbstractSnapshotTests {
 
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
@@ -49,7 +38,7 @@ public class SnapshotTests {
         Path outputDir = spec.getParent().getParent().resolve("output");
         Path snapshotDir = spec.getParent().getParent().resolve("snapshot");
         try {
-            generate(spec, "typescript-fetch-api", outputDir, getModelName(spec));
+            generate(spec, outputDir, getModelName(spec));
         } catch (Exception e) {
             if (e.getCause() != null) {
                 return dynamicTest("Generator for " + spec, () -> {throw e.getCause();});
@@ -92,7 +81,7 @@ public class SnapshotTests {
 
     private static void diff(Path file, Path snapshot) throws IOException {
         assertTrue(Files.exists(snapshot), "Missing " + snapshot);
-        Patch<String> diff = DiffUtils.diff(Files.readAllLines(file), Files.readAllLines(snapshot));
+        Patch<String> diff = DiffUtils.diff(Files.readAllLines(snapshot), Files.readAllLines(file));
         if (!diff.getDeltas().isEmpty()) {
             List<Delta<String>> significantDiff = diff.getDeltas().stream().filter(delta -> !whitespaceOnly(delta)).collect(Collectors.toList());
             if (significantDiff.isEmpty()) {
@@ -113,42 +102,5 @@ public class SnapshotTests {
         }
     }
 
-    private static void generate(Path spec, String generatorName, Path output, String modelName) {
-        try {
-            if (spec.getFileName().toString().endsWith(".link")) {
-                spec = Paths.get(Files.readAllLines(spec).get(0));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        final CodegenConfigurator configurator = new CodegenConfigurator()
-                .setGeneratorName(generatorName)
-                .setInputSpec(spec.toString().replaceAll("\\\\", "/"))
-                .setModelNameSuffix("Dto")
-                .addAdditionalProperty("npmName", modelName)
-                .addAdditionalProperty("withInterfaces", "true")
-                .addAdditionalProperty("generateModelTests", "true")
-                .setOutputDir(output.resolve(modelName).toString());
 
-        final ClientOptInput clientOptInput = configurator.toClientOptInput();
-        DefaultGenerator generator = new DefaultGenerator();
-        generator.opts(clientOptInput).generate();
-    }
-
-    private static String getModelName(Path file) {
-        String filename = file.getFileName().toString();
-        int lastDot = filename.lastIndexOf('.');
-        return lastDot < 0 ? filename : filename.substring(0, lastDot);
-    }
-
-
-    static void cleanDirectory(Path directory) throws IOException {
-        if (Files.isDirectory(directory)) {
-            try (Stream<Path> walk = Files.walk(directory)) {
-                walk.sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
-            }
-        }
-    }
 }

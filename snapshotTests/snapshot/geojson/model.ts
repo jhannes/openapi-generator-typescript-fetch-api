@@ -34,7 +34,7 @@ export interface PointDto {
     /**
      * Point in 3D space
      */
-    coordinates: Array<number>;
+    coordinates: [number, number, number?];
 }
 
 export interface PolygonDto {

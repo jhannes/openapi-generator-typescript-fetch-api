@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.openapitools.codegen.CodegenConstants.GENERATE_API_TESTS;
 import static org.openapitools.codegen.CodegenConstants.GENERATE_MODEL_TESTS;
@@ -218,6 +220,12 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                     }
                     if (variable.dataType.equals("object")) {
                         variable.dataType = variable.datatypeWithEnum = "unknown";
+                    }
+                    if (variable.isArray && variable.maxItems != null && variable.maxItems <= 5) {
+                        String toupleType = "[" + IntStream.range(0, variable.maxItems)
+                                .mapToObj(i -> variable.items.dataType + (i >= variable.minItems ? "?" : ""))
+                                .collect(Collectors.joining(", ")) + "]";
+                        variable.dataType = variable.datatypeWithEnum = toupleType;
                     }
                 }
                 for (CodegenProperty variable : codegenModel.allVars) {
