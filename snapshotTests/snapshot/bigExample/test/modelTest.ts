@@ -1,9 +1,7 @@
 import {
-    GeometryCollectionDto,
-    GeometryDto,
-    LineStringDto,
-    PointDto,
-    PolygonDto,
+    PetDto,
+    PetLocationsDto,
+    PetStoreDto,
 } from "../model";
 
 export class Random {
@@ -59,11 +57,9 @@ type Factory<T> = {
 type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
 
 export interface SampleModelFactories {
-    GeometryCollectionDto?: ModelFactory<GeometryCollectionDto>;
-    GeometryDto?: ModelFactory<GeometryDto>;
-    LineStringDto?: ModelFactory<LineStringDto>;
-    PointDto?: ModelFactory<PointDto>;
-    PolygonDto?: ModelFactory<PolygonDto>;
+    PetDto?: ModelFactory<PetDto>;
+    PetLocationsDto?: ModelFactory<PetLocationsDto>;
+    PetStoreDto?: ModelFactory<PetStoreDto>;
 }
 
 export interface SamplePropertyValues {
@@ -255,171 +251,103 @@ export class TestSampleData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
         switch (modelName) {
-            case "GeometryCollectionDto":
-                return this.sampleGeometryCollectionDto();
-            case "Array<GeometryCollectionDto>":
-                return this.sampleArrayGeometryCollectionDto();
-            case "GeometryDto":
-                return this.sampleGeometryDto();
-            case "Array<GeometryDto>":
-                return this.sampleArrayGeometryDto();
-            case "LineStringDto":
-                return this.sampleLineStringDto();
-            case "Array<LineStringDto>":
-                return this.sampleArrayLineStringDto();
-            case "PointDto":
-                return this.samplePointDto();
-            case "Array<PointDto>":
-                return this.sampleArrayPointDto();
-            case "PolygonDto":
-                return this.samplePolygonDto();
-            case "Array<PolygonDto>":
-                return this.sampleArrayPolygonDto();
+            case "PetDto":
+                return this.samplePetDto();
+            case "Array<PetDto>":
+                return this.sampleArrayPetDto();
+            case "PetLocationsDto":
+                return this.samplePetLocationsDto();
+            case "Array<PetLocationsDto>":
+                return this.sampleArrayPetLocationsDto();
+            case "PetStoreDto":
+                return this.samplePetStoreDto();
+            case "Array<PetStoreDto>":
+                return this.sampleArrayPetStoreDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
     }
 
-    sampleGeometryCollectionDto(template?: Factory<GeometryCollectionDto>): GeometryCollectionDto {
-        const containerClass = "GeometryCollectionDto";
+    samplePetDto(template?: Factory<PetDto>): PetDto {
+        const containerClass = "PetDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            type: "GeometryCollection",
-            geometries: this.generate(
-                template?.geometries,
-                { containerClass, propertyName: "geometries", example: null, isNullable: false },
-                () => this.sampleArrayGeometryDto()
+            pet_type: this.generate(
+                template?.pet_type,
+                { containerClass, propertyName: "pet_type", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            birth_date: this.generate(
+                template?.birth_date,
+                { containerClass, propertyName: "birth_date", example: "null", isNullable: false },
+                () => this.sampleDate()
             ),
         };
     }
 
-    sampleArrayGeometryCollectionDto(
-        template: Factory<GeometryCollectionDto> = {},
+    sampleArrayPetDto(
+        template: Factory<PetDto> = {},
         length?: number
-    ): Array<GeometryCollectionDto> {
+    ): Array<PetDto> {
         return this.randomArray(
-            () => this.sampleGeometryCollectionDto(template),
+            () => this.samplePetDto(template),
             length ?? this.arrayLength()
         );
     }
 
-    sampleGeometryDto(
-        factory?: (sampleData: TestSampleData) => GeometryDto
-    ): GeometryDto {
-        const containerClass = "GeometryDto";
-        if (factory) {
-            return factory(this);
-        }
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        const type = this.pickOneString(["Point", "Polygon", "LineString"])
-        switch (type) {
-            case "Point":
-                return {
-                    ...this.samplePointDto(),
-                    type
-                };
-            case "Polygon":
-                return {
-                    ...this.samplePolygonDto(),
-                    type
-                };
-            case "LineString":
-                return {
-                    ...this.sampleLineStringDto(),
-                    type
-                };
-        }
-    }
-
-    sampleArrayGeometryDto(
-        factory?: (sampleData: TestSampleData) => GeometryDto,
-        length?: number
-    ): Array<GeometryDto> {
-        return this.randomArray(
-            () => this.sampleGeometryDto(factory),
-            length ?? this.arrayLength()
-        );
-    }
-
-    sampleLineStringDto(template?: Factory<LineStringDto>): LineStringDto {
-        const containerClass = "LineStringDto";
+    samplePetLocationsDto(template?: Factory<PetLocationsDto>): PetLocationsDto {
+        const containerClass = "PetLocationsDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            type: "LineString",
-            coordinates: this.generate(
-                template?.coordinates,
-                { containerClass, propertyName: "coordinates", example: null, isNullable: false },
+            locations: this.generate(
+                template?.locations,
+                { containerClass, propertyName: "locations", example: null, isNullable: false },
                 () => {
-                    throw new Error("Can't automatically generate for Array<Array<number>>");
+                    throw new Error("Can't automatically generate for { [key: string]: { [key: string]: Array<number>; }; }");
                 }
             ),
         };
     }
 
-    sampleArrayLineStringDto(
-        template: Factory<LineStringDto> = {},
+    sampleArrayPetLocationsDto(
+        template: Factory<PetLocationsDto> = {},
         length?: number
-    ): Array<LineStringDto> {
+    ): Array<PetLocationsDto> {
         return this.randomArray(
-            () => this.sampleLineStringDto(template),
+            () => this.samplePetLocationsDto(template),
             length ?? this.arrayLength()
         );
     }
 
-    samplePointDto(template?: Factory<PointDto>): PointDto {
-        const containerClass = "PointDto";
+    samplePetStoreDto(template?: Factory<PetStoreDto>): PetStoreDto {
+        const containerClass = "PetStoreDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            type: "Point",
-            coordinates: this.generate(
-                template?.coordinates,
-                { containerClass, propertyName: "coordinates", example: null, isNullable: false },
-                () => this.sampleArraynumber()
+            pets: this.generate(
+                template?.pets,
+                { containerClass, propertyName: "pets", example: null, isNullable: false },
+                () => this.sampleArrayPetDto()
             ),
         };
     }
 
-    sampleArrayPointDto(
-        template: Factory<PointDto> = {},
+    sampleArrayPetStoreDto(
+        template: Factory<PetStoreDto> = {},
         length?: number
-    ): Array<PointDto> {
+    ): Array<PetStoreDto> {
         return this.randomArray(
-            () => this.samplePointDto(template),
-            length ?? this.arrayLength()
-        );
-    }
-
-    samplePolygonDto(template?: Factory<PolygonDto>): PolygonDto {
-        const containerClass = "PolygonDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        return {
-            type: "Polygon",
-            coordinates: this.generate(
-                template?.coordinates,
-                { containerClass, propertyName: "coordinates", example: null, isNullable: false },
-                () => {
-                    throw new Error("Can't automatically generate for Array<Array<Array<number>>>");
-                }
-            ),
-        };
-    }
-
-    sampleArrayPolygonDto(
-        template: Factory<PolygonDto> = {},
-        length?: number
-    ): Array<PolygonDto> {
-        return this.randomArray(
-            () => this.samplePolygonDto(template),
+            () => this.samplePetStoreDto(template),
             length ?? this.arrayLength()
         );
     }

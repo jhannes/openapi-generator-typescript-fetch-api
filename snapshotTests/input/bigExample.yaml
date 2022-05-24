@@ -1,0 +1,130 @@
+openapi: 3.0.2
+info:
+  title: Sample API
+  description: A small example to demonstrate individual problems
+  version: 0.1.9
+servers:
+  - url: /v1
+    description: Server
+paths:
+  /{storeId}/pets:
+    get:
+      operationId: listPets
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          style: spaceDelimited
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: tags
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: bornAfter
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+    post:
+      operationId: addPet
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+  /pets/{petId}:
+    post:
+      operationId: addPetWithForm
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: Updated name of the pet
+                  type: string
+                status:
+                  description: Updated status of the pet
+                  type: string
+  /pet/locations:
+    get:
+      operationId: getPetLocations
+      responses:
+        200:
+          description: Returns the pet locations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetLocations'
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - pet_type
+      properties:
+        pet_type:
+          type: string
+        name:
+          type: string
+        birth_date:
+          type: string
+          format: date
+    PetStore:
+      properties:
+        pets:
+          format: uuid
+          additionalProperties:
+            $ref: "#/components/schemas/Pet"
+    PetLocations:
+      properties:
+        locations:
+          additionalProperties:
+            description: object with location history, indexed by petId
+            additionalProperties:
+              description: object with the location history of one pet, indexed by timestamp
+              type: array
+              minItems: 2
+              maxItems: 2
+              items:
+                type: number
+                format: double

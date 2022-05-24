@@ -316,7 +316,9 @@ export class TestSampleData {
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
-                () => {{#items}}{{#isString}}this.sampleArrayString{{/isString}}{{^isString}}this.sampleArray{{{dataType}}}{{/isString}}{{/items}}()
+                () => {{#if items.isString}}this.sampleArrayString(){{else if items.isContainer}}{
+                    throw new Error("Can't automatically generate for {{{dataType}}}");
+                }{{else}}this.sampleArray{{{items.dataType}}}(){{/if}}
             ),{{~else if uniqueItems}}
             {{name}}: {{{dataType}}},{{~else if isEnum}}
             {{name}}: this.generate(
