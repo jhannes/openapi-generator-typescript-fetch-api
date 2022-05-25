@@ -4,6 +4,8 @@
 /localSnapshotTests/
 /snapshotTests/output/
 /snapshotTests/verify/
+/snapshotTests/package.json
+/snapshotTests/package-lock.json
 pom.xml.releaseBackup
 release.properties
 node_modules/

@@ -16,7 +16,7 @@ public class AbstractSnapshotTests {
     public static final Path SNAPSHOT_ROOT = Paths.get("snapshotTests");
     public static final Path LOCAL_SNAPSHOT_ROOT = Paths.get("localSnapshotTests");
 
-    protected static void generate(Path spec, Path output, String modelName) {
+    protected static void generate(Path spec, String modelName, Path projectDir) {
         try {
             if (spec.getFileName().toString().endsWith(".link")) {
                 spec = Paths.get(Files.readAllLines(spec).get(0));
@@ -31,7 +31,7 @@ public class AbstractSnapshotTests {
                 .addAdditionalProperty("npmName", modelName)
                 .addAdditionalProperty("withInterfaces", "true")
                 .addAdditionalProperty("generateModelTests", "true")
-                .setOutputDir(output.resolve(modelName).toString());
+                .setOutputDir(projectDir.toString());
 
         final ClientOptInput clientOptInput = configurator.toClientOptInput();
         DefaultGenerator generator = new DefaultGenerator();

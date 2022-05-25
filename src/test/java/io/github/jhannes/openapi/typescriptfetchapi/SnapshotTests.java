@@ -38,7 +38,7 @@ public class SnapshotTests extends AbstractSnapshotTests {
         Path outputDir = spec.getParent().getParent().resolve("output");
         Path snapshotDir = spec.getParent().getParent().resolve("snapshot");
         try {
-            generate(spec, outputDir, getModelName(spec));
+            generate(spec, getModelName(spec), outputDir.resolve(getModelName(spec)));
         } catch (Exception e) {
             if (e.getCause() != null) {
                 return dynamicTest("Generator for " + spec, () -> {throw e.getCause();});

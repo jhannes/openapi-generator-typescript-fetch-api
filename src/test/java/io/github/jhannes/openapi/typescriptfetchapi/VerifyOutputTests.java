@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -32,7 +33,8 @@ public class VerifyOutputTests extends AbstractSnapshotTests {
     private DynamicNode verify(Path testDir) throws IOException {
         Path inputDir = testDir.resolve("input");
         if (!Files.isDirectory(inputDir)) {
-            return dynamicTest("No test for " + testDir, () -> {});
+            return dynamicTest("No test for " + testDir, () -> {
+            });
         }
         cleanDirectory(testDir.resolve("verify"));
         return dynamicContainer(
@@ -43,18 +45,23 @@ public class VerifyOutputTests extends AbstractSnapshotTests {
     }
 
     static DynamicContainer createTestsForSpec(Path spec) {
-        Path outputDir = spec.getParent().getParent().resolve("verify");
+        Path projectDir = spec.getParent().getParent().resolve("verify").resolve(getModelName(spec));
         return dynamicContainer("Verify " + spec, Arrays.asList(
-                dynamicTest("Generate " + spec, () -> generate(spec, outputDir, getModelName(spec))),
-                dynamicTest("npm install " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "install"})),
-                dynamicTest("npm build " + spec, () -> runCommand(outputDir.resolve(getModelName(spec)), new String[]{NPM_PATH, "run", "build"}))
+                dynamicTest("Generate " + spec, () -> generate(spec, getModelName(spec), projectDir)),
+                dynamicTest("npm install " + spec, () -> npmInstall(projectDir)),
+                dynamicTest("npm build " + spec, () -> runCommand(projectDir, new String[]{NPM_PATH, "run", "build"}))
         ));
     }
 
-    private static void runCommand(Path outputDir, String[] npmCommand) throws IOException, InterruptedException {
-        Process command = Runtime.getRuntime().exec(npmCommand, null, outputDir.toFile());
-        startTransferThread(command.getInputStream(), System.out, outputDir + "-to-stdout");
-        startTransferThread(command.getErrorStream(), System.err, outputDir + "-to-stderr");
+    private static void npmInstall(Path projectDir) throws IOException, InterruptedException {
+        Files.copy(projectDir.resolve("package.json"), projectDir.getParent().getParent().resolve("package.json"), StandardCopyOption.REPLACE_EXISTING);
+        runCommand(projectDir.getParent().getParent(), new String[] { NPM_PATH, "install" });
+    }
+
+    private static void runCommand(Path workingDir, String[] commandLine) throws IOException, InterruptedException {
+        Process command = Runtime.getRuntime().exec(commandLine, null, workingDir.toFile());
+        startTransferThread(command.getInputStream(), System.out, commandLine[0] + "-to-stdout");
+        startTransferThread(command.getErrorStream(), System.err, commandLine[0] + "-to-stderr");
         command.waitFor(60, TimeUnit.SECONDS);
         assertEquals(0, command.exitValue());
     }
