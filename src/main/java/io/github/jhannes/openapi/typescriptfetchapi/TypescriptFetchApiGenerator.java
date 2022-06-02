@@ -2,12 +2,7 @@ package io.github.jhannes.openapi.typescriptfetchapi;
 
 import io.swagger.v3.parser.util.SchemaTypeUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.openapitools.codegen.CliOption;
-import org.openapitools.codegen.CodegenDiscriminator;
-import org.openapitools.codegen.CodegenModel;
-import org.openapitools.codegen.CodegenOperation;
-import org.openapitools.codegen.CodegenProperty;
-import org.openapitools.codegen.SupportingFile;
+import org.openapitools.codegen.*;
 import org.openapitools.codegen.api.TemplatingEngineAdapter;
 import org.openapitools.codegen.languages.AbstractTypeScriptClientCodegen;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
@@ -191,6 +186,15 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             Filter all the operations that are multipart/form-data operations and set the vendor extension flag
             'multipartFormData' for the template to work with.
          */
+        for (CodegenOperation operation : operations) {
+            for (CodegenResponse response : operation.responses) {
+                if (response.code.equals("204") && response.dataType == null) {
+                    response.isNull = true;
+                }
+            }
+        }
+
+
         operations.stream()
                 .filter(op -> op.hasConsumes)
                 .filter(op -> op.consumes.stream().anyMatch(opc -> opc.values().stream().anyMatch("multipart/form-data"::equals)))

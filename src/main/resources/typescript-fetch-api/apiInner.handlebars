@@ -25,7 +25,7 @@ export interface {{classname}}Interface {
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
-    }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
+    }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}{{#responses}}{{#is2xx}}{{#isNull}}|undefined{{/isNull}}{{/is2xx}}{{/responses}}>{{else}}Promise<void>{{/if}};
 {{~/operation}}
 }
 {{/operations}}{{~/withInterfaces}}
@@ -58,7 +58,7 @@ export class {{classname}} extends BaseAPI {
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
     }{{else if hasAuthMethods}}params: {
         security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
-    }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}} {
+    }{{/if}}): {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}{{#responses}}{{#is2xx}}{{#isNull}}|undefined{{/isNull}}{{/is2xx}}{{/responses}}>{{else}}Promise<void>{{/if}} {
         {{~#if isResponseFile}}
         const response: Response = await this.fetch(
         {{~else}}

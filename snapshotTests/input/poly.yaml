@@ -16,6 +16,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AnyParty'
+        204:
+          description: "User has no access to any party"
     post:
       requestBody:
         content:
