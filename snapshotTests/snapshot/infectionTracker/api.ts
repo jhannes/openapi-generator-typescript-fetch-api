@@ -79,6 +79,7 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
         );
     }
 }
+
 /**
  * CasesApi - object-oriented interface
  */
@@ -180,6 +181,7 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
         );
     }
 }
+
 /**
  * ExposuresApi - object-oriented interface
  */

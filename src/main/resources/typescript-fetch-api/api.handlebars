@@ -19,7 +19,6 @@ export interface ApplicationApis {
 }
 {{~/withInterfaces}}
 {{#apiInfo}}{{#apis}}{{>apiInner}}{{/apis}}{{/apiInfo}}
-
 type ServerNames =
 {{~#servers}}
     | "{{#if description}}{{description}}{{else}}default{{/if}}"
@@ -57,4 +56,4 @@ export class {{name}} implements SecurityScheme {
 {{~/if}}
 }
 {{/unless~}}
-{{/authMethods~}}{{/if}}
+{{/authMethods~}}{{/if~}}

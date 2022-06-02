@@ -290,6 +290,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         );
     }
 }
+
 /**
  * StoreApi - object-oriented interface
  */
@@ -406,6 +407,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
         );
     }
 }
+
 /**
  * UserApi - object-oriented interface
  */
