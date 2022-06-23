@@ -147,9 +147,9 @@ it("shows pets", async () => {
 ### From the command line
 
 1. Download openapi jar. On Linux/mac
-    * `wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar`
+    * `wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.0/openapi-generator-cli-5.2.0.jar -O openapi-generator-cli.jar`
 2. Download the Typescript-fetch-api generator
-    * `wget https://repo1.maven.org/maven2/io/github/jhannes/openapi/openapi-generator-typescript-fetch-api/0.1.7/openapi-generator-typescript-fetch-api-0.1.7.jar -O openapi-generator-typescript-fetch-api.jar`
+    * `wget https://repo1.maven.org/maven2/io/github/jhannes/openapi/openapi-generator-typescript-fetch-api/0.2.9/openapi-generator-typescript-fetch-api-0.2.9.jar -O openapi-generator-typescript-fetch-api.jar`
 3. Generate the code from your OpenAPI spec:
     * `java -cp openapi-generator-typescript-fetch-api.jar:openapi-generator-cli.jar org.openapitools.codegen.OpenAPIGenerator generate -g typescript-fetch-api -i <open api file>`
 
@@ -163,7 +163,7 @@ Add to your `pom.xml`:
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>4.3.1</version>
+                <version>5.2.0</version>
                 <executions>
                     <execution>
                         <id>petstore-typescript-fetch-api</id>
@@ -187,7 +187,7 @@ Add to your `pom.xml`:
                     <dependency>
                         <groupId>io.github.jhannes.openapi</groupId>
                         <artifactId>openapi-generator-typescript-fetch-api</artifactId>
-                        <version>0.1.3</version>
+                        <version>0.2.9</version>
                     </dependency>
                 </dependencies>
             </plugin>
