@@ -42,7 +42,7 @@ export interface CaseWorkersApiInterface {
      * @throws {HttpError}
      */
     registerCaseWorker(params: {
-        caseWorkerDto?: CaseWorkerDto;
+        caseWorkerDto: CaseWorkerDto;
     }): Promise<void>;
 }
 
@@ -65,7 +65,7 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
      * @throws {HttpError}
      */
     public async registerCaseWorker(params: {
-        caseWorkerDto?: CaseWorkerDto;
+        caseWorkerDto: CaseWorkerDto;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/api/caseWorkers",
