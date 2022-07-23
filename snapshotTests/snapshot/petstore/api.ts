@@ -450,6 +450,14 @@ export interface UserApiInterface {
     }): Promise<void>;
     /**
      *
+     * @summary Get the currently logged in user
+     * @throws {HttpError}
+     */
+    getCurrentUser(params: {
+        security: petstore_auth;
+    }): Promise<UserDto>;
+    /**
+     *
      * @summary Get user by user name
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
@@ -561,6 +569,23 @@ export class UserApi extends BaseAPI implements UserApiInterface {
             this.url("/user/{username}", params.pathParams),
             {
                 method: "DELETE",
+            }
+        );
+    }
+    /**
+     *
+     * @summary Get the currently logged in user
+     * @throws {HttpError}
+     */
+    public async getCurrentUser(params: {
+        security: petstore_auth;
+    }): Promise<UserDto> {
+        return await this.fetch(
+            this.basePath + "/user",
+            {
+                headers: {
+                    ...params.security?.headers(),
+                },
             }
         );
     }

@@ -79,6 +79,7 @@ export function mockUserApi(operations: {
     createUsersWithArrayInput?: () => Promise<void>;
     createUsersWithListInput?: () => Promise<void>;
     deleteUser?: () => Promise<void>;
+    getCurrentUser?: () => Promise<UserDto>;
     getUserByName?: () => Promise<UserDto>;
     loginUser?: () => Promise<string>;
     logoutUser?: () => Promise<void>;
@@ -89,6 +90,7 @@ export function mockUserApi(operations: {
         createUsersWithArrayInput: operations.createUsersWithArrayInput || reject("UserApi.createUsersWithArrayInput"),
         createUsersWithListInput: operations.createUsersWithListInput || reject("UserApi.createUsersWithListInput"),
         deleteUser: operations.deleteUser || reject("UserApi.deleteUser"),
+        getCurrentUser: operations.getCurrentUser || reject("UserApi.getCurrentUser"),
         getUserByName: operations.getUserByName || reject("UserApi.getUserByName"),
         loginUser: operations.loginUser || reject("UserApi.loginUser"),
         logoutUser: operations.logoutUser || reject("UserApi.logoutUser"),

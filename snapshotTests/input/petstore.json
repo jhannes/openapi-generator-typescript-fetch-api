@@ -96,7 +96,9 @@
                   "sold"
                 ]
               },
-              "default": ["available"]
+              "default": [
+                "available"
+              ]
             }
           }
         ],
@@ -573,6 +575,38 @@
       }
     },
     "/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "getCurrentUser",
+        "summary": "Get the currently logged in user",
+        "security": [
+          {
+            "petstore_auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User is not logged in"
+          }
+        }
+      },
       "post": {
         "tags": [
           "user"
