@@ -32,6 +32,15 @@ export interface ApplicationApis {
 export interface DefaultApiInterface {
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    fetchToken(params: {
+        formParams: { code: string; clientId: string; clientSecret: string; redirectUri: string; subjectToken: string; audience: string; }
+        headers?: { "Authorization"?: string };
+    }): Promise<TokenResponseDto>;
+    /**
+     *
      * @throws {HttpError}
      */
     wellKnownKeysGet(): Promise<JwksDocumentDto>;
@@ -46,6 +55,27 @@ export interface DefaultApiInterface {
  * DefaultApi - object-oriented interface
  */
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
+    /**
+     *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    public async fetchToken(params: {
+        formParams: { code: string; clientId: string; clientSecret: string; redirectUri: string; subjectToken: string; audience: string; }
+        headers?: { "Authorization"?: string };
+    }): Promise<TokenResponseDto> {
+        return await this.fetch(
+            this.basePath + "/token",
+            {
+                method: "POST",
+                body: this.formData(params.formParams),
+                headers: {
+                    ...this.removeEmpty(params.headers),
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            }
+        );
+    }
     /**
      *
      * @throws {HttpError}

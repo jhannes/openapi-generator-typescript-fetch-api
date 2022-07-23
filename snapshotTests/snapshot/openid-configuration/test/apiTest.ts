@@ -36,10 +36,12 @@ export function mockApplicationApis({
 }
 
 export function mockDefaultApi(operations: {
+    fetchToken?: () => Promise<TokenResponseDto>;
     wellKnownKeysGet?: () => Promise<JwksDocumentDto>;
     wellKnownOpenidConfigurationGet?: () => Promise<DiscoveryDocumentDto>;
 } = {}): DefaultApiInterface {
     return {
+        fetchToken: operations.fetchToken || reject("DefaultApi.fetchToken"),
         wellKnownKeysGet: operations.wellKnownKeysGet || reject("DefaultApi.wellKnownKeysGet"),
         wellKnownOpenidConfigurationGet: operations.wellKnownOpenidConfigurationGet || reject("DefaultApi.wellKnownOpenidConfigurationGet"),
     };

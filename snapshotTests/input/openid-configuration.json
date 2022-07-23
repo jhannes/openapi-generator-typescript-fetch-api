@@ -37,6 +37,65 @@
           }
         }
       }
+    },
+    "/token": {
+      "post": {
+        "operationId": "fetchToken",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Used with token-exchange to validate client_name - use Basic authentication with client_id:client_secret",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "client_id": {
+                    "type": "string"
+                  },
+                  "client_secret": {
+                    "type": "string"
+                  },
+                  "redirect_uri": {
+                    "type": "string"
+                  },
+                  "subject_token": {
+                    "type": "string",
+                    "description": "Used with grant_type=urn:ietf:params:oauth:grant-type:token-exchange to do a token exchange"
+                  },
+                  "audience": {
+                    "type": "string",
+                    "description": "Used with token-exchange to indicate which application the token will be used with"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The tokens from the identity service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
