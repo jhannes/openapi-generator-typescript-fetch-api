@@ -22,13 +22,13 @@
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {
-        "typescript": "^4.1.3",
-        "eslint": "^7.17.0",
-        "prettier": "^2.2.1",
-        "@typescript-eslint/eslint-plugin": "^4.12.0",
-        "@typescript-eslint/parser": "^4.12.0",
-        "eslint-config-prettier": "^7.1.0",
-        "eslint-plugin-prettier": "^3.3.1"
+        "typescript": "^4.7.4",
+        "eslint": "^8.20.0",
+        "prettier": "^2.7.1",
+        "@typescript-eslint/eslint-plugin": "^5.30.7",
+        "@typescript-eslint/parser": "^5.30.7",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1"
     }{{#if npmRepository}},
     "publishConfig": {
         "registry": "{{npmRepository}}"
@@ -66,7 +66,7 @@
                 100,
                 {
                     "comments": 140,
-                    "ignorePattern": "\\{ containerClass, propertyName:|sample\\w+Dto\\(template: Factory"
+                    "ignorePattern": "\\{ containerClass, propertyName:|sample\\w+Dto\\(template\\?: Factory|operation\\.\\w || reject"
                 }
             ],
             "no-trailing-spaces": "error",

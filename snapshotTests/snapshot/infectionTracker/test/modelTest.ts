@@ -1,9 +1,7 @@
 import {
     CaseWorkerDto,
     ExposureDto,
-    ExposureDtoStatusEnum,
     ExposureDtoStatusEnumValues,
-    ExposureDtoDelayAfterInfectionEnum,
     ExposureDtoDelayAfterInfectionEnumValues,
     InfectionDto,
     InfectionInformationDto,
@@ -216,6 +214,7 @@ export class TestSampleData {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.sampleString());
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sampleArrayArray<T>(length?: number): Array<Array<T>> {
         return [];
     }

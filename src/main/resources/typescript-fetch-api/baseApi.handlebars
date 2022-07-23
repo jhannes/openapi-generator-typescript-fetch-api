@@ -98,18 +98,33 @@ export class BaseAPI {
                 if (!options?.explode) {
                     for (const item of value) {
                         if (item instanceof Date) {
-                            query.append(key, options?.format === "date" ? item.toISOString().substr(0, 10) : item.toISOString());
+                            query.append(
+                                key,
+                                options?.format === "date"
+                                    ? item.toISOString().substr(0, 10)
+                                    : item.toISOString()
+                            );
                         } else {
                             query.append(key, item);
                         }
                     }
                 } else if (options?.format === "date") {
-                    query.append(key, (value as Array<Date>).map(item => item.toISOString().substr(0,10)).join(options.delimiter || ","));
+                    query.append(
+                        key,
+                        (value as Array<Date>)
+                            .map((item) => item.toISOString().substr(0, 10))
+                            .join(options.delimiter || ",")
+                    );
                 } else {
                     query.append(key, value.join(options.delimiter || ","));
                 }
             } else if (value instanceof Date) {
-                query.append(key, options?.format === "date" ? value.toISOString().substr(0, 10) : value.toISOString());
+                query.append(
+                    key,
+                    options?.format === "date"
+                        ? value.toISOString().substr(0, 10)
+                        : value.toISOString()
+                );
             } else if (value !== undefined) {
                 query.append(key, value.toString());
             }
