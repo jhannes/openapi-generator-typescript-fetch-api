@@ -16,7 +16,7 @@ import {
     PetTypeDto,
 } from "./model";
 
-import { BaseAPI, SecurityScheme } from "./base";
+import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     defaultApi: DefaultApiInterface;
@@ -34,7 +34,7 @@ export interface DefaultApiInterface {
     addPet(params: {
         pathParams: { storeId: string };
         petDto?: PetDto;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -43,7 +43,7 @@ export interface DefaultApiInterface {
     addPetWithForm(params: {
         pathParams: { petId: string };
         formParams: { name: string; status: string; }
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -52,7 +52,7 @@ export interface DefaultApiInterface {
     listPets(params: {
         pathParams: { storeId: string };
         queryParams?: { status?: Array<string>, tags?: Array<string>, bornAfter?: Date, };
-    }): Promise<PetDto>;
+    } & RequestCallOptions): Promise<PetDto>;
 }
 
 /**
@@ -67,13 +67,15 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     public async addPet(params: {
         pathParams: { storeId: string };
         petDto?: PetDto;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/{storeId}/pets", params.pathParams),
             {
+                ...params,
                 method: "POST",
                 body: JSON.stringify(params.petDto),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     "Content-Type": "application/json",
                 },
             }
@@ -87,13 +89,15 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     public async addPetWithForm(params: {
         pathParams: { petId: string };
         formParams: { name: string; status: string; }
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/pets/{petId}", params.pathParams),
             {
+                ...params,
                 method: "POST",
                 body: this.formData(params.formParams),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
             }
@@ -107,12 +111,12 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     public async listPets(params: {
         pathParams: { storeId: string };
         queryParams?: { status?: Array<string>, tags?: Array<string>, bornAfter?: Date,  };
-    }): Promise<PetDto> {
+    } & RequestCallOptions): Promise<PetDto> {
         return await this.fetch(
             this.url("/{storeId}/pets", params.pathParams, params?.queryParams, {
                 status: { delimiter: " " },
                 bornAfter: { format: "date" },
-            })
+            }), params
         );
     }
 }

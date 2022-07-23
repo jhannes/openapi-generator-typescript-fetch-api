@@ -20,7 +20,7 @@ import {
     TokenResponseDto,
 } from "./model";
 
-import { BaseAPI, SecurityScheme } from "./base";
+import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     defaultApi: DefaultApiInterface;
@@ -38,17 +38,17 @@ export interface DefaultApiInterface {
     fetchToken(params: {
         formParams: { code: string; clientId: string; clientSecret: string; redirectUri: string; subjectToken: string; audience: string; }
         headers?: { "Authorization"?: string };
-    }): Promise<TokenResponseDto>;
+    } & RequestCallOptions): Promise<TokenResponseDto>;
     /**
      *
      * @throws {HttpError}
      */
-    wellKnownKeysGet(): Promise<JwksDocumentDto>;
+    wellKnownKeysGet(params?: RequestCallOptions): Promise<JwksDocumentDto>;
     /**
      *
      * @throws {HttpError}
      */
-    wellKnownOpenidConfigurationGet(): Promise<DiscoveryDocumentDto>;
+    wellKnownOpenidConfigurationGet(params?: RequestCallOptions): Promise<DiscoveryDocumentDto>;
 }
 
 /**
@@ -63,10 +63,11 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     public async fetchToken(params: {
         formParams: { code: string; clientId: string; clientSecret: string; redirectUri: string; subjectToken: string; audience: string; }
         headers?: { "Authorization"?: string };
-    }): Promise<TokenResponseDto> {
+    } & RequestCallOptions): Promise<TokenResponseDto> {
         return await this.fetch(
             this.basePath + "/token",
             {
+                ...params,
                 method: "POST",
                 body: this.formData(params.formParams),
                 headers: {
@@ -80,18 +81,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      *
      * @throws {HttpError}
      */
-    public async wellKnownKeysGet(): Promise<JwksDocumentDto> {
+    public async wellKnownKeysGet(params: RequestCallOptions = {}): Promise<JwksDocumentDto> {
         return await this.fetch(
-            this.basePath + "/.well-known/keys"
+            this.basePath + "/.well-known/keys", params
         );
     }
     /**
      *
      * @throws {HttpError}
      */
-    public async wellKnownOpenidConfigurationGet(): Promise<DiscoveryDocumentDto> {
+    public async wellKnownOpenidConfigurationGet(params: RequestCallOptions = {}): Promise<DiscoveryDocumentDto> {
         return await this.fetch(
-            this.basePath + "/.well-known/openid-configuration"
+            this.basePath + "/.well-known/openid-configuration", params
         );
     }
 }

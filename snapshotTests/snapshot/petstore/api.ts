@@ -19,7 +19,7 @@ import {
     UserDto,
 } from "./model";
 
-import { BaseAPI, SecurityScheme } from "./base";
+import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     petApi: PetApiInterface;
@@ -40,7 +40,7 @@ export interface PetApiInterface {
     addPet(params: {
         petDto?: PetDto;
         security: petstore_auth;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Deletes a pet
@@ -51,7 +51,7 @@ export interface PetApiInterface {
         pathParams: { petId: number };
         headers: { "api_key"?: string };
         security: petstore_auth;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Finds Pets by status
@@ -61,7 +61,7 @@ export interface PetApiInterface {
     findPetsByStatus(params: {
         queryParams?: { status?: Array<"available" | "pending" | "sold">, };
         security: petstore_auth;
-    }): Promise<Array<PetDto>>;
+    } & RequestCallOptions): Promise<Array<PetDto>>;
     /**
      *
      * @summary Finds Pets by tags
@@ -71,7 +71,7 @@ export interface PetApiInterface {
     findPetsByTags(params: {
         queryParams?: { tags?: Array<string>, };
         security: petstore_auth;
-    }): Promise<Array<PetDto>>;
+    } & RequestCallOptions): Promise<Array<PetDto>>;
     /**
      *
      * @summary Find pet by ID
@@ -81,7 +81,7 @@ export interface PetApiInterface {
     getPetById(params: {
         pathParams: { petId: number };
         security: api_key | petstore_auth;
-    }): Promise<PetDto>;
+    } & RequestCallOptions): Promise<PetDto>;
     /**
      *
      * @summary Update an existing pet
@@ -91,7 +91,7 @@ export interface PetApiInterface {
     updatePet(params: {
         petDto?: PetDto;
         security: petstore_auth;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Updates a pet in the store with form data
@@ -102,7 +102,7 @@ export interface PetApiInterface {
         pathParams: { petId: string };
         formParams: { name: string; status: string; }
         security: petstore_auth;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary uploads an image
@@ -113,7 +113,7 @@ export interface PetApiInterface {
         pathParams: { petId: number };
         formParams: { additionalMetadata: string; file: Blob; }
         security: petstore_auth;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
 }
 
 /**
@@ -129,13 +129,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async addPet(params: {
         petDto?: PetDto;
         security: petstore_auth;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/pet",
             {
+                ...params,
                 method: "POST",
                 body: JSON.stringify(params.petDto),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                     "Content-Type": "application/json",
                 },
@@ -152,14 +154,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         pathParams: { petId: number };
         headers: { "api_key"?: string };
         security: petstore_auth;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/pet/{petId}", params.pathParams),
             {
+                ...params,
                 method: "DELETE",
                 headers: {
-                    ...params.security?.headers(),
                     ...this.removeEmpty(params.headers),
+                    ...params.security?.headers(),
                 },
             }
         );
@@ -173,11 +176,13 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async findPetsByStatus(params: {
         queryParams?: { status?: Array<"available" | "pending" | "sold">,  };
         security: petstore_auth;
-    }): Promise<Array<PetDto>> {
+    } & RequestCallOptions): Promise<Array<PetDto>> {
         return await this.fetch(
             this.url("/pet/findByStatus", {}, params?.queryParams, {}),
             {
+                ...params,
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                 },
             }
@@ -192,11 +197,13 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async findPetsByTags(params: {
         queryParams?: { tags?: Array<string>,  };
         security: petstore_auth;
-    }): Promise<Array<PetDto>> {
+    } & RequestCallOptions): Promise<Array<PetDto>> {
         return await this.fetch(
             this.url("/pet/findByTags", {}, params?.queryParams, {}),
             {
+                ...params,
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                 },
             }
@@ -211,11 +218,13 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async getPetById(params: {
         pathParams: { petId: number };
         security: api_key | petstore_auth;
-    }): Promise<PetDto> {
+    } & RequestCallOptions): Promise<PetDto> {
         return await this.fetch(
             this.url("/pet/{petId}", params.pathParams),
             {
+                ...params,
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                 },
             }
@@ -230,13 +239,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async updatePet(params: {
         petDto?: PetDto;
         security: petstore_auth;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/pet",
             {
+                ...params,
                 method: "PUT",
                 body: JSON.stringify(params.petDto),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                     "Content-Type": "application/json",
                 },
@@ -253,13 +264,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         pathParams: { petId: string };
         formParams: { name: string; status: string; }
         security: petstore_auth;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/pet/{petId}", params.pathParams),
             {
+                ...params,
                 method: "POST",
                 body: this.formData(params.formParams),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
@@ -276,13 +289,15 @@ export class PetApi extends BaseAPI implements PetApiInterface {
         pathParams: { petId: number };
         formParams: { additionalMetadata: string; file: Blob; }
         security: petstore_auth;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/pet/{petId}/uploadImage", params.pathParams),
             {
+                ...params,
                 method: "POST",
                 body: this.formData(params.formParams),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                     "Content-Type": "multipart/form-data",
                 },
@@ -303,7 +318,7 @@ export interface StoreApiInterface {
      */
     deleteOrder(params: {
         pathParams: { orderId: string };
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Returns pet inventories by status
@@ -313,7 +328,7 @@ export interface StoreApiInterface {
     getInventory(params: {
         queryParams?: { effectiveDateTime?: Date, };
         security: api_key;
-    }): Promise<{ [key: string]: number; }>;
+    } & RequestCallOptions): Promise<{ [key: string]: number; }>;
     /**
      *
      * @summary Find purchase order by ID
@@ -322,7 +337,7 @@ export interface StoreApiInterface {
      */
     getOrderById(params: {
         pathParams: { orderId: string };
-    }): Promise<OrderDto>;
+    } & RequestCallOptions): Promise<OrderDto>;
     /**
      *
      * @summary Place an order for a pet
@@ -331,7 +346,7 @@ export interface StoreApiInterface {
      */
     placeOrder(params?: {
         orderDto?: OrderDto;
-    }): Promise<OrderDto>;
+    } & RequestCallOptions): Promise<OrderDto>;
 }
 
 /**
@@ -346,10 +361,11 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
      */
     public async deleteOrder(params: {
         pathParams: { orderId: string };
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/store/order/{orderId}", params.pathParams),
             {
+                ...params,
                 method: "DELETE",
             }
         );
@@ -363,11 +379,13 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
     public async getInventory(params: {
         queryParams?: { effectiveDateTime?: Date,  };
         security: api_key;
-    }): Promise<{ [key: string]: number; }> {
+    } & RequestCallOptions): Promise<{ [key: string]: number; }> {
         return await this.fetch(
             this.url("/store/inventory", {}, params?.queryParams, {}),
             {
+                ...params,
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                 },
             }
@@ -381,9 +399,9 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
      */
     public async getOrderById(params: {
         pathParams: { orderId: string };
-    }): Promise<OrderDto> {
+    } & RequestCallOptions): Promise<OrderDto> {
         return await this.fetch(
-            this.url("/store/order/{orderId}", params.pathParams)
+            this.url("/store/order/{orderId}", params.pathParams), params
         );
     }
     /**
@@ -394,13 +412,15 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
      */
     public async placeOrder(params?: {
         orderDto?: OrderDto;
-    }): Promise<OrderDto> {
+    } & RequestCallOptions): Promise<OrderDto> {
         return await this.fetch(
             this.basePath + "/store/order",
             {
+                ...params,
                 method: "POST",
                 body: params?.orderDto ? JSON.stringify(params.orderDto) : undefined,
                 headers: {
+                    ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",
                 },
             }
@@ -420,7 +440,7 @@ export interface UserApiInterface {
      */
     createUser(params?: {
         userDto?: UserDto;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Creates list of users with given input array
@@ -429,7 +449,7 @@ export interface UserApiInterface {
      */
     createUsersWithArrayInput(params?: {
         userDto?: Array<UserDto>;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Creates list of users with given input array
@@ -438,7 +458,7 @@ export interface UserApiInterface {
      */
     createUsersWithListInput(params?: {
         userDto?: Array<UserDto>;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Delete user
@@ -447,7 +467,7 @@ export interface UserApiInterface {
      */
     deleteUser(params: {
         pathParams: { username: string };
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Get the currently logged in user
@@ -455,7 +475,7 @@ export interface UserApiInterface {
      */
     getCurrentUser(params: {
         security: petstore_auth;
-    }): Promise<UserDto>;
+    } & RequestCallOptions): Promise<UserDto>;
     /**
      *
      * @summary Get user by user name
@@ -464,7 +484,7 @@ export interface UserApiInterface {
      */
     getUserByName(params: {
         pathParams: { username: string };
-    }): Promise<UserDto>;
+    } & RequestCallOptions): Promise<UserDto>;
     /**
      *
      * @summary Logs user into the system
@@ -473,13 +493,13 @@ export interface UserApiInterface {
      */
     loginUser(params?: {
         queryParams?: { username?: string, password?: string, };
-    }): Promise<string>;
+    } & RequestCallOptions): Promise<string>;
     /**
      *
      * @summary Logs out current logged in user session
      * @throws {HttpError}
      */
-    logoutUser(): Promise<void>;
+    logoutUser(params?: RequestCallOptions): Promise<void>;
     /**
      *
      * @summary Updated user
@@ -489,7 +509,7 @@ export interface UserApiInterface {
     updateUser(params: {
         pathParams: { username: string };
         userDto?: UserDto;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
 }
 
 /**
@@ -504,13 +524,15 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async createUser(params?: {
         userDto?: UserDto;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/user",
             {
+                ...params,
                 method: "POST",
                 body: params?.userDto ? JSON.stringify(params.userDto) : undefined,
                 headers: {
+                    ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",
                 },
             }
@@ -524,13 +546,15 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async createUsersWithArrayInput(params?: {
         userDto?: Array<UserDto>;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/user/createWithArray",
             {
+                ...params,
                 method: "POST",
                 body: params?.userDto ? JSON.stringify(params.userDto) : undefined,
                 headers: {
+                    ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",
                 },
             }
@@ -544,13 +568,15 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async createUsersWithListInput(params?: {
         userDto?: Array<UserDto>;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/user/createWithList",
             {
+                ...params,
                 method: "POST",
                 body: params?.userDto ? JSON.stringify(params.userDto) : undefined,
                 headers: {
+                    ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",
                 },
             }
@@ -564,10 +590,11 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async deleteUser(params: {
         pathParams: { username: string };
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/user/{username}", params.pathParams),
             {
+                ...params,
                 method: "DELETE",
             }
         );
@@ -579,11 +606,13 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async getCurrentUser(params: {
         security: petstore_auth;
-    }): Promise<UserDto> {
+    } & RequestCallOptions): Promise<UserDto> {
         return await this.fetch(
             this.basePath + "/user",
             {
+                ...params,
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                 },
             }
@@ -597,9 +626,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async getUserByName(params: {
         pathParams: { username: string };
-    }): Promise<UserDto> {
+    } & RequestCallOptions): Promise<UserDto> {
         return await this.fetch(
-            this.url("/user/{username}", params.pathParams)
+            this.url("/user/{username}", params.pathParams), params
         );
     }
     /**
@@ -610,9 +639,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public async loginUser(params?: {
         queryParams?: { username?: string, password?: string,  };
-    }): Promise<string> {
+    } & RequestCallOptions): Promise<string> {
         return await this.fetch(
-            this.url("/user/login", {}, params?.queryParams, {})
+            this.url("/user/login", {}, params?.queryParams, {}), params
         );
     }
     /**
@@ -620,9 +649,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @summary Logs out current logged in user session
      * @throws {HttpError}
      */
-    public async logoutUser(): Promise<void> {
+    public async logoutUser(params: RequestCallOptions = {}): Promise<void> {
         return await this.fetch(
-            this.basePath + "/user/logout"
+            this.basePath + "/user/logout", params
         );
     }
     /**
@@ -634,13 +663,15 @@ export class UserApi extends BaseAPI implements UserApiInterface {
     public async updateUser(params: {
         pathParams: { username: string };
         userDto?: UserDto;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/user/{username}", params.pathParams),
             {
+                ...params,
                 method: "PUT",
                 body: JSON.stringify(params.userDto),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     "Content-Type": "application/json",
                 },
             }

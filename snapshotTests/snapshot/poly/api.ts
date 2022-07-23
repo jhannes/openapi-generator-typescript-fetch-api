@@ -24,7 +24,7 @@ import {
     UpdateErrorDto,
 } from "./model";
 
-import { BaseAPI, SecurityScheme } from "./base";
+import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     defaultApi: DefaultApiInterface;
@@ -41,12 +41,12 @@ export interface DefaultApiInterface {
      */
     logMessage(params?: {
         logMessageDto?: LogMessageDto;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @throws {HttpError}
      */
-    partiesGet(): Promise<AnyPartyDto|undefined>;
+    partiesGet(params?: RequestCallOptions): Promise<AnyPartyDto|undefined>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -55,7 +55,7 @@ export interface DefaultApiInterface {
     partiesIdPut(params: {
         pathParams: { id: string };
         anyPartyDto?: AnyPartyDto;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -63,7 +63,7 @@ export interface DefaultApiInterface {
      */
     partiesPost(params?: {
         anyPartyDto?: AnyPartyDto;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
 }
 
 /**
@@ -77,13 +77,15 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async logMessage(params?: {
         logMessageDto?: LogMessageDto;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/log",
             {
+                ...params,
                 method: "POST",
                 body: params?.logMessageDto ? JSON.stringify(params.logMessageDto) : undefined,
                 headers: {
+                    ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",
                 },
             }
@@ -93,9 +95,9 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      *
      * @throws {HttpError}
      */
-    public async partiesGet(): Promise<AnyPartyDto|undefined> {
+    public async partiesGet(params: RequestCallOptions = {}): Promise<AnyPartyDto|undefined> {
         return await this.fetch(
-            this.basePath + "/parties"
+            this.basePath + "/parties", params
         );
     }
     /**
@@ -106,13 +108,15 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     public async partiesIdPut(params: {
         pathParams: { id: string };
         anyPartyDto?: AnyPartyDto;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/parties/{id}", params.pathParams),
             {
+                ...params,
                 method: "PUT",
                 body: JSON.stringify(params.anyPartyDto),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     "Content-Type": "application/json",
                 },
             }
@@ -125,13 +129,15 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async partiesPost(params?: {
         anyPartyDto?: AnyPartyDto;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/parties",
             {
+                ...params,
                 method: "POST",
                 body: params?.anyPartyDto ? JSON.stringify(params.anyPartyDto) : undefined,
                 headers: {
+                    ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",
                 },
             }

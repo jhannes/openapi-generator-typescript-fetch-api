@@ -23,9 +23,9 @@ export interface {{classname}}Interface {
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
         headers{{^hasRequiredParams}}?{{/hasRequiredParams}}: { {{#headerParams}}"{{baseName}}"{{^required}}?{{/required}}: string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
-    }){{else if hasAuthMethods}}(params: {
+    } & RequestCallOptions){{else if hasAuthMethods}}(params: {
         security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
-    }){{else}}(){{/if}}: {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}{{#responses}}{{#is2xx}}{{#isNull}}|undefined{{/isNull}}{{/is2xx}}{{/responses}}>{{else}}Promise<void>{{/if}};
+    } & RequestCallOptions){{else}}(params?: RequestCallOptions){{/if}}: {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}{{#responses}}{{#is2xx}}{{#isNull}}|undefined{{/isNull}}{{/is2xx}}{{/responses}}>{{else}}Promise<void>{{/if}};
 {{~/operation}}
 }
 {{/operations}}{{~/withInterfaces}}
@@ -56,9 +56,9 @@ export class {{classname}} extends BaseAPI {
         formParams: { {{#formParams}}{{paramName}}: {{#if isFile}}Blob{{else}}{{{dataType}}}{{/if}}; {{/formParams~}} }{{/hasFormParams}}{{#hasHeaderParams}}
         headers{{^hasRequiredParams}}?{{/hasRequiredParams}}: { {{#headerParams}}"{{baseName}}"{{^required}}?{{/required}}: string{{#unless @last}},{{/unless}} {{/headerParams~}} };{{/hasHeaderParams}}{{#if authMethods}}{{#authMethods}}{{#if @first}}
         security: {{/if}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}{{/if}}
-    }){{else if hasAuthMethods}}(params: {
+    } & RequestCallOptions){{else if hasAuthMethods}}(params: {
         security: {{#authMethods}}{{#if (eq scheme 'none')}}undefined{{else}}{{name}}{{/if}}{{#if @last}};{{else}} | {{/if}}{{/authMethods}}
-    }){{else}}(){{/if}}: {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}{{#responses}}{{#is2xx}}{{#isNull}}|undefined{{/isNull}}{{/is2xx}}{{/responses}}>{{else}}Promise<void>{{/if}} {
+    } & RequestCallOptions){{else}}(params: RequestCallOptions = {}){{/if}}: {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}{{#responses}}{{#is2xx}}{{#isNull}}|undefined{{/isNull}}{{/is2xx}}{{/responses}}>{{else}}Promise<void>{{/if}} {
         {{~#if isResponseFile}}
         const response: Response = await this.fetch(
         {{~else}}
@@ -71,26 +71,21 @@ export class {{classname}} extends BaseAPI {
             {{else if (eq dataFormat "date")}}
                 {{baseName}}: { format: "{{dataFormat}}" },
             {{/unless}}{{/queryParams~}} }{{/if}}){{else}}this.basePath + "{{{path}}}"{{/if}}{{#if (or (neq httpMethod "GET") hasAuthMethods hasHeaderParams)}},
-            { {{~#if (neq httpMethod 'GET')}}
+            {
+                ...params,
+            {{~#if (neq httpMethod 'GET')}}
                 method: "{{httpMethod}}",
             {{~/if}}{{~#if bodyParam}}
                 body: {{#if hasRequiredParams}}JSON.stringify(params.{{bodyParam.paramName}}){{else if hasAuthMethods}}JSON.stringify(params.{{bodyParam.paramName}}){{else}}params?.{{bodyParam.paramName}} ? JSON.stringify(params.{{bodyParam.paramName}}) : undefined{{/if}},
             {{~else if hasFormParams}}
                 body: this.formData(params.formParams),
-            {{~/if}}{{#if hasAuthMethods}}
+            {{~/if}}{{#if (or hasAuthMethods hasConsumes)}}
                 headers: {
-                    ...params.security?.headers(){{#hasHeaderParams}},
-                    ...this.removeEmpty(params.headers){{/hasHeaderParams}}{{#if hasConsumes}},
+                    ...this.removeEmpty(params{{#unless (or hasRequiredParams hasAuthMethods hasFormParams)}}?{{/unless}}.headers){{#if hasAuthMethods}},
+                    ...params.security?.headers(){{/if}}{{#if hasConsumes}},
                     "Content-Type": {{^consumes}}"application/json"{{/consumes}}{{#consumes}}{{#if @first}}"{{{mediaType}}}"{{/if}}{{/consumes}}{{/if}},
-                },{{else if hasHeaderParams}}
-                headers: {
-                    ...this.removeEmpty(params{{#unless (or hasRequiredParams hasAuthMethods hasFormParams)}}?{{/unless}}.headers){{#if hasConsumes}},
-                    "Content-Type": {{^consumes}}"application/json"{{/consumes}}{{#consumes}}{{#if @first}}"{{{mediaType}}}"{{/if}}{{/consumes}}{{/if}},
-                },{{else if hasConsumes}}
-                headers: {
-                    "Content-Type": {{^consumes}}"application/json"{{/consumes}}{{#consumes}}{{#if @first}}"{{{mediaType}}}"{{/if}}{{/consumes}},
                 },{{/if}}
-            }{{/if}}
+            }{{else}}, params{{/if}}
         );
         {{~#if isResponseFile}}
         return await response.blob();

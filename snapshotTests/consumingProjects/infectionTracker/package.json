@@ -1,0 +1,16 @@
+{
+    "name": "infectiontracker",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "verify": "prettier --check **/*.{ts,tsx,js,jsx} && tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "prettier": "^2.7.1",
+        "typescript": "^4.7.4"
+    }
+}

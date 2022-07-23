@@ -11,17 +11,27 @@ export interface RequestOptions {
     referrerPolicy?: ReferrerPolicy;
 }
 
+export type RequestCallOptions = RequestOptions & {
+    signal?: AbortSignal | null;
+};
+
 export class BaseAPI {
     constructor(
         protected basePath: string = window.location.origin,
         protected requestOptions?: RequestOptions
     ) {}
 
-    protected async fetch(url: string, options: RequestInit = {}): Promise<any> {
+    protected async fetch(
+        url: string,
+        options: RequestCallOptions & { method?: string; body?: string } = {}
+    ): Promise<any> {
         const result = await fetch(url, {
-            credentials: this.requestOptions?.credentials || "same-origin",
-            mode: this.requestOptions?.mode,
-            ...options,
+            credentials: options.credentials || this.requestOptions?.credentials || "same-origin",
+            mode: options.mode || this.requestOptions?.mode,
+            method: options.method,
+            body: options.body,
+            referrer: options.referrer || this.requestOptions?.referrer,
+            referrerPolicy: options.referrerPolicy || this.requestOptions?.referrerPolicy,
             headers: {
                 ...(this.requestOptions?.headers || {}),
                 ...options.headers,
