@@ -290,7 +290,7 @@ export class TestSampleData {
             case "{{mappingName}}":
                 return {
                     ...this.sample{{modelName}}(),
-                    {{discriminator.propertyName}}
+                    {{discriminator.propertyName}},
                 };
             {{~/mappedModels}}
         }

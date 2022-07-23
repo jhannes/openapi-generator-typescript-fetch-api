@@ -560,12 +560,12 @@ export class TestSampleData {
             case "Cat":
                 return {
                     ...this.sampleCatDto(),
-                    pet_type
+                    pet_type,
                 };
             case "Dog":
                 return {
                     ...this.sampleDogDto(),
-                    pet_type
+                    pet_type,
                 };
         }
     }

@@ -74,7 +74,7 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
                 body: JSON.stringify(params.caseWorkerDto),
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -102,7 +102,7 @@ export interface CasesApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    newCase(params: {
+    newCase(params?: {
         infectionInformationDto?: InfectionInformationDto;
     }): Promise<void>;
     /**
@@ -146,17 +146,17 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async newCase(params: {
+    public async newCase(params?: {
         infectionInformationDto?: InfectionInformationDto;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/api/cases",
             {
                 method: "POST",
-                body: JSON.stringify(params.infectionInformationDto),
+                body: params?.infectionInformationDto ? JSON.stringify(params.infectionInformationDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -176,7 +176,7 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
                 body: JSON.stringify(params.exposureDto),
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -191,7 +191,7 @@ export interface ExposuresApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    listExposures(params: {
+    listExposures(params?: {
         queryParams?: { exposureDate?: Array<Date>, maxCount?: number, };
     }): Promise<ExposureDto>;
     /**
@@ -214,7 +214,7 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async listExposures(params: {
+    public async listExposures(params?: {
         queryParams?: { exposureDate?: Array<Date>, maxCount?: number,  };
     }): Promise<ExposureDto> {
         return await this.fetch(
@@ -238,7 +238,7 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
                 body: JSON.stringify(params.exposureDto),
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }

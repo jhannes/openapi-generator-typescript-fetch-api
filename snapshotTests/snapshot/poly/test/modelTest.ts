@@ -325,12 +325,12 @@ export class TestSampleData {
             case "organization":
                 return {
                     ...this.sampleOrganizationDto(),
-                    type
+                    type,
                 };
             case "person":
                 return {
                     ...this.samplePersonDto(),
-                    type
+                    type,
                 };
         }
     }
@@ -360,17 +360,17 @@ export class TestSampleData {
             case "IllegalEmailAddressError":
                 return {
                     ...this.sampleIllegalEmailAddressErrorDto(),
-                    code
+                    code,
                 };
             case "DuplicateIdentifierError":
                 return {
                     ...this.sampleDuplicateIdentifierErrorDto(),
-                    code
+                    code,
                 };
             case "GeneralError":
                 return {
                     ...this.sampleGeneralErrorDto(),
-                    code
+                    code,
                 };
         }
     }
@@ -673,22 +673,22 @@ export class TestSampleData {
             case "IllegalEmailAddressError":
                 return {
                     ...this.sampleIllegalEmailAddressErrorDto(),
-                    code
+                    code,
                 };
             case "DuplicateIdentifierError":
                 return {
                     ...this.sampleDuplicateIdentifierErrorDto(),
-                    code
+                    code,
                 };
             case "GeneralError":
                 return {
                     ...this.sampleGeneralErrorDto(),
-                    code
+                    code,
                 };
             case "NotFoundError":
                 return {
                     ...this.sampleNotFoundErrorDto(),
-                    code
+                    code,
                 };
         }
     }

@@ -13,13 +13,19 @@
  * Do not edit the class manually.
  */
 
-export class BaseAPI {
+export interface RequestOptions {
+    mode?: RequestMode;
+    headers?: Record<string, string>;
+    credentials?: RequestCredentials;
+    referrer?: string;
+    referrerPolicy?: ReferrerPolicy;
+}
 
-    constructor(protected basePath: string = window.location.origin, protected requestOptions?: {
-        credentials?: RequestCredentials,
-        headers?: Record<string, string>,
-        mode?: RequestMode
-    } | undefined) {}
+export class BaseAPI {
+    constructor(
+        protected basePath: string = window.location.origin,
+        protected requestOptions?: RequestOptions
+    ) {}
 
     protected async fetch(url: string, options: RequestInit = {}): Promise<any> {
         const result = await fetch(url, {

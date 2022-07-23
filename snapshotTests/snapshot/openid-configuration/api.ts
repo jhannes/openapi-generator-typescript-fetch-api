@@ -72,7 +72,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
                 headers: {
                     ...this.removeEmpty(params.headers),
                     "Content-Type": "application/x-www-form-urlencoded",
-                }
+                },
             }
         );
     }

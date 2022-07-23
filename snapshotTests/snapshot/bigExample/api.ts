@@ -81,7 +81,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
                 body: JSON.stringify(params.petDto),
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -101,7 +101,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
                 body: this.formData(params.formParams),
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
-                }
+                },
             }
         );
     }

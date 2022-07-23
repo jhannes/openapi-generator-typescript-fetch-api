@@ -36,7 +36,7 @@ export interface DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    petsPost(params: {
+    petsPost(params?: {
         petDto?: PetDto;
     }): Promise<void>;
 }
@@ -50,17 +50,17 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async petsPost(params: {
+    public async petsPost(params?: {
         petDto?: PetDto;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/pets",
             {
                 method: "POST",
-                body: JSON.stringify(params.petDto),
+                body: params?.petDto ? JSON.stringify(params.petDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }

@@ -320,17 +320,17 @@ export class TestSampleData {
             case "Point":
                 return {
                     ...this.samplePointDto(),
-                    type
+                    type,
                 };
             case "Polygon":
                 return {
                     ...this.samplePolygonDto(),
-                    type
+                    type,
                 };
             case "LineString":
                 return {
                     ...this.sampleLineStringDto(),
-                    type
+                    type,
                 };
         }
     }

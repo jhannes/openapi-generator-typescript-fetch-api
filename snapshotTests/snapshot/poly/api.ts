@@ -39,7 +39,7 @@ export interface DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    logMessage(params: {
+    logMessage(params?: {
         logMessageDto?: LogMessageDto;
     }): Promise<void>;
     /**
@@ -61,7 +61,7 @@ export interface DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    partiesPost(params: {
+    partiesPost(params?: {
         anyPartyDto?: AnyPartyDto;
     }): Promise<void>;
 }
@@ -75,17 +75,17 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async logMessage(params: {
+    public async logMessage(params?: {
         logMessageDto?: LogMessageDto;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/log",
             {
                 method: "POST",
-                body: JSON.stringify(params.logMessageDto),
+                body: params?.logMessageDto ? JSON.stringify(params.logMessageDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -114,7 +114,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
                 body: JSON.stringify(params.anyPartyDto),
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -123,17 +123,17 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async partiesPost(params: {
+    public async partiesPost(params?: {
         anyPartyDto?: AnyPartyDto;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/parties",
             {
                 method: "POST",
-                body: JSON.stringify(params.anyPartyDto),
+                body: params?.anyPartyDto ? JSON.stringify(params.anyPartyDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }

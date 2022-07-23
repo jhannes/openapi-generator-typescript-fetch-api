@@ -138,7 +138,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
                 headers: {
                     ...params.security?.headers(),
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -160,7 +160,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
                 headers: {
                     ...params.security?.headers(),
                     ...this.removeEmpty(params.headers),
-                }
+                },
             }
         );
     }
@@ -179,7 +179,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {
                 headers: {
                     ...params.security?.headers(),
-                }
+                },
             }
         );
     }
@@ -198,7 +198,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {
                 headers: {
                     ...params.security?.headers(),
-                }
+                },
             }
         );
     }
@@ -217,7 +217,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
             {
                 headers: {
                     ...params.security?.headers(),
-                }
+                },
             }
         );
     }
@@ -239,7 +239,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
                 headers: {
                     ...params.security?.headers(),
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -262,7 +262,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
                 headers: {
                     ...params.security?.headers(),
                     "Content-Type": "application/x-www-form-urlencoded",
-                }
+                },
             }
         );
     }
@@ -285,7 +285,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
                 headers: {
                     ...params.security?.headers(),
                     "Content-Type": "multipart/form-data",
-                }
+                },
             }
         );
     }
@@ -329,7 +329,7 @@ export interface StoreApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    placeOrder(params: {
+    placeOrder(params?: {
         orderDto?: OrderDto;
     }): Promise<OrderDto>;
 }
@@ -369,7 +369,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
             {
                 headers: {
                     ...params.security?.headers(),
-                }
+                },
             }
         );
     }
@@ -392,17 +392,17 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async placeOrder(params: {
+    public async placeOrder(params?: {
         orderDto?: OrderDto;
     }): Promise<OrderDto> {
         return await this.fetch(
             this.basePath + "/store/order",
             {
                 method: "POST",
-                body: JSON.stringify(params.orderDto),
+                body: params?.orderDto ? JSON.stringify(params.orderDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -418,7 +418,7 @@ export interface UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    createUser(params: {
+    createUser(params?: {
         userDto?: UserDto;
     }): Promise<void>;
     /**
@@ -427,7 +427,7 @@ export interface UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    createUsersWithArrayInput(params: {
+    createUsersWithArrayInput(params?: {
         userDto?: Array<UserDto>;
     }): Promise<void>;
     /**
@@ -436,7 +436,7 @@ export interface UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    createUsersWithListInput(params: {
+    createUsersWithListInput(params?: {
         userDto?: Array<UserDto>;
     }): Promise<void>;
     /**
@@ -463,7 +463,7 @@ export interface UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    loginUser(params: {
+    loginUser(params?: {
         queryParams?: { username?: string, password?: string, };
     }): Promise<string>;
     /**
@@ -494,17 +494,17 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async createUser(params: {
+    public async createUser(params?: {
         userDto?: UserDto;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/user",
             {
                 method: "POST",
-                body: JSON.stringify(params.userDto),
+                body: params?.userDto ? JSON.stringify(params.userDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -514,17 +514,17 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async createUsersWithArrayInput(params: {
+    public async createUsersWithArrayInput(params?: {
         userDto?: Array<UserDto>;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/user/createWithArray",
             {
                 method: "POST",
-                body: JSON.stringify(params.userDto),
+                body: params?.userDto ? JSON.stringify(params.userDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -534,17 +534,17 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async createUsersWithListInput(params: {
+    public async createUsersWithListInput(params?: {
         userDto?: Array<UserDto>;
     }): Promise<void> {
         return await this.fetch(
             this.basePath + "/user/createWithList",
             {
                 method: "POST",
-                body: JSON.stringify(params.userDto),
+                body: params?.userDto ? JSON.stringify(params.userDto) : undefined,
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -583,7 +583,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async loginUser(params: {
+    public async loginUser(params?: {
         queryParams?: { username?: string, password?: string,  };
     }): Promise<string> {
         return await this.fetch(
@@ -617,7 +617,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
                 body: JSON.stringify(params.userDto),
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
