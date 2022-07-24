@@ -49,13 +49,16 @@ public class VerifyOutputTests extends AbstractSnapshotTests {
         return dynamicContainer("Verify " + spec, Arrays.asList(
                 dynamicTest("Generate " + spec, () -> generate(spec, getModelName(spec), projectDir)),
                 dynamicTest("npm install " + spec, () -> npmInstall(projectDir)),
-                dynamicTest("npm build " + spec, () -> runCommand(projectDir, new String[]{NPM_PATH, "run", "build"}))
+                dynamicTest(
+                        "npm verify " + spec,
+                        () -> runCommand(projectDir, new String[] {NPM_PATH, "run", "verify"})
+                )
         ));
     }
 
     private static void npmInstall(Path projectDir) throws IOException, InterruptedException {
         Files.copy(projectDir.resolve("package.json"), projectDir.getParent().getParent().resolve("package.json"), StandardCopyOption.REPLACE_EXISTING);
-        runCommand(projectDir.getParent().getParent(), new String[] { NPM_PATH, "install" });
+        runCommand(projectDir.getParent().getParent(), new String[] {NPM_PATH, "install"});
     }
 
     private static void runCommand(Path workingDir, String[] commandLine) throws IOException, InterruptedException {
