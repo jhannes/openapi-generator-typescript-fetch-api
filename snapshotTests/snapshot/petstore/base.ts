@@ -16,6 +16,7 @@
 export interface RequestOptions {
     mode?: RequestMode;
     headers?: Record<string, string>;
+    cache?: RequestCache;
     credentials?: RequestCredentials;
     referrer?: string;
     referrerPolicy?: ReferrerPolicy;
@@ -40,8 +41,10 @@ export class BaseAPI {
             mode: options.mode || this.requestOptions?.mode,
             method: options.method,
             body: options.body,
+            cache: options.cache || this.requestOptions?.cache,
             referrer: options.referrer || this.requestOptions?.referrer,
             referrerPolicy: options.referrerPolicy || this.requestOptions?.referrerPolicy,
+            signal: options.signal,
             headers: {
                 ...(this.requestOptions?.headers || {}),
                 ...options.headers,
