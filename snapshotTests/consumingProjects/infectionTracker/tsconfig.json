@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "declaration": true,
+        "target": "es2015",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "dist",
+        "lib": ["es2019", "dom"],
+        "typeRoots": ["node_modules/@types"],
+        "noEmit": true
+    },
+    "exclude": ["dist", "node_modules"]
+}

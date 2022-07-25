@@ -21,7 +21,7 @@ import {
     PetDto,
 } from "./model";
 
-import { BaseAPI, SecurityScheme } from "./base";
+import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     defaultApi: DefaultApiInterface;
@@ -38,7 +38,7 @@ export interface DefaultApiInterface {
      */
     petsPost(params?: {
         petDto?: PetDto;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
 }
 
 /**
@@ -52,13 +52,15 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async petsPost(params?: {
         petDto?: PetDto;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/pets",
             {
+                ...params,
                 method: "POST",
                 body: params?.petDto ? JSON.stringify(params.petDto) : undefined,
                 headers: {
+                    ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",
                 },
             }

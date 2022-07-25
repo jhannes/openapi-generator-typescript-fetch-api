@@ -16,10 +16,15 @@
 export interface RequestOptions {
     mode?: RequestMode;
     headers?: Record<string, string>;
+    cache?: RequestCache;
     credentials?: RequestCredentials;
     referrer?: string;
     referrerPolicy?: ReferrerPolicy;
 }
+
+export type RequestCallOptions = RequestOptions & {
+    signal?: AbortSignal | null;
+};
 
 export class BaseAPI {
     constructor(
@@ -27,11 +32,19 @@ export class BaseAPI {
         protected requestOptions?: RequestOptions
     ) {}
 
-    protected async fetch(url: string, options: RequestInit = {}): Promise<any> {
+    protected async fetch(
+        url: string,
+        options: RequestCallOptions & { method?: string; body?: string } = {}
+    ): Promise<any> {
         const result = await fetch(url, {
-            credentials: this.requestOptions?.credentials || "same-origin",
-            mode: this.requestOptions?.mode,
-            ...options,
+            credentials: options.credentials || this.requestOptions?.credentials || "same-origin",
+            mode: options.mode || this.requestOptions?.mode,
+            method: options.method,
+            body: options.body,
+            cache: options.cache || this.requestOptions?.cache,
+            referrer: options.referrer || this.requestOptions?.referrer,
+            referrerPolicy: options.referrerPolicy || this.requestOptions?.referrerPolicy,
+            signal: options.signal,
             headers: {
                 ...(this.requestOptions?.headers || {}),
                 ...options.headers,

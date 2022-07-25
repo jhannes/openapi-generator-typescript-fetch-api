@@ -19,6 +19,7 @@
         "build:typescript": "tsc --outDir dist/",
         "lint": "eslint . --ext .ts",
         "format": "prettier --write *.ts test/*.ts *.json",
+        "verify": "npm run lint && tsc --noEmit",
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {

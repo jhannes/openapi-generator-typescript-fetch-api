@@ -19,7 +19,7 @@ import {
     PolygonDto,
 } from "./model";
 
-import { BaseAPI, SecurityScheme } from "./base";
+import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
     defaultApi: DefaultApiInterface;
@@ -33,17 +33,17 @@ export interface DefaultApiInterface {
      *
      * @throws {HttpError}
      */
-    getGeometry(): Promise<GeometryDto>;
+    getGeometry(params?: RequestCallOptions): Promise<GeometryDto>;
     /**
      *
      * @throws {HttpError}
      */
-    getLocation(): Promise<GeometryCollectionDto>;
+    getLocation(params?: RequestCallOptions): Promise<GeometryCollectionDto>;
     /**
      *
      * @throws {HttpError}
      */
-    getPolygon(): Promise<PolygonDto>;
+    getPolygon(params?: RequestCallOptions): Promise<PolygonDto>;
 }
 
 /**
@@ -54,27 +54,27 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      *
      * @throws {HttpError}
      */
-    public async getGeometry(): Promise<GeometryDto> {
+    public async getGeometry(params: RequestCallOptions = {}): Promise<GeometryDto> {
         return await this.fetch(
-            this.basePath + "/geometry"
+            this.basePath + "/geometry", params
         );
     }
     /**
      *
      * @throws {HttpError}
      */
-    public async getLocation(): Promise<GeometryCollectionDto> {
+    public async getLocation(params: RequestCallOptions = {}): Promise<GeometryCollectionDto> {
         return await this.fetch(
-            this.basePath + "/collection"
+            this.basePath + "/collection", params
         );
     }
     /**
      *
      * @throws {HttpError}
      */
-    public async getPolygon(): Promise<PolygonDto> {
+    public async getPolygon(params: RequestCallOptions = {}): Promise<PolygonDto> {
         return await this.fetch(
-            this.basePath + "/polygon"
+            this.basePath + "/polygon", params
         );
     }
 }

@@ -10,7 +10,7 @@ public class SingleSnapshotTest {
 
     @TestFactory
     DynamicNode javaAnnotationFreeSnapshots() throws IOException {
-        Path spec = SnapshotTests.SNAPSHOT_ROOT.resolve("input/infectionTracker.json");
+        Path spec = SnapshotTests.SNAPSHOT_ROOT.resolve("input/petstore.json");
         SnapshotTests.cleanDirectory(spec.getParent().getParent().resolve("output"));
         return SnapshotTests.createTestsForSpec(spec);
     }
