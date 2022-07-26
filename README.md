@@ -6,11 +6,13 @@
 ## Features
 
 * Generates code that resembles plain `fetch` calls
-* Supports `anyOf`-polymorphism with union types and discriminators
-* Implements `enum` with union types
+* Supports `fetch` options like `cache`, `credentials`, `headers` and abort `signal`
+* Supports `oneOf`-polymorphism with union types and discriminators
+* Implements `enum` with union types, with single element enums becoming constants
 * Supports `query` parameter options `explode` and `style`
 * Supports `securitySchemes`
 * Support blob response types
+* Generates sample model data generators for test purposes
 * Generated code have no eslint or prettier warnings except long lines
 
 ## Overview
@@ -29,12 +31,11 @@ export interface PetApiInterface {
      * @summary Add a new pet to the store
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
-     * @memberof PetApi
      */
     addPet(params: {
         petDto?: PetDto;
         security: petstore_auth;
-    }): Promise<void>;
+    } & RequestCallOptions): Promise<void>;
 }
 
 /**
@@ -50,16 +51,18 @@ export class PetApi extends BaseAPI implements PetApiInterface {
     public async addPet(params: {
         petDto?: PetDto;
         security: petstore_auth;
-    }): Promise<void> {
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/pet",
             {
+                ...params,
                 method: "POST",
                 body: JSON.stringify(params.petDto),
                 headers: {
+                    ...this.removeEmpty(params.headers),
                     ...params.security?.headers(),
                     "Content-Type": "application/json",
-                }
+                },
             }
         );
     }
@@ -80,6 +83,50 @@ try {
 }
 ```
 
+#### Example input
+
+This is the fragment of the specification used to generate the code above:
+
+```json
+{
+  "paths": {
+    "/pet": {
+      "post": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Add a new pet to the store",
+        "operationId": "addPet",
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets"
+            ]
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Pet"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "petstore_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "scopes": {
+              "write:pets": "modify pets in your account"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
 
 
 ### Generated test support code
@@ -187,7 +234,7 @@ Add to your `pom.xml`:
                     <dependency>
                         <groupId>io.github.jhannes.openapi</groupId>
                         <artifactId>openapi-generator-typescript-fetch-api</artifactId>
-                        <version>0.2.9</version>
+                        <version>0.3.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -205,13 +252,12 @@ If you want to contribute this project, please be aware of the following two pow
 
 Generates code from `snapshotTests/input/*.json` to `snapshotTests/output` and compares with `snapshotTests/snapshot`. The test will fail on any changes. This test is great to check that any changes didn't have unintended effects.
 
-When changes to the generated code are desired, one approach is the manually change the snapshots and then run this tests and tweak the generator until the desired result.
+When changes to the generated code are desired, one approach is to manually change the snapshots and then run this tests and tweak the generator until the desired result.
 
 In addition to `snapshotTests`, this test also runs on files in the `.gitignore`d directory `localSnapshotTests`. This is great if you want to verify changes using your private project specifications.
 
 ### io.github.jhannes.openapi.typescriptfetchapi.VerifyOutputTests
 
-Generates code from `snapshotTests/input/*.json` to `snapshotTests/verify` and runs `npm install` and `npm run build` on each output directory to verify that there are no Typescript or Eslint errors.
+Generates code from `snapshotTests/input/*.json` to `snapshotTests/verify` and runs `npm install` and `npm run verify` on each output directory to verify that there are no Typescript or Eslint errors.
 
-Notice that due to laziness, this test currently only runs on Windows.
 
