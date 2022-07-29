@@ -6,8 +6,8 @@ import {
 
 export class Random {
     seed: number;
-    constructor(seed: number) {
-        this.seed = seed % 2147483647;
+    constructor(seed: number | string) {
+        this.seed = this.hash(seed) % 2147483647;
         if (this.seed <= 0) this.seed += 2147483646;
     }
 
@@ -48,6 +48,16 @@ export class Random {
             return v.toString(16);
         });
     }
+
+    hash(s: string | number): number {
+        if (typeof s === "number") {
+            return s;
+        }
+        return s.split("").reduce((a, b) => {
+            a = (a << 5) - a + b.charCodeAt(0);
+            return a & a;
+        }, 0);
+    }
 }
 
 type Factory<T> = {
@@ -67,7 +77,7 @@ export interface SamplePropertyValues {
 }
 
 export interface TestData {
-    seed?: number;
+    seed?: number | string;
     sampleModelProperties?: SampleModelFactories;
     samplePropertyValues?: SamplePropertyValues;
     now?: Date;
@@ -90,7 +100,7 @@ export class TestSampleData {
 
     constructor({ seed, sampleModelProperties, samplePropertyValues, now }: TestData) {
         this.random = new Random(seed || 100);
-        this.now = now || new Date(2019, 1, seed);
+        this.now = now || new Date(2019, 1, this.random.hash(seed || 100));
         this.sampleModelProperties = sampleModelProperties || {};
         this.samplePropertyValues = samplePropertyValues || {};
     }
