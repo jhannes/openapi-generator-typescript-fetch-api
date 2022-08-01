@@ -31,15 +31,13 @@ function reject(operation: string) {
 
 export function mockApplicationApis({
     defaultApi = mockDefaultApi(),
-}: Partial<ApplicationApis>): ApplicationApis {
+}: Partial<ApplicationApis> = {}): ApplicationApis {
     return { defaultApi };
 }
 
-export function mockDefaultApi(operations: {
-    fetchToken?: () => Promise<TokenResponseDto>;
-    wellKnownKeysGet?: () => Promise<JwksDocumentDto>;
-    wellKnownOpenidConfigurationGet?: () => Promise<DiscoveryDocumentDto>;
-} = {}): DefaultApiInterface {
+export function mockDefaultApi(
+    operations: Partial<DefaultApiInterface> = {}
+): DefaultApiInterface {
     return {
         fetchToken: operations.fetchToken || reject("DefaultApi.fetchToken"),
         wellKnownKeysGet: operations.wellKnownKeysGet || reject("DefaultApi.wellKnownKeysGet"),

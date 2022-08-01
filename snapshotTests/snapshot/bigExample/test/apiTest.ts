@@ -28,16 +28,13 @@ function reject(operation: string) {
 
 export function mockApplicationApis({
     defaultApi = mockDefaultApi(),
-}: Partial<ApplicationApis>): ApplicationApis {
+}: Partial<ApplicationApis> = {}): ApplicationApis {
     return { defaultApi };
 }
 
-export function mockDefaultApi(operations: {
-    addPet?: () => Promise<void>;
-    addPetWithForm?: () => Promise<void>;
-    getPetLocations?: () => Promise<PetLocationsDto>;
-    listPets?: () => Promise<PetDto>;
-} = {}): DefaultApiInterface {
+export function mockDefaultApi(
+    operations: Partial<DefaultApiInterface> = {}
+): DefaultApiInterface {
     return {
         addPet: operations.addPet || reject("DefaultApi.addPet"),
         addPetWithForm: operations.addPetWithForm || reject("DefaultApi.addPetWithForm"),

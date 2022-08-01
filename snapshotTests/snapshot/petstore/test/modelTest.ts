@@ -53,11 +53,11 @@ export class Random {
         });
     }
 
-    hash(s: string | number): number {
-        if (typeof s === "number") {
-            return s;
+    hash(seed: string | number): number {
+        if (typeof seed === "number") {
+            return seed < 0 ? Math.floor(seed*1000) : Math.floor(seed);
         }
-        return s.split("").reduce((a, b) => {
+        return seed.split("").reduce((a, b) => {
             a = (a << 5) - a + b.charCodeAt(0);
             return a & a;
         }, 0);
@@ -107,7 +107,7 @@ export class TestSampleData {
 
     constructor({ seed, sampleModelProperties, samplePropertyValues, now }: TestData) {
         this.random = new Random(seed || 100);
-        this.now = now || new Date(2019, 1, this.random.hash(seed || 100));
+        this.now = now || new Date(2019, 1, this.random.nextInt(2000));
         this.sampleModelProperties = sampleModelProperties || {};
         this.samplePropertyValues = samplePropertyValues || {};
     }

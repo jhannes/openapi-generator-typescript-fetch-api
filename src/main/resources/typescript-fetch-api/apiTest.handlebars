@@ -25,18 +25,16 @@ export function mockApplicationApis({
 {{~#apiInfo}}{{#apis}}
     {{classVarName}}Api = mock{{classname}}(),
 {{~/apis}}{{/apiInfo}}
-}: Partial<ApplicationApis>): ApplicationApis {
+}: Partial<ApplicationApis> = {}): ApplicationApis {
     return { {{#apiInfo}}{{#apis}}{{classVarName}}Api{{#unless @last}}, {{/unless}}{{~/apis}}{{/apiInfo}} };
 }
 {{~/withInterfaces~}}
 
 {{~#apiInfo}}{{~#apis}}{{~#operations}}
 
-export function mock{{classname}}(operations: {
-    {{~#operation}}
-    {{nickname}}?: () => {{#if isResponseFile}}Promise<Blob>{{else if returnType}}Promise<{{{returnType}}}>{{else}}Promise<void>{{/if}};
-    {{~/operation}}
-} = {}): {{classname}}Interface {
+export function mock{{classname}}(
+    operations: Partial<{{classname}}Interface> = {}
+): {{classname}}Interface {
     return {
     {{~#operation}}
         {{nickname}}: operations.{{nickname}} || reject("{{classname}}.{{nickname}}"),

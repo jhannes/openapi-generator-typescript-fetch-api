@@ -32,13 +32,13 @@ function reject(operation: string) {
 
 export function mockApplicationApis({
     defaultApi = mockDefaultApi(),
-}: Partial<ApplicationApis>): ApplicationApis {
+}: Partial<ApplicationApis> = {}): ApplicationApis {
     return { defaultApi };
 }
 
-export function mockDefaultApi(operations: {
-    petsPost?: () => Promise<void>;
-} = {}): DefaultApiInterface {
+export function mockDefaultApi(
+    operations: Partial<DefaultApiInterface> = {}
+): DefaultApiInterface {
     return {
         petsPost: operations.petsPost || reject("DefaultApi.petsPost"),
     };

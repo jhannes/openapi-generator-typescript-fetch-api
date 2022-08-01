@@ -34,20 +34,13 @@ export function mockApplicationApis({
     petApi = mockPetApi(),
     storeApi = mockStoreApi(),
     userApi = mockUserApi(),
-}: Partial<ApplicationApis>): ApplicationApis {
+}: Partial<ApplicationApis> = {}): ApplicationApis {
     return { petApi, storeApi, userApi };
 }
 
-export function mockPetApi(operations: {
-    addPet?: () => Promise<void>;
-    deletePet?: () => Promise<void>;
-    findPetsByStatus?: () => Promise<Array<PetDto>>;
-    findPetsByTags?: () => Promise<Array<PetDto>>;
-    getPetById?: () => Promise<PetDto>;
-    updatePet?: () => Promise<void>;
-    updatePetWithForm?: () => Promise<void>;
-    uploadFile?: () => Promise<void>;
-} = {}): PetApiInterface {
+export function mockPetApi(
+    operations: Partial<PetApiInterface> = {}
+): PetApiInterface {
     return {
         addPet: operations.addPet || reject("PetApi.addPet"),
         deletePet: operations.deletePet || reject("PetApi.deletePet"),
@@ -60,12 +53,9 @@ export function mockPetApi(operations: {
     };
 }
 
-export function mockStoreApi(operations: {
-    deleteOrder?: () => Promise<void>;
-    getInventory?: () => Promise<{ [key: string]: number; }>;
-    getOrderById?: () => Promise<OrderDto>;
-    placeOrder?: () => Promise<OrderDto>;
-} = {}): StoreApiInterface {
+export function mockStoreApi(
+    operations: Partial<StoreApiInterface> = {}
+): StoreApiInterface {
     return {
         deleteOrder: operations.deleteOrder || reject("StoreApi.deleteOrder"),
         getInventory: operations.getInventory || reject("StoreApi.getInventory"),
@@ -74,17 +64,9 @@ export function mockStoreApi(operations: {
     };
 }
 
-export function mockUserApi(operations: {
-    createUser?: () => Promise<void>;
-    createUsersWithArrayInput?: () => Promise<void>;
-    createUsersWithListInput?: () => Promise<void>;
-    deleteUser?: () => Promise<void>;
-    getCurrentUser?: () => Promise<UserDto>;
-    getUserByName?: () => Promise<UserDto>;
-    loginUser?: () => Promise<string>;
-    logoutUser?: () => Promise<void>;
-    updateUser?: () => Promise<void>;
-} = {}): UserApiInterface {
+export function mockUserApi(
+    operations: Partial<UserApiInterface> = {}
+): UserApiInterface {
     return {
         createUser: operations.createUser || reject("UserApi.createUser"),
         createUsersWithArrayInput: operations.createUsersWithArrayInput || reject("UserApi.createUsersWithArrayInput"),
