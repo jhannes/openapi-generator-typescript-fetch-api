@@ -324,8 +324,8 @@ export class TestSampleData {
     }
 
     sampleArrayCaseWorkerDto(
-        template: Factory<CaseWorkerDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<CaseWorkerDto>
     ): Array<CaseWorkerDto> {
         return this.randomArray(
             () => this.sampleCaseWorkerDto(template),
@@ -388,8 +388,8 @@ export class TestSampleData {
     }
 
     sampleArrayExposureDto(
-        template: Factory<ExposureDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<ExposureDto>
     ): Array<ExposureDto> {
         return this.randomArray(
             () => this.sampleExposureDto(template),
@@ -422,8 +422,8 @@ export class TestSampleData {
     }
 
     sampleArrayInfectionDto(
-        template: Factory<InfectionDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<InfectionDto>
     ): Array<InfectionDto> {
         return this.randomArray(
             () => this.sampleInfectionDto(template),
@@ -461,8 +461,8 @@ export class TestSampleData {
     }
 
     sampleArrayInfectionInformationDto(
-        template: Factory<InfectionInformationDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<InfectionInformationDto>
     ): Array<InfectionInformationDto> {
         return this.randomArray(
             () => this.sampleInfectionInformationDto(template),

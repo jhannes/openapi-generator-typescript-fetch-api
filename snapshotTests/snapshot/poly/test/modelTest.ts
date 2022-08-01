@@ -347,8 +347,8 @@ export class TestSampleData {
     }
 
     sampleArrayAnyPartyDto(
-        factory?: (sampleData: TestSampleData) => AnyPartyDto,
-        length?: number
+        length?: number,
+        factory?: (sampleData: TestSampleData) => AnyPartyDto
     ): Array<AnyPartyDto> {
         return this.randomArray(
             () => this.sampleAnyPartyDto(factory),
@@ -387,8 +387,8 @@ export class TestSampleData {
     }
 
     sampleArrayCreationErrorDto(
-        factory?: (sampleData: TestSampleData) => CreationErrorDto,
-        length?: number
+        length?: number,
+        factory?: (sampleData: TestSampleData) => CreationErrorDto
     ): Array<CreationErrorDto> {
         return this.randomArray(
             () => this.sampleCreationErrorDto(factory),
@@ -421,8 +421,8 @@ export class TestSampleData {
     }
 
     sampleArrayDuplicateIdentifierErrorDto(
-        template: Factory<DuplicateIdentifierErrorDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<DuplicateIdentifierErrorDto>
     ): Array<DuplicateIdentifierErrorDto> {
         return this.randomArray(
             () => this.sampleDuplicateIdentifierErrorDto(template),
@@ -450,8 +450,8 @@ export class TestSampleData {
     }
 
     sampleArrayGeneralErrorDto(
-        template: Factory<GeneralErrorDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<GeneralErrorDto>
     ): Array<GeneralErrorDto> {
         return this.randomArray(
             () => this.sampleGeneralErrorDto(template),
@@ -484,8 +484,8 @@ export class TestSampleData {
     }
 
     sampleArrayIllegalEmailAddressErrorDto(
-        template: Factory<IllegalEmailAddressErrorDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<IllegalEmailAddressErrorDto>
     ): Array<IllegalEmailAddressErrorDto> {
         return this.randomArray(
             () => this.sampleIllegalEmailAddressErrorDto(template),
@@ -513,8 +513,8 @@ export class TestSampleData {
     }
 
     sampleArrayLogMessageDto(
-        template: Factory<LogMessageDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<LogMessageDto>
     ): Array<LogMessageDto> {
         return this.randomArray(
             () => this.sampleLogMessageDto(template),
@@ -547,8 +547,8 @@ export class TestSampleData {
     }
 
     sampleArrayNotFoundErrorDto(
-        template: Factory<NotFoundErrorDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<NotFoundErrorDto>
     ): Array<NotFoundErrorDto> {
         return this.randomArray(
             () => this.sampleNotFoundErrorDto(template),
@@ -606,8 +606,8 @@ export class TestSampleData {
     }
 
     sampleArrayOrganizationDto(
-        template: Factory<OrganizationDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<OrganizationDto>
     ): Array<OrganizationDto> {
         return this.randomArray(
             () => this.sampleOrganizationDto(template),
@@ -660,8 +660,8 @@ export class TestSampleData {
     }
 
     sampleArrayPersonDto(
-        template: Factory<PersonDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<PersonDto>
     ): Array<PersonDto> {
         return this.randomArray(
             () => this.samplePersonDto(template),
@@ -705,8 +705,8 @@ export class TestSampleData {
     }
 
     sampleArrayUpdateErrorDto(
-        factory?: (sampleData: TestSampleData) => UpdateErrorDto,
-        length?: number
+        length?: number,
+        factory?: (sampleData: TestSampleData) => UpdateErrorDto
     ): Array<UpdateErrorDto> {
         return this.randomArray(
             () => this.sampleUpdateErrorDto(factory),

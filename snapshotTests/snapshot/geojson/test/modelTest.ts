@@ -307,8 +307,8 @@ export class TestSampleData {
     }
 
     sampleArrayGeometryCollectionDto(
-        template: Factory<GeometryCollectionDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<GeometryCollectionDto>
     ): Array<GeometryCollectionDto> {
         return this.randomArray(
             () => this.sampleGeometryCollectionDto(template),
@@ -347,8 +347,8 @@ export class TestSampleData {
     }
 
     sampleArrayGeometryDto(
-        factory?: (sampleData: TestSampleData) => GeometryDto,
-        length?: number
+        length?: number,
+        factory?: (sampleData: TestSampleData) => GeometryDto
     ): Array<GeometryDto> {
         return this.randomArray(
             () => this.sampleGeometryDto(factory),
@@ -374,8 +374,8 @@ export class TestSampleData {
     }
 
     sampleArrayLineStringDto(
-        template: Factory<LineStringDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<LineStringDto>
     ): Array<LineStringDto> {
         return this.randomArray(
             () => this.sampleLineStringDto(template),
@@ -399,8 +399,8 @@ export class TestSampleData {
     }
 
     sampleArrayPointDto(
-        template: Factory<PointDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<PointDto>
     ): Array<PointDto> {
         return this.randomArray(
             () => this.samplePointDto(template),
@@ -426,8 +426,8 @@ export class TestSampleData {
     }
 
     sampleArrayPolygonDto(
-        template: Factory<PolygonDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<PolygonDto>
     ): Array<PolygonDto> {
         return this.randomArray(
             () => this.samplePolygonDto(template),

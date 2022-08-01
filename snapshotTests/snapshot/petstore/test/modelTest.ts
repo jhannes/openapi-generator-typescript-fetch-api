@@ -313,8 +313,8 @@ export class TestSampleData {
     }
 
     sampleArrayCategoryDto(
-        template: Factory<CategoryDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<CategoryDto>
     ): Array<CategoryDto> {
         return this.randomArray(
             () => this.sampleCategoryDto(template),
@@ -362,8 +362,8 @@ export class TestSampleData {
     }
 
     sampleArrayOrderDto(
-        template: Factory<OrderDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<OrderDto>
     ): Array<OrderDto> {
         return this.randomArray(
             () => this.sampleOrderDto(template),
@@ -411,8 +411,8 @@ export class TestSampleData {
     }
 
     sampleArrayPetDto(
-        template: Factory<PetDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<PetDto>
     ): Array<PetDto> {
         return this.randomArray(
             () => this.samplePetDto(template),
@@ -440,8 +440,8 @@ export class TestSampleData {
     }
 
     sampleArrayTagDto(
-        template: Factory<TagDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<TagDto>
     ): Array<TagDto> {
         return this.randomArray(
             () => this.sampleTagDto(template),
@@ -499,8 +499,8 @@ export class TestSampleData {
     }
 
     sampleArrayUserDto(
-        template: Factory<UserDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<UserDto>
     ): Array<UserDto> {
         return this.randomArray(
             () => this.sampleUserDto(template),

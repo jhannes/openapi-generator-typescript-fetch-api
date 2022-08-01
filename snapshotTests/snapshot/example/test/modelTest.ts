@@ -299,8 +299,8 @@ export class TestSampleData {
     }
 
     sampleArrayPetDto(
-        template: Factory<PetDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<PetDto>
     ): Array<PetDto> {
         return this.randomArray(
             () => this.samplePetDto(template),

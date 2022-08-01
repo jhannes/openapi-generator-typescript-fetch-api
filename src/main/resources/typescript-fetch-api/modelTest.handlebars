@@ -352,10 +352,10 @@ export class TestSampleData {
     }
 {{~/if}}
 
-    sampleArray{{classname}}{{^isEnum}}({{#if oneOf}}
-        factory?: (sampleData: TestSampleData) => {{classname}},{{else}}
-        template: Factory<{{classname}}> = {},{{/if}}
-        length?: number
+    sampleArray{{classname}}{{^isEnum}}(
+        length?: number,{{#if oneOf}}
+        factory?: (sampleData: TestSampleData) => {{classname}}{{else}}
+        template?: Factory<{{classname}}>{{/if}}
     ){{/isEnum}}{{#isEnum}}(length?: number){{/isEnum}}: Array<{{classname}}> {
         return this.randomArray(
             () => this.sample{{classname}}({{#if oneOf}}factory{{else}}{{^isEnum}}template{{/isEnum}}{{/if}}),

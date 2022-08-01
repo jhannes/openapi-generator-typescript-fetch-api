@@ -362,8 +362,8 @@ export class TestSampleData {
     }
 
     sampleArrayDiscoveryDocumentDto(
-        template: Factory<DiscoveryDocumentDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<DiscoveryDocumentDto>
     ): Array<DiscoveryDocumentDto> {
         return this.randomArray(
             () => this.sampleDiscoveryDocumentDto(template),
@@ -386,8 +386,8 @@ export class TestSampleData {
     }
 
     sampleArrayJwksDocumentDto(
-        template: Factory<JwksDocumentDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<JwksDocumentDto>
     ): Array<JwksDocumentDto> {
         return this.randomArray(
             () => this.sampleJwksDocumentDto(template),
@@ -425,8 +425,8 @@ export class TestSampleData {
     }
 
     sampleArrayJwksKeyDto(
-        template: Factory<JwksKeyDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<JwksKeyDto>
     ): Array<JwksKeyDto> {
         return this.randomArray(
             () => this.sampleJwksKeyDto(template),
@@ -459,8 +459,8 @@ export class TestSampleData {
     }
 
     sampleArrayJwtHeaderDto(
-        template: Factory<JwtHeaderDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<JwtHeaderDto>
     ): Array<JwtHeaderDto> {
         return this.randomArray(
             () => this.sampleJwtHeaderDto(template),
@@ -518,8 +518,8 @@ export class TestSampleData {
     }
 
     sampleArrayJwtPayloadDto(
-        template: Factory<JwtPayloadDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<JwtPayloadDto>
     ): Array<JwtPayloadDto> {
         return this.randomArray(
             () => this.sampleJwtPayloadDto(template),
@@ -567,8 +567,8 @@ export class TestSampleData {
     }
 
     sampleArrayTokenResponseDto(
-        template: Factory<TokenResponseDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<TokenResponseDto>
     ): Array<TokenResponseDto> {
         return this.randomArray(
             () => this.sampleTokenResponseDto(template),

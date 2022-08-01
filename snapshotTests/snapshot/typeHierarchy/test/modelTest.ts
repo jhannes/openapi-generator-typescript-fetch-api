@@ -335,8 +335,8 @@ export class TestSampleData {
     }
 
     sampleArrayAddressDto(
-        template: Factory<AddressDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<AddressDto>
     ): Array<AddressDto> {
         return this.randomArray(
             () => this.sampleAddressDto(template),
@@ -364,8 +364,8 @@ export class TestSampleData {
     }
 
     sampleArrayCatAllOfDto(
-        template: Factory<CatAllOfDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<CatAllOfDto>
     ): Array<CatAllOfDto> {
         return this.randomArray(
             () => this.sampleCatAllOfDto(template),
@@ -418,8 +418,8 @@ export class TestSampleData {
     }
 
     sampleArrayCatDto(
-        template: Factory<CatDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<CatDto>
     ): Array<CatDto> {
         return this.randomArray(
             () => this.sampleCatDto(template),
@@ -447,8 +447,8 @@ export class TestSampleData {
     }
 
     sampleArrayDogAllOfDto(
-        template: Factory<DogAllOfDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<DogAllOfDto>
     ): Array<DogAllOfDto> {
         return this.randomArray(
             () => this.sampleDogAllOfDto(template),
@@ -501,8 +501,8 @@ export class TestSampleData {
     }
 
     sampleArrayDogDto(
-        template: Factory<DogDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<DogDto>
     ): Array<DogDto> {
         return this.randomArray(
             () => this.sampleDogDto(template),
@@ -545,8 +545,8 @@ export class TestSampleData {
     }
 
     sampleArrayPetBaseDto(
-        template: Factory<PetBaseDto> = {},
-        length?: number
+        length?: number,
+        template?: Factory<PetBaseDto>
     ): Array<PetBaseDto> {
         return this.randomArray(
             () => this.samplePetBaseDto(template),
@@ -580,8 +580,8 @@ export class TestSampleData {
     }
 
     sampleArrayPetDto(
-        factory?: (sampleData: TestSampleData) => PetDto,
-        length?: number
+        length?: number,
+        factory?: (sampleData: TestSampleData) => PetDto
     ): Array<PetDto> {
         return this.randomArray(
             () => this.samplePetDto(factory),
