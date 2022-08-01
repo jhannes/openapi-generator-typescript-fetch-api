@@ -17,10 +17,16 @@ export type RequestCallOptions = RequestOptions & {
 };
 
 export class BaseAPI {
+    readonly basePath: string;
+    readonly requestOptions?: RequestOptions;
+
     constructor(
-        protected basePath: string = window.location.origin,
-        protected requestOptions?: RequestOptions
-    ) {}
+        basePath: string = window.location.origin,
+        requestOptions?: RequestOptions
+    ) {
+        this.basePath = basePath;
+        this.requestOptions = requestOptions;
+    }
 
     protected async fetch(
         url: string,
@@ -150,8 +156,13 @@ type QueryParams = Record<string, string | string[] | Date | Date[] | boolean | 
 type QueryOptions = Record<string, { explode?: boolean; delimiter?: "," | " " | "|", format?: "date" }>;
 
 export class HttpError extends Error {
-    constructor(public readonly response: Response, public readonly body?: any) {
+    readonly response: Response;
+    readonly body?: any;
+
+    constructor(response: Response, body?: any) {
         super(body?.message || response.statusText || response.status);
+        this.response = response;
+        this.body = body;
         this.name = new.target.name;
         Object.setPrototypeOf(this, new.target.prototype);
     }
