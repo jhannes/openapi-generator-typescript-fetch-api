@@ -62,7 +62,7 @@ export class Random {
     }
 }
 
-type Factory<T> = {
+export type Factory<T> = {
     [P in keyof T]?: ((sampleData: TestSampleData) => T[P]) | T[P];
 };
 
