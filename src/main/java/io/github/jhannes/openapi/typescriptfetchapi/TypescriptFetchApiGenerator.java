@@ -105,8 +105,6 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         additionalProperties.put("modelRelativeToRoot", modelRelativeToRoot);
 
         supportingFiles.add(new SupportingFile("index.handlebars", "", "index.ts"));
-        supportingFiles.add(new SupportingFile("package.handlebars", "", "package.json"));
-        supportingFiles.add(new SupportingFile("package.handlebars", "", "package.json"));
         supportingFiles.add(new SupportingFile("baseApi.handlebars", "", "base.ts"));
         supportingFiles.add(new SupportingFile("api.handlebars", "", "api.ts"));
         supportingFiles.add(new SupportingFile("model.handlebars", "", "model.ts"));

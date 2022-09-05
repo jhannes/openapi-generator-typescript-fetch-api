@@ -7,8 +7,6 @@ git_push.sh
 index.ts
 model.ts
 package.json
-package.json
-package.json
 test/apiTest.ts
 test/modelTest.ts
 tsconfig.json
