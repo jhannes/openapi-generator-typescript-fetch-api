@@ -243,7 +243,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 }
 
                 if (!codegenModel.oneOf.isEmpty()) {
-                    if (codegenModel.discriminator.getMapping() == null) {
+                    if (codegenModel.discriminator != null && codegenModel.discriminator.getMapping() == null) {
                         Set<CodegenDiscriminator.MappedModel> mappedModels = new HashSet<>();
                         HashMap<String, String> mapping = new HashMap<>();
                         for (String className : codegenModel.oneOf) {

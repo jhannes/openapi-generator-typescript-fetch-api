@@ -1,0 +1,93 @@
+openapi: 3.0.2
+info:
+  title: "WebSockets"
+  description: "An example of sending requests and commands"
+  version: "0.1.0"
+  contact:
+    name: "Johannes Brodwall"
+    email: "johannes@brodwall.com"
+paths:
+  /commands:
+    get:
+      responses:
+        200:
+          description: "Returns a log of all commands"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSocketCommand'
+components:
+  schemas:
+    WebSocketMessage:
+      oneOf:
+        - $ref: '#/components/schemas/WebSocketCommand'
+        - $ref: '#/components/schemas/WebSocketRequest'
+    WebSocketRequest:
+      oneOf:
+        - $ref: '#/components/schemas/Subscribe'
+      discriminator:
+        propertyName: request
+    Subscribe:
+      properties:
+        request:
+          enum: [ Subscribe ]
+      required: [ request ]
+    Unsubscribe:
+      properties:
+        request:
+          enum: [ Unsubscribe ]
+      required: [ request ]
+    WebSocketCommand:
+      oneOf:
+        - $ref: '#/components/schemas/CreatePersonCommand'
+        - $ref: '#/components/schemas/UpdatePersonCommand'
+      discriminator:
+        propertyName: command
+        mapping:
+          createPerson: CreatePersonCommand
+          updatePerson: UpdatePersonCommand
+    CreatePersonCommand:
+      properties:
+        command:
+          enum: [ createPerson ]
+        id:
+          type: string
+          format: uuid
+        person:
+          $ref: "#/components/schemas/Person"
+      required: [ command, id, person ]
+    UpdatePersonCommand:
+      properties:
+        command:
+          enum: [ updatePerson ]
+        id:
+          type: string
+          format: uuid
+        person:
+          $ref: "#/components/schemas/Person"
+      required: [ command, id, person ]
+    Person:
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          type: string
+        givenName:
+          type: string
+        familyName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          format: phone
+        birthDate:
+          type: string
+          format: date
+      required:
+        - type
+        - givenName
+        - familyName

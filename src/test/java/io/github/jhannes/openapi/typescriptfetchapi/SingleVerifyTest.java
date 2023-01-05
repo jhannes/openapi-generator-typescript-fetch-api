@@ -9,7 +9,7 @@ public class SingleVerifyTest {
 
     @TestFactory
     DynamicNode javaAnnotationFreeSnapshots() {
-        Path spec = SnapshotTests.SNAPSHOT_ROOT.resolve("input/infectionTracker.json");
+        Path spec = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
         return VerifyOutputTests.createTestsForSpec(spec);
     }
 

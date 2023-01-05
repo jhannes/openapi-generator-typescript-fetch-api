@@ -3,8 +3,8 @@
  * {{{description}}}
  */
 {{~/if}}
-export type {{classname}} ={{#discriminator}}
+export type {{classname}} ={{#if discriminator}}{{#discriminator}}
 {{~#mappedModels}}
 	{ {{discriminator.propertyName}}: "{{mappingName}}" } & {{modelName}}{{#unless @last}} |{{/unless}}{{/mappedModels}}
-{{~^mappedModels}}{{#oneOf}}{{{.}}}{{#unless @last}} | {{/unless}}{{/oneOf}}{{/mappedModels}}{{/discriminator}};
+{{~^mappedModels}}{{#oneOf}}{{{.}}}{{#unless @last}} | {{/unless}}{{/oneOf}}{{/mappedModels}}{{/discriminator}}{{else}} {{dataType}}{{/if}};
 

@@ -282,7 +282,7 @@ export class TestSampleData {
                 throw new Error("Unknown type " + modelName);
         }
     }
-{{~#models}}{{~#model}}{{~#if oneOf}}{{#discriminator}}
+{{~#models}}{{~#model}}{{~#if oneOf}}
 
     sample{{classname}}(
         factory?: (sampleData: TestSampleData) => {{classname}}
@@ -293,7 +293,7 @@ export class TestSampleData {
         }
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
-        }
+        }{{#if discriminator}}{{#discriminator}}
         const {{propertyName}} = this.pickOneString([{{#mappedModels}}"{{mappingName}}"{{#unless @last}}, {{/unless}}{{/mappedModels}}])
         switch ({{propertyName}}) {
             {{~#mappedModels}}
@@ -303,9 +303,12 @@ export class TestSampleData {
                     {{discriminator.propertyName}},
                 };
             {{~/mappedModels}}
-        }
+        }{{/discriminator}}{{else}}
+        return this.pickOne([{{#interfaces}}
+            () => this.sample{{.}}(),{{/interfaces}}
+        ])();{{/if}}
     }
-{{~/discriminator}}{{~else}}
+{{~else}}
 
     sample{{classname}}({{^isEnum}}template?: Factory<{{classname}}>{{/isEnum}}): {{classname}} {
         const containerClass = "{{classname}}";
