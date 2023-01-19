@@ -2,13 +2,21 @@ package io.github.jhannes.openapi.typescriptfetchapi;
 
 import io.swagger.v3.parser.util.SchemaTypeUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.openapitools.codegen.*;
+import org.openapitools.codegen.CliOption;
+import org.openapitools.codegen.CodegenDiscriminator;
+import org.openapitools.codegen.CodegenModel;
+import org.openapitools.codegen.CodegenOperation;
+import org.openapitools.codegen.CodegenProperty;
+import org.openapitools.codegen.CodegenResponse;
+import org.openapitools.codegen.SupportingFile;
 import org.openapitools.codegen.api.TemplatingEngineAdapter;
 import org.openapitools.codegen.languages.AbstractTypeScriptClientCodegen;
 import org.openapitools.codegen.meta.features.DocumentationFeature;
 import org.openapitools.codegen.meta.features.SecurityFeature;
+import org.openapitools.codegen.model.ModelMap;
+import org.openapitools.codegen.model.ModelsMap;
+import org.openapitools.codegen.model.OperationsMap;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -82,9 +90,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         if (slashCount == 0) {
             sb.append("./");
         } else {
-            for (int i = 0; i < slashCount; ++i) {
-                sb.append("../");
-            }
+            sb.append("../".repeat(slashCount));
         }
         return sb.toString();
     }
@@ -154,32 +160,9 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
     }
 
     @Override
-    public Map<String, Object> postProcessOperationsWithModels(Map<String, Object> objs, List<Object> allModels) {
-    /*
-        allModels.forEach(modelMap -> {
-            CodegenModel model = (CodegenModel) ((Map<String, Object>)modelMap).get("model");
-            for (String alternative : model.oneOf) {
-                for (Object objAlternative : allModels) {
-                    CodegenModel alternativeModel = (CodegenModel) ((Map<String, Object>)objAlternative).get("model");
-                    String name = alternativeModel.getClassname();
-                    if (name.equals(alternative)) {
-                        for (CodegenProperty allVar : model.getAllVars()) {
-                            if (allVar.isDiscriminator) {
-                                alternativeModel.allVars.stream()
-                                        .filter(v -> v.name.equals(allVar.name))
-                                        .forEach(v -> v.isDiscriminator = true);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-     */
-
+    public OperationsMap postProcessOperationsWithModels(OperationsMap objs, List<ModelMap> allModels) {
         objs = super.postProcessOperationsWithModels(objs, allModels);
-        Map<String, Object> vals = (Map<String, Object>) objs.getOrDefault("operations", new HashMap<>());
-        List<CodegenOperation> operations = (List<CodegenOperation>) vals.getOrDefault("operation", new ArrayList<>());
+        List<CodegenOperation> operations = objs.getOperations().getOperation();
         /*
             Filter all the operations that are multipart/form-data operations and set the vendor extension flag
             'multipartFormData' for the template to work with.
@@ -201,13 +184,12 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
     }
 
     @Override
-    public Map<String, Object> postProcessAllModels(Map<String, Object> objs) {
-        Map<String, Object> result = super.postProcessAllModels(objs);
-        for (Map.Entry<String, Object> entry : result.entrySet()) {
-            Map<String, Object> inner = (Map<String, Object>) entry.getValue();
-            List<Map<String, Object>> models = (List<Map<String, Object>>) inner.get("models");
-            for (Map<String, Object> model : models) {
-                CodegenModel codegenModel = (CodegenModel) model.get("model");
+    public Map<String, ModelsMap> postProcessAllModels(Map<String, ModelsMap> objs) {
+        Map<String, ModelsMap> result = super.postProcessAllModels(objs);
+        for (Map.Entry<String, ModelsMap> entry : result.entrySet()) {
+            ModelsMap inner = entry.getValue();
+            for (ModelMap model : inner.getModels()) {
+                CodegenModel codegenModel = model.getModel();
                 model.put("hasAllOf", codegenModel.allOf.size() > 0);
                 model.put("hasOneOf", codegenModel.oneOf.size() > 0);
                 model.put("hasReadOnly", codegenModel.allVars.stream().anyMatch(v -> v.isReadOnly));
@@ -267,25 +249,23 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> postProcessModels(Map<String, Object> objs) {
-        List<Object> models = (List<Object>) postProcessModelsEnum(objs).get("models");
+    public ModelsMap postProcessModels(ModelsMap objs) {
+        List<ModelMap> models = postProcessModelsEnum(objs).getModels();
 
         boolean withoutPrefixEnums = false;
         if (additionalProperties.containsKey(WITHOUT_PREFIX_ENUMS)) {
             withoutPrefixEnums = Boolean.parseBoolean(additionalProperties.get(WITHOUT_PREFIX_ENUMS).toString());
         }
 
-        for (Object _mo  : models) {
-            Map<String, Object> mo = (Map<String, Object>) _mo;
-            CodegenModel cm = (CodegenModel) mo.get("model");
+        for (ModelMap model : models) {
+            CodegenModel cm = model.getModel();
 
             // Deduce the model file name in kebab case
             cm.classFilename = cm.classname.replaceAll("([a-z0-9])([A-Z])", "$1-$2").toLowerCase(Locale.ROOT);
 
             //processed enum names
             if(!withoutPrefixEnums) {
-                cm.imports = new TreeSet(cm.imports);
+                cm.imports = new TreeSet<>(cm.imports);
                 // name enum with model name, e.g. StatusEnum => PetStatusEnum
                 for (CodegenProperty var : cm.vars) {
                     if (Boolean.TRUE.equals(var.isEnum)) {
@@ -303,7 +283,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         }
 
         // Apply the model file name to the imports as well
-        for (Map<String, String> m : (List<Map<String, String>>) objs.get("imports")) {
+        for (Map<String, String> m : objs.getImports()) {
             String javaImport = m.get("import").substring(modelPackage.length() + 1);
             String tsImport = tsModelPackage + "/" + javaImport;
             m.put("tsImport", tsImport);
