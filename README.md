@@ -194,9 +194,9 @@ it("shows pets", async () => {
 ### From the command line
 
 1. Download openapi jar. On Linux/mac
-    * `wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.4.0/openapi-generator-cli-5.4.0.jar -O openapi-generator-cli.jar`
+    * `wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/6.2.0/openapi-generator-cli-6.2.0.jar -O openapi-generator-cli.jar`
 2. Download the Typescript-fetch-api generator
-    * `wget https://repo1.maven.org/maven2/io/github/jhannes/openapi/openapi-generator-typescript-fetch-api/0.2.9/openapi-generator-typescript-fetch-api-0.2.9.jar -O openapi-generator-typescript-fetch-api.jar`
+    * `wget https://repo1.maven.org/maven2/io/github/jhannes/openapi/openapi-generator-typescript-fetch-api/0.4.0/openapi-generator-typescript-fetch-api-0.4.0.jar -O openapi-generator-typescript-fetch-api.jar`
 3. Generate the code from your OpenAPI spec:
     * `java -cp openapi-generator-typescript-fetch-api.jar:openapi-generator-cli.jar org.openapitools.codegen.OpenAPIGenerator generate -g typescript-fetch-api -i <open api file>`
 
@@ -210,7 +210,7 @@ Add to your `pom.xml`:
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>5.4.0</version>
+                <version>6.2.0</version>
                 <executions>
                     <execution>
                         <id>petstore-typescript-fetch-api</id>
@@ -234,7 +234,7 @@ Add to your `pom.xml`:
                     <dependency>
                         <groupId>io.github.jhannes.openapi</groupId>
                         <artifactId>openapi-generator-typescript-fetch-api</artifactId>
-                        <version>0.3.0</version>
+                        <version>0.4.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -260,4 +260,6 @@ In addition to `snapshotTests`, this test also runs on files in the `.gitignore`
 
 Generates code from `snapshotTests/input/*.json` to `snapshotTests/verify` and runs `npm install` and `npm run verify` on each output directory to verify that there are no Typescript or Eslint errors.
 
+### io.github.jhannes.openapi.typescriptfetchapi.FocusedExampleTest
 
+Lets you work with a single example spec. Ideal for test-driving new features or bugfixes
