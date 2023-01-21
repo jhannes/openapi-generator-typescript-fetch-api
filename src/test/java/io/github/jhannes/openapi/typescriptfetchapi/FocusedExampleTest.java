@@ -1,0 +1,47 @@
+package io.github.jhannes.openapi.typescriptfetchapi;
+
+import org.junit.jupiter.api.DynamicContainer;
+import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.TestFactory;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Arrays;
+
+/**
+ * Use this test to fix bugs and develop new features:
+ *
+ * <ol>
+ *     <li>Decide what {@link #SPEC} to use</li>
+ *     <li>Run the test class to verify the baseline</li>
+ *     <li>Update the snapshotTests/snapshots/&lt;SPEC&gt;/ to match your desired output</li>
+ *     <li>The test <code>snapshotShouldVerify</code> will fail if your changes resulted in syntax error</li>
+ *     <li>The test <code>outputShouldMatchSnapshot</code>, update the templates under
+ *     <code>src/main/resources</code> to make it pass</li>
+ * </ol>
+ */
+public class FocusedExampleTest {
+
+    public static final Path SPEC = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
+
+    @TestFactory
+    DynamicNode snapshotShouldVerify() {
+        Path snapshotDirectory = VerifyOutputTests.targetDirectory(SPEC, "snapshot");
+        return DynamicContainer.dynamicContainer("Verify " + snapshotDirectory, Arrays.asList(
+                VerifyOutputTests.runNpmInstall(SPEC, snapshotDirectory),
+                VerifyOutputTests.verifyGeneratedCode(SPEC, snapshotDirectory)
+        ));
+    }
+
+    @TestFactory
+    DynamicNode outputShouldMatchSnapshot() throws IOException {
+        SnapshotTests.cleanDirectory(SPEC.getParent().getParent().resolve("output"));
+        return SnapshotTests.createTestsForSpec(SPEC);
+    }
+
+    @TestFactory
+    DynamicNode outputShouldVerify() {
+        Path spec = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
+        return VerifyOutputTests.createTestsForSpec(spec);
+    }
+}

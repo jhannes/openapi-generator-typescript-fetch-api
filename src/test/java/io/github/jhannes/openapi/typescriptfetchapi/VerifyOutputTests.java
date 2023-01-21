@@ -2,6 +2,7 @@ package io.github.jhannes.openapi.typescriptfetchapi;
 
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
@@ -45,15 +46,31 @@ public class VerifyOutputTests extends AbstractSnapshotTests {
     }
 
     static DynamicContainer createTestsForSpec(Path spec) {
-        Path projectDir = spec.getParent().getParent().resolve("verify").resolve(getModelName(spec));
+        Path projectDir = targetDirectory(spec, "verify");
         return dynamicContainer("Verify " + spec, Arrays.asList(
-                dynamicTest("Generate " + spec, () -> generate(spec, getModelName(spec), projectDir)),
-                dynamicTest("npm install " + spec, () -> npmInstall(projectDir)),
-                dynamicTest(
-                        "npm verify " + spec,
-                        () -> runCommand(projectDir, new String[] {NPM_PATH, "run", "verify"})
-                )
+                generateOutput(spec, projectDir),
+                runNpmInstall(spec, projectDir),
+                verifyGeneratedCode(spec, projectDir)
         ));
+    }
+
+    static Path targetDirectory(Path spec, String directoryName) {
+        return spec.getParent().getParent().resolve(directoryName).resolve(getModelName(spec));
+    }
+
+    static DynamicTest verifyGeneratedCode(Path spec, Path projectDir) {
+        return dynamicTest(
+                "npm verify " + spec,
+                () -> runCommand(projectDir, new String[]{NPM_PATH, "run", "verify"})
+        );
+    }
+
+    static DynamicTest runNpmInstall(Path spec, Path projectDir) {
+        return dynamicTest("npm install " + spec, () -> npmInstall(projectDir));
+    }
+
+    static DynamicTest generateOutput(Path spec, Path projectDir) {
+        return dynamicTest("Generate " + spec, () -> generate(spec, getModelName(spec), projectDir));
     }
 
     private static void npmInstall(Path projectDir) throws IOException, InterruptedException {
