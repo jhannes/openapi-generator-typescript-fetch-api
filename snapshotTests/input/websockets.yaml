@@ -91,3 +91,31 @@ components:
         - type
         - givenName
         - familyName
+    ChangeTracked:
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          format: username
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+          format: username
+      required:
+      - createdAt
+      - createdBy
+    PersonSnapshot:
+      allOf:
+      - $ref: "#/components/schemas/ChangeTracked"
+      - $ref: "#/components/schemas/Person"
+    StringSnapshot:
+      allOf:
+      - $ref: "#/components/schemas/ChangeTracked"
+      - type: object
+        properties:
+          name:
+            type: string

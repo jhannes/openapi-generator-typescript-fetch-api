@@ -12,8 +12,12 @@
  */
 
 import {
+    ChangeTrackedDto,
     CreatePersonCommandDto,
     PersonDto,
+    PersonSnapshotDto,
+    StringSnapshotAllOfDto,
+    StringSnapshotDto,
     SubscribeDto,
     UnsubscribeDto,
     UpdatePersonCommandDto,

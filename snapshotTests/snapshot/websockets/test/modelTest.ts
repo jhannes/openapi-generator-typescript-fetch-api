@@ -1,6 +1,10 @@
 import {
+    ChangeTrackedDto,
     CreatePersonCommandDto,
     PersonDto,
+    PersonSnapshotDto,
+    StringSnapshotAllOfDto,
+    StringSnapshotDto,
     SubscribeDto,
     UnsubscribeDto,
     UpdatePersonCommandDto,
@@ -72,8 +76,12 @@ export type Factory<T> = {
 type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
 
 export interface SampleModelFactories {
+    ChangeTrackedDto?: ModelFactory<ChangeTrackedDto>;
     CreatePersonCommandDto?: ModelFactory<CreatePersonCommandDto>;
     PersonDto?: ModelFactory<PersonDto>;
+    PersonSnapshotDto?: ModelFactory<PersonSnapshotDto>;
+    StringSnapshotAllOfDto?: ModelFactory<StringSnapshotAllOfDto>;
+    StringSnapshotDto?: ModelFactory<StringSnapshotDto>;
     SubscribeDto?: ModelFactory<SubscribeDto>;
     UnsubscribeDto?: ModelFactory<UnsubscribeDto>;
     UpdatePersonCommandDto?: ModelFactory<UpdatePersonCommandDto>;
@@ -272,6 +280,10 @@ export class TestSampleData {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sample(modelName: string): any {
         switch (modelName) {
+            case "ChangeTrackedDto":
+                return this.sampleChangeTrackedDto();
+            case "Array<ChangeTrackedDto>":
+                return this.sampleArrayChangeTrackedDto();
             case "CreatePersonCommandDto":
                 return this.sampleCreatePersonCommandDto();
             case "Array<CreatePersonCommandDto>":
@@ -280,6 +292,18 @@ export class TestSampleData {
                 return this.samplePersonDto();
             case "Array<PersonDto>":
                 return this.sampleArrayPersonDto();
+            case "PersonSnapshotDto":
+                return this.samplePersonSnapshotDto();
+            case "Array<PersonSnapshotDto>":
+                return this.sampleArrayPersonSnapshotDto();
+            case "StringSnapshotAllOfDto":
+                return this.sampleStringSnapshotAllOfDto();
+            case "Array<StringSnapshotAllOfDto>":
+                return this.sampleArrayStringSnapshotAllOfDto();
+            case "StringSnapshotDto":
+                return this.sampleStringSnapshotDto();
+            case "Array<StringSnapshotDto>":
+                return this.sampleArrayStringSnapshotDto();
             case "SubscribeDto":
                 return this.sampleSubscribeDto();
             case "Array<SubscribeDto>":
@@ -307,6 +331,45 @@ export class TestSampleData {
             default:
                 throw new Error("Unknown type " + modelName);
         }
+    }
+
+    sampleChangeTrackedDto(template?: Factory<ChangeTrackedDto>): ChangeTrackedDto {
+        const containerClass = "ChangeTrackedDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            createdAt: this.generate(
+                template?.createdAt,
+                { containerClass, propertyName: "createdAt", example: "null", isNullable: false },
+                () => this.sampleDate()
+            ),
+            createdBy: this.generate(
+                template?.createdBy,
+                { containerClass, propertyName: "createdBy", isNullable: false },
+                () => this.sampleString("username", "null")
+            ),
+            updatedAt: this.generate(
+                template?.updatedAt,
+                { containerClass, propertyName: "updatedAt", example: "null", isNullable: false },
+                () => this.sampleDate()
+            ),
+            updatedBy: this.generate(
+                template?.updatedBy,
+                { containerClass, propertyName: "updatedBy", isNullable: false },
+                () => this.sampleString("username", "null")
+            ),
+        };
+    }
+
+    sampleArrayChangeTrackedDto(
+        length?: number,
+        template?: Factory<ChangeTrackedDto>
+    ): Array<ChangeTrackedDto> {
+        return this.randomArray(
+            () => this.sampleChangeTrackedDto(template),
+            length ?? this.arrayLength()
+        );
     }
 
     sampleCreatePersonCommandDto(template?: Factory<CreatePersonCommandDto>): CreatePersonCommandDto {
@@ -389,6 +452,148 @@ export class TestSampleData {
     ): Array<PersonDto> {
         return this.randomArray(
             () => this.samplePersonDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    samplePersonSnapshotDto(template?: Factory<PersonSnapshotDto>): PersonSnapshotDto {
+        const containerClass = "PersonSnapshotDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            createdAt: this.generate(
+                template?.createdAt,
+                { containerClass, propertyName: "createdAt", example: "null", isNullable: false },
+                () => this.sampleDate()
+            ),
+            createdBy: this.generate(
+                template?.createdBy,
+                { containerClass, propertyName: "createdBy", isNullable: false },
+                () => this.sampleString("username", "null")
+            ),
+            updatedAt: this.generate(
+                template?.updatedAt,
+                { containerClass, propertyName: "updatedAt", example: "null", isNullable: false },
+                () => this.sampleDate()
+            ),
+            updatedBy: this.generate(
+                template?.updatedBy,
+                { containerClass, propertyName: "updatedBy", isNullable: false },
+                () => this.sampleString("username", "null")
+            ),
+            id: this.generate(
+                template?.id,
+                { containerClass, propertyName: "id", isNullable: false },
+                () => this.sampleString("uuid", "null")
+            ),
+            type: this.generate(
+                template?.type,
+                { containerClass, propertyName: "type", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            givenName: this.generate(
+                template?.givenName,
+                { containerClass, propertyName: "givenName", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            familyName: this.generate(
+                template?.familyName,
+                { containerClass, propertyName: "familyName", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            email: this.generate(
+                template?.email,
+                { containerClass, propertyName: "email", isNullable: false },
+                () => this.sampleString("email", "null")
+            ),
+            phone: this.generate(
+                template?.phone,
+                { containerClass, propertyName: "phone", isNullable: false },
+                () => this.sampleString("phone", "null")
+            ),
+            birthDate: this.generate(
+                template?.birthDate,
+                { containerClass, propertyName: "birthDate", example: "null", isNullable: false },
+                () => this.sampleDate()
+            ),
+        };
+    }
+
+    sampleArrayPersonSnapshotDto(
+        length?: number,
+        template?: Factory<PersonSnapshotDto>
+    ): Array<PersonSnapshotDto> {
+        return this.randomArray(
+            () => this.samplePersonSnapshotDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleStringSnapshotAllOfDto(template?: Factory<StringSnapshotAllOfDto>): StringSnapshotAllOfDto {
+        const containerClass = "StringSnapshotAllOfDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayStringSnapshotAllOfDto(
+        length?: number,
+        template?: Factory<StringSnapshotAllOfDto>
+    ): Array<StringSnapshotAllOfDto> {
+        return this.randomArray(
+            () => this.sampleStringSnapshotAllOfDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleStringSnapshotDto(template?: Factory<StringSnapshotDto>): StringSnapshotDto {
+        const containerClass = "StringSnapshotDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            createdAt: this.generate(
+                template?.createdAt,
+                { containerClass, propertyName: "createdAt", example: "null", isNullable: false },
+                () => this.sampleDate()
+            ),
+            createdBy: this.generate(
+                template?.createdBy,
+                { containerClass, propertyName: "createdBy", isNullable: false },
+                () => this.sampleString("username", "null")
+            ),
+            updatedAt: this.generate(
+                template?.updatedAt,
+                { containerClass, propertyName: "updatedAt", example: "null", isNullable: false },
+                () => this.sampleDate()
+            ),
+            updatedBy: this.generate(
+                template?.updatedBy,
+                { containerClass, propertyName: "updatedBy", isNullable: false },
+                () => this.sampleString("username", "null")
+            ),
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayStringSnapshotDto(
+        length?: number,
+        template?: Factory<StringSnapshotDto>
+    ): Array<StringSnapshotDto> {
+        return this.randomArray(
+            () => this.sampleStringSnapshotDto(template),
             length ?? this.arrayLength()
         );
     }

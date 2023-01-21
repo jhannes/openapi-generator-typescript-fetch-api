@@ -10,6 +10,13 @@
  * Do not edit the class manually.
  */
 
+export interface ChangeTrackedDto {
+    createdAt: Date;
+    createdBy: string;
+    updatedAt?: Date;
+    updatedBy?: string;
+}
+
 export interface CreatePersonCommandDto {
     command: "createPerson";
     id: string;
@@ -24,6 +31,32 @@ export interface PersonDto {
     email?: string;
     phone?: string;
     birthDate?: Date;
+}
+
+export interface PersonSnapshotDto {
+    createdAt: Date;
+    createdBy: string;
+    updatedAt?: Date;
+    updatedBy?: string;
+    readonly id?: string;
+    type: string;
+    givenName: string;
+    familyName: string;
+    email?: string;
+    phone?: string;
+    birthDate?: Date;
+}
+
+export interface StringSnapshotAllOfDto {
+    name?: string;
+}
+
+export interface StringSnapshotDto {
+    createdAt: Date;
+    createdBy: string;
+    updatedAt?: Date;
+    updatedBy?: string;
+    name?: string;
 }
 
 export interface SubscribeDto {
