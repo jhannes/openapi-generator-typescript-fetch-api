@@ -27,7 +27,6 @@ public class SnapshotTests extends AbstractSnapshotTests {
         if (!Files.isDirectory(inputDir)) {
             return dynamicTest("No snapshots for " + testDir, () -> {});
         }
-        cleanDirectory(testDir.resolve("output"));
         return dynamicContainer(
                 "Snapshots of " + testDir,
                 Files.list(inputDir).filter(p -> p.toFile().isFile()).map(SnapshotTests::createTestsForSpec)
@@ -38,12 +37,13 @@ public class SnapshotTests extends AbstractSnapshotTests {
         Path outputDir = spec.getParent().getParent().resolve("output");
         Path snapshotDir = spec.getParent().getParent().resolve("snapshot");
         try {
+            cleanDirectory(outputDir);
             generate(spec, getModelName(spec), outputDir.resolve(getModelName(spec)));
         } catch (Exception e) {
             if (e.getCause() != null) {
                 return dynamicTest("Generator for " + spec, () -> {throw e.getCause();});
             }
-            return dynamicTest("Generator for " + spec, () -> assertNull(e));
+            return dynamicTest("Generator for " + spec, () -> {throw e;});
         }
 
         List<Path> files;

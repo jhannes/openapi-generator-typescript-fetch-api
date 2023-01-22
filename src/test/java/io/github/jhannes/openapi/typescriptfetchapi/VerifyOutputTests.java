@@ -37,7 +37,6 @@ public class VerifyOutputTests extends AbstractSnapshotTests {
             return dynamicTest("No test for " + testDir, () -> {
             });
         }
-        cleanDirectory(testDir.resolve("verify"));
         return dynamicContainer(
                 "Verifications of " + testDir,
                 Files.list(inputDir)

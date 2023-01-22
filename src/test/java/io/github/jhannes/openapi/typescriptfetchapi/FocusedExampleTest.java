@@ -14,10 +14,12 @@ import java.util.Arrays;
  * <ol>
  *     <li>Decide what {@link #SPEC} to use</li>
  *     <li>Run the test class to verify the baseline</li>
- *     <li>Update the snapshotTests/snapshots/&lt;SPEC&gt;/ to match your desired output</li>
- *     <li>The test <code>snapshotShouldVerify</code> will fail if your changes resulted in syntax error</li>
- *     <li>The test <code>outputShouldMatchSnapshot</code>, update the templates under
- *     <code>src/main/resources</code> to make it pass</li>
+ *     <li>Update files under <code>snapshotTests/snapshots/&lt;SPEC&gt;/</code> to match your desired output</li>
+ *     <li>The test {@link #snapshotShouldVerify()} will fail if your changes resulted in syntax error</li>
+ *     <li>
+ *         The test {@link #outputShouldMatchSnapshot()} will fail until the output matches your desired snapshot.
+ *         Update the templates under <code>src/main/resources</code> to make it pass
+ *     </li>
  * </ol>
  */
 public class FocusedExampleTest {

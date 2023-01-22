@@ -18,6 +18,7 @@ public class AbstractSnapshotTests {
 
     protected static void generate(Path spec, String modelName, Path projectDir) {
         try {
+            cleanDirectory(projectDir);
             if (spec.getFileName().toString().endsWith(".link")) {
                 spec = Paths.get(Files.readAllLines(spec).get(0));
             }
