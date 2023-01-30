@@ -13,9 +13,7 @@
 
 import {
     AddressDto,
-    CatAllOfDto,
     CatDto,
-    DogAllOfDto,
     DogDto,
     PetBaseDto,
     PetDto,

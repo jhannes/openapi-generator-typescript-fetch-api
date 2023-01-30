@@ -10,12 +10,14 @@ export interface {{classname}} {{#if parent}}extends {{{parent}}} {{/if}}{
 
 {{/if~}}
 {{~#vars}}
+    {{~#unless isInherited}}
     {{~#if description}}
     /**
      * {{{description}}}
      */
     {{~/if}}
     {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{#isReadOnly}}?{{/isReadOnly}}{{/required}}: {{#if isEnum}}{{{datatypeWithEnum}}}{{else if isFile}}Blob{{else}}{{{dataType}}}{{/if}}{{#isNullable}} | null{{/isNullable}};
+    {{~/unless}}
 {{~/vars}}
 }
 

@@ -3,7 +3,6 @@ import {
     CreatePersonCommandDto,
     PersonDto,
     PersonSnapshotDto,
-    StringSnapshotAllOfDto,
     StringSnapshotDto,
     SubscribeDto,
     UnsubscribeDto,
@@ -80,7 +79,6 @@ export interface SampleModelFactories {
     CreatePersonCommandDto?: ModelFactory<CreatePersonCommandDto>;
     PersonDto?: ModelFactory<PersonDto>;
     PersonSnapshotDto?: ModelFactory<PersonSnapshotDto>;
-    StringSnapshotAllOfDto?: ModelFactory<StringSnapshotAllOfDto>;
     StringSnapshotDto?: ModelFactory<StringSnapshotDto>;
     SubscribeDto?: ModelFactory<SubscribeDto>;
     UnsubscribeDto?: ModelFactory<UnsubscribeDto>;
@@ -296,10 +294,6 @@ export class TestSampleData {
                 return this.samplePersonSnapshotDto();
             case "Array<PersonSnapshotDto>":
                 return this.sampleArrayPersonSnapshotDto();
-            case "StringSnapshotAllOfDto":
-                return this.sampleStringSnapshotAllOfDto();
-            case "Array<StringSnapshotAllOfDto>":
-                return this.sampleArrayStringSnapshotAllOfDto();
             case "StringSnapshotDto":
                 return this.sampleStringSnapshotDto();
             case "Array<StringSnapshotDto>":
@@ -530,30 +524,6 @@ export class TestSampleData {
         );
     }
 
-    sampleStringSnapshotAllOfDto(template?: Factory<StringSnapshotAllOfDto>): StringSnapshotAllOfDto {
-        const containerClass = "StringSnapshotAllOfDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        return {
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-        };
-    }
-
-    sampleArrayStringSnapshotAllOfDto(
-        length?: number,
-        template?: Factory<StringSnapshotAllOfDto>
-    ): Array<StringSnapshotAllOfDto> {
-        return this.randomArray(
-            () => this.sampleStringSnapshotAllOfDto(template),
-            length ?? this.arrayLength()
-        );
-    }
-
     sampleStringSnapshotDto(template?: Factory<StringSnapshotDto>): StringSnapshotDto {
         const containerClass = "StringSnapshotDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
@@ -583,6 +553,11 @@ export class TestSampleData {
             name: this.generate(
                 template?.name,
                 { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            type: this.generate(
+                template?.type,
+                { containerClass, propertyName: "type", isNullable: false },
                 () => this.sampleString("", "null")
             ),
         };

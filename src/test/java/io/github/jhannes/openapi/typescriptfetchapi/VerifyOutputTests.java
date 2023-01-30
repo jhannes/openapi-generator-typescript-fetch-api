@@ -80,7 +80,7 @@ public class VerifyOutputTests extends AbstractSnapshotTests {
     private static void runCommand(Path workingDir, String[] commandLine) throws IOException, InterruptedException {
         Process command = Runtime.getRuntime().exec(commandLine, null, workingDir.toFile());
         startTransferThread(command.getInputStream(), System.out, commandLine[0] + "-to-stdout");
-        startTransferThread(command.getErrorStream(), System.err, commandLine[0] + "-to-stderr");
+        startTransferThread(command.getInputStream(), System.err, commandLine[0] + "-to-stderr");
         command.waitFor(60, TimeUnit.SECONDS);
         assertEquals(0, command.exitValue());
     }

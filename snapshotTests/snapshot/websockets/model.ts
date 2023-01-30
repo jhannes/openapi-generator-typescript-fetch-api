@@ -33,30 +33,11 @@ export interface PersonDto {
     birthDate?: Date;
 }
 
-export interface PersonSnapshotDto {
-    createdAt: Date;
-    createdBy: string;
-    updatedAt?: Date;
-    updatedBy?: string;
-    readonly id?: string;
-    type: string;
-    givenName: string;
-    familyName: string;
-    email?: string;
-    phone?: string;
-    birthDate?: Date;
-}
+export type PersonSnapshotDto = ChangeTrackedDto & PersonDto;
 
-export interface StringSnapshotAllOfDto {
+export interface StringSnapshotDto extends ChangeTrackedDto {
     name?: string;
-}
-
-export interface StringSnapshotDto {
-    createdAt: Date;
-    createdBy: string;
-    updatedAt?: Date;
-    updatedBy?: string;
-    name?: string;
+    type?: string;
 }
 
 export interface SubscribeDto {

@@ -20,11 +20,11 @@ components:
   schemas:
     WebSocketMessage:
       oneOf:
-        - $ref: '#/components/schemas/WebSocketCommand'
-        - $ref: '#/components/schemas/WebSocketRequest'
+      - $ref: '#/components/schemas/WebSocketCommand'
+      - $ref: '#/components/schemas/WebSocketRequest'
     WebSocketRequest:
       oneOf:
-        - $ref: '#/components/schemas/Subscribe'
+      - $ref: '#/components/schemas/Subscribe'
       discriminator:
         propertyName: request
     Subscribe:
@@ -39,8 +39,8 @@ components:
       required: [ request ]
     WebSocketCommand:
       oneOf:
-        - $ref: '#/components/schemas/CreatePersonCommand'
-        - $ref: '#/components/schemas/UpdatePersonCommand'
+      - $ref: '#/components/schemas/CreatePersonCommand'
+      - $ref: '#/components/schemas/UpdatePersonCommand'
       discriminator:
         propertyName: command
         mapping:
@@ -88,9 +88,9 @@ components:
           type: string
           format: date
       required:
-        - type
-        - givenName
-        - familyName
+      - type
+      - givenName
+      - familyName
     ChangeTracked:
       properties:
         createdAt:
@@ -118,4 +118,8 @@ components:
       - type: object
         properties:
           name:
+            type: string
+      - type: object
+        properties:
+          type:
             type: string
