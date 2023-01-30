@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -24,7 +23,7 @@ import java.util.Arrays;
  */
 public class FocusedExampleTest {
 
-    public static final Path SPEC = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
+    public static final Path SPEC = SnapshotTests.SNAPSHOT_ROOT.resolve("input/typeHierarchy.yaml");
 
     @TestFactory
     DynamicNode snapshotShouldVerify() {
@@ -36,14 +35,12 @@ public class FocusedExampleTest {
     }
 
     @TestFactory
-    DynamicNode outputShouldMatchSnapshot() throws IOException {
-        SnapshotTests.cleanDirectory(SPEC.getParent().getParent().resolve("output"));
+    DynamicNode outputShouldMatchSnapshot() {
         return SnapshotTests.createTestsForSpec(SPEC);
     }
 
     @TestFactory
     DynamicNode outputShouldVerify() {
-        Path spec = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
-        return VerifyOutputTests.createTestsForSpec(spec);
+        return VerifyOutputTests.createTestsForSpec(SPEC);
     }
 }

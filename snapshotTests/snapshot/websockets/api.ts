@@ -16,7 +16,6 @@ import {
     CreatePersonCommandDto,
     PersonDto,
     PersonSnapshotDto,
-    StringSnapshotAllOfDto,
     StringSnapshotDto,
     SubscribeDto,
     UnsubscribeDto,

@@ -1,2 +1,2 @@
 {{>licenseInfo}}
-{{#models}}{{#model}}{{#isEnum}}{{>modelEnum}}{{/isEnum}}{{#oneOf}}{{#if @first}}{{>modelOneOf}}{{/if}}{{/oneOf}}{{^isEnum}}{{^oneOf}}{{>modelGeneric}}{{/oneOf}}{{/isEnum}}{{/model}}{{/models}}
+{{#models}}{{#model}}{{#isEnum}}{{>modelEnum}}{{/isEnum}}{{#oneOf}}{{#if @first}}{{>modelOneOf}}{{/if}}{{/oneOf}}{{^isEnum}}{{#allOf}}{{#if @first}}{{>modelAllOf}}{{/if}}{{/allOf}}{{^oneOf}}{{^allOf}}{{>modelGeneric}}{{/allOf}}{{/oneOf}}{{/isEnum}}{{/model}}{{/models}}

@@ -17,35 +17,14 @@ export interface AddressDto {
     country: string;
 }
 
-export interface CatAllOfDto {
-    hunts?: boolean;
-    readonly age?: number;
-}
-
 export interface CatDto extends PetBaseDto {
+    pet_type: "Cat";
     hunts?: boolean;
     readonly age?: number;
 }
-
-export interface DogAllOfDto {
-    bark?: boolean;
-    breed?: DogAllOfDtoBreedEnum;
-}
-
-export type DogAllOfDtoBreedEnum =
-    | "Dingo"
-    | "Husky"
-    | "Retriever"
-    | "Shepherd";
-
-export const DogAllOfDtoBreedEnumValues: DogAllOfDtoBreedEnum[] = [
-    "Dingo",
-    "Husky",
-    "Retriever",
-    "Shepherd",
-];
 
 export interface DogDto extends PetBaseDto {
+    pet_type: "Dog";
     bark?: boolean;
     breed?: DogDtoBreedEnum;
 }

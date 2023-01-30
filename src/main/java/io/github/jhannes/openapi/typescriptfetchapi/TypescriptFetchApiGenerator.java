@@ -17,6 +17,7 @@ import org.openapitools.codegen.model.ModelMap;
 import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationsMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -185,6 +186,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
 
     @Override
     public Map<String, ModelsMap> postProcessAllModels(Map<String, ModelsMap> objs) {
+        ArrayList<String> elementsToBeRemoved = new ArrayList<>();
         Map<String, ModelsMap> result = super.postProcessAllModels(objs);
         for (Map.Entry<String, ModelsMap> entry : result.entrySet()) {
             ModelsMap inner = entry.getValue();
@@ -241,9 +243,36 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         codegenModel.discriminator.setMapping(mapping);
                         codegenModel.discriminator.setMappedModels(mappedModels);
                     }
-                }
+                } else if (!codegenModel.allOf.isEmpty()) {
+                    List<CodegenModel> interfacesToBeRemoved = codegenModel.interfaceModels.stream()
+                            .filter(element -> element.name.startsWith(codegenModel.name + "_allOf"))
+                            .collect(Collectors.toList());
+                    if (codegenModel.interfaceModels.size() == interfacesToBeRemoved.size() + 1) {
+                        for (CodegenModel itf : interfacesToBeRemoved) {
+                            codegenModel.allOf.remove(itf.classname);
+                            elementsToBeRemoved.add(itf.name);
+                        }
 
+                        codegenModel.parentModel = codegenModel.interfaceModels.get(0);
+                        codegenModel.parent = codegenModel.parentModel.classname;
+                        codegenModel.parentVars = codegenModel.parentModel.vars;
+                        for (CodegenProperty var : codegenModel.vars) {
+                            for (CodegenProperty inheritedVar : codegenModel.parentModel.allVars) {
+                                if (inheritedVar.name.equals(var.name)) {
+                                    var.isInherited = inheritedVar.datatypeWithEnum.equals(var.datatypeWithEnum);
+                                    var.required = var.required || inheritedVar.required;
+                                }
+                            }
+                        }
+                        codegenModel.allOf = new TreeSet<>();
+                        codegenModel.interfaceModels = new ArrayList<>();
+                        codegenModel.interfaces = new ArrayList<>();
+                    }
+                }
             }
+        }
+        for (var element : elementsToBeRemoved) {
+            result.remove(element);
         }
         return result;
     }

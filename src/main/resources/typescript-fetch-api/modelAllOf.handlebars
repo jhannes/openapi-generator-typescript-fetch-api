@@ -1,0 +1,7 @@
+{{~#if description}}
+/**
+ * {{{description}}}
+ */
+{{~/if}}
+export type {{classname}} =
+{{~#allOf}} {{.}}{{#unless @last}} &{{/unless}}{{/allOf}};
