@@ -38,14 +38,7 @@ export interface ExposureDto {
     delayAfterInfection?: ExposureDtoDelayAfterInfectionEnum;
 }
 
-export type ExposureDtoStatusEnum =
-    | "unidentified"
-    | "identified"
-    | "contacted"
-    | "tested"
-    | "infected";
-
-export const ExposureDtoStatusEnumValues: ExposureDtoStatusEnum[] = [
+export const ExposureDtoStatusEnumValues = [
     "unidentified",
     "identified",
     "contacted",
@@ -53,16 +46,9 @@ export const ExposureDtoStatusEnumValues: ExposureDtoStatusEnum[] = [
     "infected",
 ];
 
-export type ExposureDtoDelayAfterInfectionEnum =
-    | -2
-    | -1
-    | 0
-    | 1
-    | 2
-    | 3
-    | 4;
+export type ExposureDtoStatusEnum = typeof ExposureDtoStatusEnumValues[number];
 
-export const ExposureDtoDelayAfterInfectionEnumValues: ExposureDtoDelayAfterInfectionEnum[] = [
+export const ExposureDtoDelayAfterInfectionEnumValues = [
     -2,
     -1,
     0,
@@ -71,6 +57,8 @@ export const ExposureDtoDelayAfterInfectionEnumValues: ExposureDtoDelayAfterInfe
     3,
     4,
 ];
+
+export type ExposureDtoDelayAfterInfectionEnum = typeof ExposureDtoDelayAfterInfectionEnumValues[number];
 
 export interface InfectionDto {
     readonly id?: string;
@@ -87,14 +75,10 @@ export interface InfectionInformationDto {
      */
     notes?: string;
 }
-
-export type UserRoleDto =
-    | "administrator"
-    | "interviewer"
-    | "followup";
-
-export const UserRoleDtoValues: UserRoleDto[] = [
+export const UserRoleDtoValues = [
     "administrator",
     "interviewer",
     "followup",
 ];
+
+export type UserRoleDto = typeof UserRoleDtoValues[number];

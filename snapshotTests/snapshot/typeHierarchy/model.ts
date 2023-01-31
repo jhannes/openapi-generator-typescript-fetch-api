@@ -29,18 +29,14 @@ export interface DogDto extends PetBaseDto {
     breed?: DogDtoBreedEnum;
 }
 
-export type DogDtoBreedEnum =
-    | "Dingo"
-    | "Husky"
-    | "Retriever"
-    | "Shepherd";
-
-export const DogDtoBreedEnumValues: DogDtoBreedEnum[] = [
+export const DogDtoBreedEnumValues = [
     "Dingo",
     "Husky",
     "Retriever",
     "Shepherd",
 ];
+
+export type DogDtoBreedEnum = typeof DogDtoBreedEnumValues[number];
 
 export interface PetBaseDto {
     readonly id?: string;

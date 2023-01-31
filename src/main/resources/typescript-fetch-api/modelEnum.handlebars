@@ -1,17 +1,12 @@
-{{#if description}}/**
- * {{{description}}}
- */{{/if}}
-export type {{classname}} =
-{{~#allowableValues}}
-{{~#enumVars}}
-    | {{{value}}}{{#if @last}};{{/if}}
-{{~/enumVars}}
-{{~/allowableValues}}
-
-export const {{classname}}Values: {{classname}}[] = [
+export const {{classname}}Values = [
 {{~#allowableValues}}
     {{~#enumVars}}
     {{{value}}},
     {{~/enumVars}}
 {{~/allowableValues}}
 ];
+{{#if description}}
+/**
+ * {{{description}}}
+ */{{/if}}
+export type {{classname}} = typeof {{classname}}Values[number];

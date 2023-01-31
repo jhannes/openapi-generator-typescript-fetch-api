@@ -26,19 +26,17 @@ export interface OrderDto {
     status?: OrderDtoStatusEnum;
     complete?: boolean;
 }
-/**
- * Order Status
- */
-export type OrderDtoStatusEnum =
-    | "placed"
-    | "approved"
-    | "delivered";
 
-export const OrderDtoStatusEnumValues: OrderDtoStatusEnum[] = [
+export const OrderDtoStatusEnumValues = [
     "placed",
     "approved",
     "delivered",
 ];
+
+/**
+ * Order Status
+ */
+export type OrderDtoStatusEnum = typeof OrderDtoStatusEnumValues[number];
 
 export interface PetDto {
     id?: number;
@@ -51,19 +49,17 @@ export interface PetDto {
      */
     status?: PetDtoStatusEnum;
 }
-/**
- * pet status in the store
- */
-export type PetDtoStatusEnum =
-    | "available"
-    | "pending"
-    | "sold";
 
-export const PetDtoStatusEnumValues: PetDtoStatusEnum[] = [
+export const PetDtoStatusEnumValues = [
     "available",
     "pending",
     "sold",
 ];
+
+/**
+ * pet status in the store
+ */
+export type PetDtoStatusEnum = typeof PetDtoStatusEnumValues[number];
 
 export interface TagDto {
     id?: number;

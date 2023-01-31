@@ -15,14 +15,10 @@ export interface PetDto {
     name?: string;
     birth_date?: Date;
 }
-
-export type PetTypeDto =
-    | "cat"
-    | "dog"
-    | "bird";
-
-export const PetTypeDtoValues: PetTypeDto[] = [
+export const PetTypeDtoValues = [
     "cat",
     "dog",
     "bird",
 ];
+
+export type PetTypeDto = typeof PetTypeDtoValues[number];

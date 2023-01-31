@@ -24,50 +24,40 @@ export interface DiscoveryDocumentDto {
     x_sso_frame?: string;
 }
 
-export type DiscoveryDocumentDtoResponseTypesSupportedEnum =
-    | "code"
-    | "token"
-    | "id_token";
-
-export const DiscoveryDocumentDtoResponseTypesSupportedEnumValues: DiscoveryDocumentDtoResponseTypesSupportedEnum[] = [
+export const DiscoveryDocumentDtoResponseTypesSupportedEnumValues = [
     "code",
     "token",
     "id_token",
 ];
 
-export type DiscoveryDocumentDtoResponseModesSupportedEnum =
-    | "query"
-    | "fragment";
+export type DiscoveryDocumentDtoResponseTypesSupportedEnum = typeof DiscoveryDocumentDtoResponseTypesSupportedEnumValues[number];
 
-export const DiscoveryDocumentDtoResponseModesSupportedEnumValues: DiscoveryDocumentDtoResponseModesSupportedEnum[] = [
+export const DiscoveryDocumentDtoResponseModesSupportedEnumValues = [
     "query",
     "fragment",
 ];
 
-export type DiscoveryDocumentDtoSubjectTypesSupportedEnum =
-    | "pairwise"
-    | "public";
+export type DiscoveryDocumentDtoResponseModesSupportedEnum = typeof DiscoveryDocumentDtoResponseModesSupportedEnumValues[number];
 
-export const DiscoveryDocumentDtoSubjectTypesSupportedEnumValues: DiscoveryDocumentDtoSubjectTypesSupportedEnum[] = [
+export const DiscoveryDocumentDtoSubjectTypesSupportedEnumValues = [
     "pairwise",
     "public",
 ];
 
-export type DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum =
-    | "S256"
-    | "plain";
+export type DiscoveryDocumentDtoSubjectTypesSupportedEnum = typeof DiscoveryDocumentDtoSubjectTypesSupportedEnumValues[number];
 
-export const DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnumValues: DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum[] = [
+export const DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnumValues = [
     "S256",
     "plain",
 ];
 
-export type DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnum =
-    | "RS256";
+export type DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum = typeof DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnumValues[number];
 
-export const DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues: DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnum[] = [
+export const DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues = [
     "RS256",
 ];
+
+export type DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnum = typeof DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues[number];
 
 export interface JwksDocumentDto {
     keys?: Array<JwksKeyDto>;
