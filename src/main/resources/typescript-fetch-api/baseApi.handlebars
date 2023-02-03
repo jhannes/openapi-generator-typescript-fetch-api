@@ -97,8 +97,9 @@ export class BaseAPI {
     }
 
     protected removeEmpty(obj: Record<string, string | undefined> = {}): Record<string, string> {
-        return Object.fromEntries(Object.entries(obj)
-            .filter(([, v]) => v != null)) as Record<string, string>;
+        return Object.keys(obj)
+            .filter((k) => obj[k] != null)
+            .reduce((a, k) => ({ ...a, [k]: obj[k] }), {}) as Record<string, string>;
     }
 
     private expandPathTemplate(pathTemplate: string, params: any): string {
