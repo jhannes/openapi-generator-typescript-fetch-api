@@ -19,10 +19,17 @@ export interface GeometryCollectionDto {
 }
 
 export type GeometryDto =
-	{ type: "Point" } & PointDto |
-	{ type: "Polygon" } & PolygonDto |
-	{ type: "LineString" } & LineStringDto;
+    { type: "Point" } & PointDto |
+    { type: "Polygon" } & PolygonDto |
+    { type: "LineString" } & LineStringDto;
 
+export const GeometryDtoDescriminators = [
+    "Point",
+    "Polygon",
+    "LineString",
+];
+
+export type GeometryDtoDescriminator = typeof GeometryDtoDescriminators[number];
 
 export interface LineStringDto {
     type: "LineString";
