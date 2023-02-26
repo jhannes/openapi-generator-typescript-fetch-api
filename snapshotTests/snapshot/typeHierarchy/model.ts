@@ -47,6 +47,12 @@ export interface PetBaseDto {
 }
 
 export type PetDto =
-	{ pet_type: "Cat" } & CatDto |
-	{ pet_type: "Dog" } & DogDto;
+    { pet_type: "Cat" } & CatDto |
+    { pet_type: "Dog" } & DogDto;
 
+export const PetDtoDescriminators = [
+    "Cat",
+    "Dog",
+];
+
+export type PetDtoDescriminator = typeof PetDtoDescriminators[number];

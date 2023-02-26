@@ -1,0 +1,6 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "editor.autoIndent": "none",
+    "editor.indentSize": "tabSize",
+    "editor.tabSize": 4
+}

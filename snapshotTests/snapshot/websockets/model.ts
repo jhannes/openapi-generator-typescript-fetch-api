@@ -55,13 +55,23 @@ export interface UpdatePersonCommandDto {
 }
 
 export type WebSocketCommandDto =
-	{ command: "createPerson" } & CreatePersonCommandDto |
-	{ command: "updatePerson" } & UpdatePersonCommandDto;
+    { command: "createPerson" } & CreatePersonCommandDto |
+    { command: "updatePerson" } & UpdatePersonCommandDto;
 
+export const WebSocketCommandDtoDescriminators = [
+    "createPerson",
+    "updatePerson",
+];
+
+export type WebSocketCommandDtoDescriminator = typeof WebSocketCommandDtoDescriminators[number];
 
 export type WebSocketMessageDto = WebSocketCommandDto | WebSocketRequestDto;
 
-
 export type WebSocketRequestDto =
-	{ request: "Subscribe" } & SubscribeDto;
+    { request: "Subscribe" } & SubscribeDto;
 
+export const WebSocketRequestDtoDescriminators = [
+    "Subscribe",
+];
+
+export type WebSocketRequestDtoDescriminator = typeof WebSocketRequestDtoDescriminators[number];
