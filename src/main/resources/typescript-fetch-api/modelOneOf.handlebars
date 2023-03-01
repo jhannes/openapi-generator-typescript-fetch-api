@@ -3,12 +3,12 @@
  * {{{description}}}
  */
 {{~/if}}
-export type {{classname}} ={{#if discriminator}}{{#discriminator}}
+export type {{classname}} ={{#and discriminator discriminator.mappedModels.length}}{{#discriminator}}
 {{~#mappedModels}}
     { {{discriminator.propertyName}}: "{{mappingName}}" } & {{modelName}}{{#unless @last}} |{{/unless}}{{/mappedModels}}
-{{~^mappedModels}}{{#oneOf}}{{{.}}}{{#unless @last}} | {{/unless}}{{/oneOf}}{{/mappedModels}}{{/discriminator}}{{else}} {{dataType}}{{/if}};
+{{~^mappedModels}}{{#oneOf}}{{{.}}}{{#unless @last}} | {{/unless}}{{/oneOf}}{{/mappedModels}}{{/discriminator}}{{else}} {{dataType}}{{/and}};
 
-{{~#if discriminator}}
+{{~#and discriminator discriminator.mappedModels.length}}
 {{#discriminator}}
 export const {{classname}}Descriminators = [
 {{~#mappedModels}}
@@ -17,4 +17,4 @@ export const {{classname}}Descriminators = [
 ];
 {{/discriminator}}
 export type {{classname}}Descriminator = typeof {{classname}}Descriminators[number];
-{{~/if}}
+{{~/and}}
