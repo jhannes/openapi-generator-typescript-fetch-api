@@ -232,13 +232,19 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         HashMap<String, String> mapping = new HashMap<>();
                         for (String className : codegenModel.oneOf) {
 
-                            String subtypeModel = result.entrySet().stream()
+                            ModelsMap subtypeModelMap = result.entrySet().stream()
                                     .filter(e -> ((Map<String, Object>) e.getValue()).get("classname").equals(className))
-                                    .map(Map.Entry::getKey)
+                                    .map(Map.Entry::getValue)
                                     .findFirst()
                                     .orElseThrow(() -> new IllegalArgumentException("Undefined model " + className + " referenced from " + codegenModel.getClassname()));
-                            mapping.put(subtypeModel, className);
-                            mappedModels.add(new CodegenDiscriminator.MappedModel(subtypeModel, className));
+
+                            for (ModelMap subModel : subtypeModelMap.getModels()) {
+                                CodegenModel subCodegenModel = subModel.getModel();
+                                if (subCodegenModel.oneOf.isEmpty()) {
+                                    mapping.put(subCodegenModel.name, className);
+                                    mappedModels.add(new CodegenDiscriminator.MappedModel(subCodegenModel.name, className));
+                                }
+                            }
                         }
                         codegenModel.discriminator.setMapping(mapping);
                         codegenModel.discriminator.setMappedModels(mappedModels);
