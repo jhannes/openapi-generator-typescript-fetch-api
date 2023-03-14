@@ -19,6 +19,6 @@ export const PetTypeDtoValues = [
     "cat",
     "dog",
     "bird",
-];
+] as const;
 
 export type PetTypeDto = typeof PetTypeDtoValues[number];

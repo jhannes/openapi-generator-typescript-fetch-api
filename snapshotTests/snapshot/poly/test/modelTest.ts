@@ -39,12 +39,12 @@ export class Random {
         return this.nextInt(2) == 0;
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return options[this.nextInt(options.length)];
     }
 
-    pickSome<T>(options: Array<T>, n?: number): T[] {
-        const shuffled = options.sort(() => 0.5 - this.next());
+    pickSome<T>(options: readonly T[], n?: number): T[] {
+        const shuffled = [...options].sort(() => 0.5 - this.next());
         return shuffled.slice(0, n || this.nextInt(options.length));
     }
 
@@ -136,15 +136,15 @@ export class TestSampleData {
         return this.random.nextBoolean();
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickOneString<T extends string>(options: Array<T>): T {
+    pickOneString<T extends string>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickSome<T>(options: Array<T>): T[] {
+    pickSome<T>(options: readonly T[]): T[] {
         return this.random.pickSome(options);
     }
 
@@ -156,7 +156,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -232,7 +232,7 @@ export class TestSampleData {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+    sampleArrayArray<T>(length?: number): readonly T[] {
         return [];
     }
 
@@ -349,7 +349,7 @@ export class TestSampleData {
     sampleArrayAnyPartyDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => AnyPartyDto
-    ): Array<AnyPartyDto> {
+    ): readonly AnyPartyDto[] {
         return this.randomArray(
             () => this.sampleAnyPartyDto(factory),
             length ?? this.arrayLength()
@@ -389,7 +389,7 @@ export class TestSampleData {
     sampleArrayCreationErrorDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => CreationErrorDto
-    ): Array<CreationErrorDto> {
+    ): readonly CreationErrorDto[] {
         return this.randomArray(
             () => this.sampleCreationErrorDto(factory),
             length ?? this.arrayLength()
@@ -423,7 +423,7 @@ export class TestSampleData {
     sampleArrayDuplicateIdentifierErrorDto(
         length?: number,
         template?: Factory<DuplicateIdentifierErrorDto>
-    ): Array<DuplicateIdentifierErrorDto> {
+    ): readonly DuplicateIdentifierErrorDto[] {
         return this.randomArray(
             () => this.sampleDuplicateIdentifierErrorDto(template),
             length ?? this.arrayLength()
@@ -452,7 +452,7 @@ export class TestSampleData {
     sampleArrayGeneralErrorDto(
         length?: number,
         template?: Factory<GeneralErrorDto>
-    ): Array<GeneralErrorDto> {
+    ): readonly GeneralErrorDto[] {
         return this.randomArray(
             () => this.sampleGeneralErrorDto(template),
             length ?? this.arrayLength()
@@ -486,7 +486,7 @@ export class TestSampleData {
     sampleArrayIllegalEmailAddressErrorDto(
         length?: number,
         template?: Factory<IllegalEmailAddressErrorDto>
-    ): Array<IllegalEmailAddressErrorDto> {
+    ): readonly IllegalEmailAddressErrorDto[] {
         return this.randomArray(
             () => this.sampleIllegalEmailAddressErrorDto(template),
             length ?? this.arrayLength()
@@ -515,7 +515,7 @@ export class TestSampleData {
     sampleArrayLogMessageDto(
         length?: number,
         template?: Factory<LogMessageDto>
-    ): Array<LogMessageDto> {
+    ): readonly LogMessageDto[] {
         return this.randomArray(
             () => this.sampleLogMessageDto(template),
             length ?? this.arrayLength()
@@ -549,7 +549,7 @@ export class TestSampleData {
     sampleArrayNotFoundErrorDto(
         length?: number,
         template?: Factory<NotFoundErrorDto>
-    ): Array<NotFoundErrorDto> {
+    ): readonly NotFoundErrorDto[] {
         return this.randomArray(
             () => this.sampleNotFoundErrorDto(template),
             length ?? this.arrayLength()
@@ -608,7 +608,7 @@ export class TestSampleData {
     sampleArrayOrganizationDto(
         length?: number,
         template?: Factory<OrganizationDto>
-    ): Array<OrganizationDto> {
+    ): readonly OrganizationDto[] {
         return this.randomArray(
             () => this.sampleOrganizationDto(template),
             length ?? this.arrayLength()
@@ -662,7 +662,7 @@ export class TestSampleData {
     sampleArrayPersonDto(
         length?: number,
         template?: Factory<PersonDto>
-    ): Array<PersonDto> {
+    ): readonly PersonDto[] {
         return this.randomArray(
             () => this.samplePersonDto(template),
             length ?? this.arrayLength()
@@ -707,7 +707,7 @@ export class TestSampleData {
     sampleArrayUpdateErrorDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => UpdateErrorDto
-    ): Array<UpdateErrorDto> {
+    ): readonly UpdateErrorDto[] {
         return this.randomArray(
             () => this.sampleUpdateErrorDto(factory),
             length ?? this.arrayLength()

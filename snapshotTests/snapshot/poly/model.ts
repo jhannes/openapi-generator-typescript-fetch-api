@@ -17,7 +17,7 @@ export type AnyPartyDto =
 export const AnyPartyDtoDescriminators = [
     "organization",
     "person",
-];
+] as const;
 
 export type AnyPartyDtoDescriminator = typeof AnyPartyDtoDescriminators[number];
 
@@ -30,7 +30,7 @@ export const CreationErrorDtoDescriminators = [
     "IllegalEmailAddressError",
     "DuplicateIdentifierError",
     "GeneralError",
-];
+] as const;
 
 export type CreationErrorDtoDescriminator = typeof CreationErrorDtoDescriminators[number];
 
@@ -94,6 +94,6 @@ export const UpdateErrorDtoDescriminators = [
     "DuplicateIdentifierError",
     "GeneralError",
     "NotFoundError",
-];
+] as const;
 
 export type UpdateErrorDtoDescriminator = typeof UpdateErrorDtoDescriminators[number];

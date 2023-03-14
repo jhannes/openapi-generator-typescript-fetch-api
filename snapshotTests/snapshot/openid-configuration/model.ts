@@ -28,34 +28,34 @@ export const DiscoveryDocumentDtoResponseTypesSupportedEnumValues = [
     "code",
     "token",
     "id_token",
-];
+] as const;
 
 export type DiscoveryDocumentDtoResponseTypesSupportedEnum = typeof DiscoveryDocumentDtoResponseTypesSupportedEnumValues[number];
 
 export const DiscoveryDocumentDtoResponseModesSupportedEnumValues = [
     "query",
     "fragment",
-];
+] as const;
 
 export type DiscoveryDocumentDtoResponseModesSupportedEnum = typeof DiscoveryDocumentDtoResponseModesSupportedEnumValues[number];
 
 export const DiscoveryDocumentDtoSubjectTypesSupportedEnumValues = [
     "pairwise",
     "public",
-];
+] as const;
 
 export type DiscoveryDocumentDtoSubjectTypesSupportedEnum = typeof DiscoveryDocumentDtoSubjectTypesSupportedEnumValues[number];
 
 export const DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnumValues = [
     "S256",
     "plain",
-];
+] as const;
 
 export type DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum = typeof DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnumValues[number];
 
 export const DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues = [
     "RS256",
-];
+] as const;
 
 export type DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnum = typeof DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues[number];
 

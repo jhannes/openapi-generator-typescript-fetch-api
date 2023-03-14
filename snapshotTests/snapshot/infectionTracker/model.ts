@@ -44,7 +44,7 @@ export const ExposureDtoStatusEnumValues = [
     "contacted",
     "tested",
     "infected",
-];
+] as const;
 
 export type ExposureDtoStatusEnum = typeof ExposureDtoStatusEnumValues[number];
 
@@ -56,7 +56,7 @@ export const ExposureDtoDelayAfterInfectionEnumValues = [
     2,
     3,
     4,
-];
+] as const;
 
 export type ExposureDtoDelayAfterInfectionEnum = typeof ExposureDtoDelayAfterInfectionEnumValues[number];
 
@@ -79,6 +79,6 @@ export const UserRoleDtoValues = [
     "administrator",
     "interviewer",
     "followup",
-];
+] as const;
 
 export type UserRoleDto = typeof UserRoleDtoValues[number];

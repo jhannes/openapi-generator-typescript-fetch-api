@@ -27,7 +27,7 @@ export const GeometryDtoDescriminators = [
     "Point",
     "Polygon",
     "LineString",
-];
+] as const;
 
 export type GeometryDtoDescriminator = typeof GeometryDtoDescriminators[number];
 

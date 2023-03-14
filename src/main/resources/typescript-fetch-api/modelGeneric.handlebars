@@ -28,7 +28,7 @@ export const {{enumName}}Values = [
     {{{value}}},
     {{~/enumVars}}
 {{~/allowableValues}}
-];
+] as const;
 {{#if description}}
 /**
  * {{{description}}}

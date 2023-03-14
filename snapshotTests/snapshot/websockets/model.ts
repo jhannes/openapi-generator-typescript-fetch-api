@@ -61,7 +61,7 @@ export type WebSocketCommandDto =
 export const WebSocketCommandDtoDescriminators = [
     "createPerson",
     "updatePerson",
-];
+] as const;
 
 export type WebSocketCommandDtoDescriminator = typeof WebSocketCommandDtoDescriminators[number];
 
@@ -72,6 +72,6 @@ export type WebSocketRequestDto =
 
 export const WebSocketRequestDtoDescriminators = [
     "Subscribe",
-];
+] as const;
 
 export type WebSocketRequestDtoDescriminator = typeof WebSocketRequestDtoDescriminators[number];

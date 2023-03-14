@@ -34,12 +34,12 @@ export class Random {
         return this.nextInt(2) == 0;
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return options[this.nextInt(options.length)];
     }
 
-    pickSome<T>(options: Array<T>, n?: number): T[] {
-        const shuffled = options.sort(() => 0.5 - this.next());
+    pickSome<T>(options: readonly T[], n?: number): T[] {
+        const shuffled = [...options].sort(() => 0.5 - this.next());
         return shuffled.slice(0, n || this.nextInt(options.length));
     }
 
@@ -126,15 +126,15 @@ export class TestSampleData {
         return this.random.nextBoolean();
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickOneString<T extends string>(options: Array<T>): T {
+    pickOneString<T extends string>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickSome<T>(options: Array<T>): T[] {
+    pickSome<T>(options: readonly T[]): T[] {
         return this.random.pickSome(options);
     }
 
@@ -146,7 +146,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -222,7 +222,7 @@ export class TestSampleData {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+    sampleArrayArray<T>(length?: number): readonly T[] {
         return [];
     }
 
@@ -309,7 +309,7 @@ export class TestSampleData {
     sampleArrayGeometryCollectionDto(
         length?: number,
         template?: Factory<GeometryCollectionDto>
-    ): Array<GeometryCollectionDto> {
+    ): readonly GeometryCollectionDto[] {
         return this.randomArray(
             () => this.sampleGeometryCollectionDto(template),
             length ?? this.arrayLength()
@@ -349,7 +349,7 @@ export class TestSampleData {
     sampleArrayGeometryDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => GeometryDto
-    ): Array<GeometryDto> {
+    ): readonly GeometryDto[] {
         return this.randomArray(
             () => this.sampleGeometryDto(factory),
             length ?? this.arrayLength()
@@ -376,7 +376,7 @@ export class TestSampleData {
     sampleArrayLineStringDto(
         length?: number,
         template?: Factory<LineStringDto>
-    ): Array<LineStringDto> {
+    ): readonly LineStringDto[] {
         return this.randomArray(
             () => this.sampleLineStringDto(template),
             length ?? this.arrayLength()
@@ -401,7 +401,7 @@ export class TestSampleData {
     sampleArrayPointDto(
         length?: number,
         template?: Factory<PointDto>
-    ): Array<PointDto> {
+    ): readonly PointDto[] {
         return this.randomArray(
             () => this.samplePointDto(template),
             length ?? this.arrayLength()
@@ -428,7 +428,7 @@ export class TestSampleData {
     sampleArrayPolygonDto(
         length?: number,
         template?: Factory<PolygonDto>
-    ): Array<PolygonDto> {
+    ): readonly PolygonDto[] {
         return this.randomArray(
             () => this.samplePolygonDto(template),
             length ?? this.arrayLength()

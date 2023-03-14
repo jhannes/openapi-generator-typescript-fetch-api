@@ -35,12 +35,12 @@ export class Random {
         return this.nextInt(2) == 0;
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return options[this.nextInt(options.length)];
     }
 
-    pickSome<T>(options: Array<T>, n?: number): T[] {
-        const shuffled = options.sort(() => 0.5 - this.next());
+    pickSome<T>(options: readonly T[], n?: number): T[] {
+        const shuffled = [...options].sort(() => 0.5 - this.next());
         return shuffled.slice(0, n || this.nextInt(options.length));
     }
 
@@ -128,15 +128,15 @@ export class TestSampleData {
         return this.random.nextBoolean();
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickOneString<T extends string>(options: Array<T>): T {
+    pickOneString<T extends string>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickSome<T>(options: Array<T>): T[] {
+    pickSome<T>(options: readonly T[]): T[] {
         return this.random.pickSome(options);
     }
 
@@ -148,7 +148,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -224,7 +224,7 @@ export class TestSampleData {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+    sampleArrayArray<T>(length?: number): readonly T[] {
         return [];
     }
 
@@ -364,7 +364,7 @@ export class TestSampleData {
     sampleArrayDiscoveryDocumentDto(
         length?: number,
         template?: Factory<DiscoveryDocumentDto>
-    ): Array<DiscoveryDocumentDto> {
+    ): readonly DiscoveryDocumentDto[] {
         return this.randomArray(
             () => this.sampleDiscoveryDocumentDto(template),
             length ?? this.arrayLength()
@@ -388,7 +388,7 @@ export class TestSampleData {
     sampleArrayJwksDocumentDto(
         length?: number,
         template?: Factory<JwksDocumentDto>
-    ): Array<JwksDocumentDto> {
+    ): readonly JwksDocumentDto[] {
         return this.randomArray(
             () => this.sampleJwksDocumentDto(template),
             length ?? this.arrayLength()
@@ -427,7 +427,7 @@ export class TestSampleData {
     sampleArrayJwksKeyDto(
         length?: number,
         template?: Factory<JwksKeyDto>
-    ): Array<JwksKeyDto> {
+    ): readonly JwksKeyDto[] {
         return this.randomArray(
             () => this.sampleJwksKeyDto(template),
             length ?? this.arrayLength()
@@ -461,7 +461,7 @@ export class TestSampleData {
     sampleArrayJwtHeaderDto(
         length?: number,
         template?: Factory<JwtHeaderDto>
-    ): Array<JwtHeaderDto> {
+    ): readonly JwtHeaderDto[] {
         return this.randomArray(
             () => this.sampleJwtHeaderDto(template),
             length ?? this.arrayLength()
@@ -520,7 +520,7 @@ export class TestSampleData {
     sampleArrayJwtPayloadDto(
         length?: number,
         template?: Factory<JwtPayloadDto>
-    ): Array<JwtPayloadDto> {
+    ): readonly JwtPayloadDto[] {
         return this.randomArray(
             () => this.sampleJwtPayloadDto(template),
             length ?? this.arrayLength()
@@ -569,7 +569,7 @@ export class TestSampleData {
     sampleArrayTokenResponseDto(
         length?: number,
         template?: Factory<TokenResponseDto>
-    ): Array<TokenResponseDto> {
+    ): readonly TokenResponseDto[] {
         return this.randomArray(
             () => this.sampleTokenResponseDto(template),
             length ?? this.arrayLength()

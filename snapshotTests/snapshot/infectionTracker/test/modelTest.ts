@@ -37,12 +37,12 @@ export class Random {
         return this.nextInt(2) == 0;
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return options[this.nextInt(options.length)];
     }
 
-    pickSome<T>(options: Array<T>, n?: number): T[] {
-        const shuffled = options.sort(() => 0.5 - this.next());
+    pickSome<T>(options: readonly T[], n?: number): T[] {
+        const shuffled = [...options].sort(() => 0.5 - this.next());
         return shuffled.slice(0, n || this.nextInt(options.length));
     }
 
@@ -129,15 +129,15 @@ export class TestSampleData {
         return this.random.nextBoolean();
     }
 
-    pickOne<T>(options: Array<T>): T {
+    pickOne<T>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickOneString<T extends string>(options: Array<T>): T {
+    pickOneString<T extends string>(options: readonly T[]): T {
         return this.random.pickOne(options);
     }
 
-    pickSome<T>(options: Array<T>): T[] {
+    pickSome<T>(options: readonly T[]): T[] {
         return this.random.pickSome(options);
     }
 
@@ -149,7 +149,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -225,7 +225,7 @@ export class TestSampleData {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    sampleArrayArray<T>(length?: number): Array<Array<T>> {
+    sampleArrayArray<T>(length?: number): readonly T[] {
         return [];
     }
 
@@ -326,7 +326,7 @@ export class TestSampleData {
     sampleArrayCaseWorkerDto(
         length?: number,
         template?: Factory<CaseWorkerDto>
-    ): Array<CaseWorkerDto> {
+    ): readonly CaseWorkerDto[] {
         return this.randomArray(
             () => this.sampleCaseWorkerDto(template),
             length ?? this.arrayLength()
@@ -390,7 +390,7 @@ export class TestSampleData {
     sampleArrayExposureDto(
         length?: number,
         template?: Factory<ExposureDto>
-    ): Array<ExposureDto> {
+    ): readonly ExposureDto[] {
         return this.randomArray(
             () => this.sampleExposureDto(template),
             length ?? this.arrayLength()
@@ -424,7 +424,7 @@ export class TestSampleData {
     sampleArrayInfectionDto(
         length?: number,
         template?: Factory<InfectionDto>
-    ): Array<InfectionDto> {
+    ): readonly InfectionDto[] {
         return this.randomArray(
             () => this.sampleInfectionDto(template),
             length ?? this.arrayLength()
@@ -463,7 +463,7 @@ export class TestSampleData {
     sampleArrayInfectionInformationDto(
         length?: number,
         template?: Factory<InfectionInformationDto>
-    ): Array<InfectionInformationDto> {
+    ): readonly InfectionInformationDto[] {
         return this.randomArray(
             () => this.sampleInfectionInformationDto(template),
             length ?? this.arrayLength()
@@ -478,7 +478,7 @@ export class TestSampleData {
         return this.pickOne(UserRoleDtoValues);
     }
 
-    sampleArrayUserRoleDto(length?: number): Array<UserRoleDto> {
+    sampleArrayUserRoleDto(length?: number): readonly UserRoleDto[] {
         return this.randomArray(
             () => this.sampleUserRoleDto(),
             length ?? this.arrayLength()
