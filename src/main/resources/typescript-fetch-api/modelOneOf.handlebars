@@ -14,7 +14,7 @@ export const {{classname}}Descriminators = [
 {{~#mappedModels}}
     "{{mappingName}}",
 {{~/mappedModels}}
-];
+] as const;
 {{/discriminator}}
 export type {{classname}}Descriminator = typeof {{classname}}Descriminators[number];
 {{~/and}}

@@ -34,7 +34,7 @@ export const DogDtoBreedEnumValues = [
     "Husky",
     "Retriever",
     "Shepherd",
-];
+] as const;
 
 export type DogDtoBreedEnum = typeof DogDtoBreedEnumValues[number];
 
@@ -53,6 +53,6 @@ export type PetDto =
 export const PetDtoDescriminators = [
     "Cat",
     "Dog",
-];
+] as const;
 
 export type PetDtoDescriminator = typeof PetDtoDescriminators[number];

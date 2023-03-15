@@ -31,7 +31,7 @@ export const OrderDtoStatusEnumValues = [
     "placed",
     "approved",
     "delivered",
-];
+] as const;
 
 /**
  * Order Status
@@ -54,7 +54,7 @@ export const PetDtoStatusEnumValues = [
     "available",
     "pending",
     "sold",
-];
+] as const;
 
 /**
  * pet status in the store
