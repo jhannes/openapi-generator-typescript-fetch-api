@@ -355,26 +355,7 @@ export class TestSampleData {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            id: this.generate(
-                template?.id,
-                { containerClass, propertyName: "id", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            birth_date: this.generate(
-                template?.birth_date,
-                { containerClass, propertyName: "birth_date", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            ownerAddress: this.generate(
-                template?.ownerAddress,
-                { containerClass, propertyName: "ownerAddress", example: "null", isNullable: false },
-                () => this.sampleAddressDto()
-            ),
+            ...this.samplePetBaseDto(template),
             pet_type: "Cat",
             hunts: this.generate(
                 template?.hunts,
@@ -405,36 +386,7 @@ export class TestSampleData {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            id: this.generate(
-                template?.id,
-                { containerClass, propertyName: "id", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            birth_date: this.generate(
-                template?.birth_date,
-                { containerClass, propertyName: "birth_date", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            ownerAddress: this.generate(
-                template?.ownerAddress,
-                { containerClass, propertyName: "ownerAddress", example: "null", isNullable: false },
-                () => this.sampleAddressDto()
-            ),
-            bark: this.generate(
-                template?.bark,
-                { containerClass, propertyName: "bark", example: "null", isNullable: false },
-                () => this.sampleboolean()
-            ),
-            breed: this.generate(
-                template?.breed,
-                { containerClass, propertyName: "breed", example: "null", isNullable: false },
-                () => this.pickOne(GenericDogDtoBreedEnumValues)
-            ),
+            ...this.sampleGenericDogDto(template),
             pet_type: "Dog",
         };
     }
@@ -455,26 +407,7 @@ export class TestSampleData {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            id: this.generate(
-                template?.id,
-                { containerClass, propertyName: "id", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            birth_date: this.generate(
-                template?.birth_date,
-                { containerClass, propertyName: "birth_date", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            ownerAddress: this.generate(
-                template?.ownerAddress,
-                { containerClass, propertyName: "ownerAddress", example: "null", isNullable: false },
-                () => this.sampleAddressDto()
-            ),
+            ...this.samplePetBaseDto(template),
             bark: this.generate(
                 template?.bark,
                 { containerClass, propertyName: "bark", example: "null", isNullable: false },
@@ -613,36 +546,7 @@ export class TestSampleData {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            id: this.generate(
-                template?.id,
-                { containerClass, propertyName: "id", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            birth_date: this.generate(
-                template?.birth_date,
-                { containerClass, propertyName: "birth_date", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            ownerAddress: this.generate(
-                template?.ownerAddress,
-                { containerClass, propertyName: "ownerAddress", example: "null", isNullable: false },
-                () => this.sampleAddressDto()
-            ),
-            bark: this.generate(
-                template?.bark,
-                { containerClass, propertyName: "bark", example: "null", isNullable: false },
-                () => this.sampleboolean()
-            ),
-            breed: this.generate(
-                template?.breed,
-                { containerClass, propertyName: "breed", example: "null", isNullable: false },
-                () => this.pickOne(GenericDogDtoBreedEnumValues)
-            ),
+            ...this.sampleGenericDogDto(template),
             pet_type: "WorkingDog",
             capabilities: this.generate(
                 template?.capabilities,

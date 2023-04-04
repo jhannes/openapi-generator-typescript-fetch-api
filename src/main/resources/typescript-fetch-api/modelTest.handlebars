@@ -319,7 +319,10 @@ export class TestSampleData {
         return this.pickOne({{classname}}Values);
 {{~else}}
         return {
-{{~#allVars}}
+{{~#if parent}}
+            ...this.sample{{parent}}(template),
+{{~/if~}}
+{{~#vars}}
 {{~#if isDateTime}}
             {{name}}: this.generate(
                 template?.{{name}},
@@ -349,7 +352,7 @@ export class TestSampleData {
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}"{{{example}}}"{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => this.sample{{{dataType}}}()
             ),{{~/if}}
-{{~/allVars}}
+{{~/vars}}
         };
 {{~/if}}
     }
