@@ -2,9 +2,12 @@ import {
     AddressDto,
     CatDto,
     DogDto,
-    DogDtoBreedEnumValues,
+    GenericDogDto,
+    GenericDogDtoBreedEnumValues,
+    GoldfishDto,
     PetBaseDto,
     PetDto,
+    WorkingDogDto,
 } from "../model";
 
 export class Random {
@@ -73,8 +76,11 @@ export interface SampleModelFactories {
     AddressDto?: ModelFactory<AddressDto>;
     CatDto?: ModelFactory<CatDto>;
     DogDto?: ModelFactory<DogDto>;
+    GenericDogDto?: ModelFactory<GenericDogDto>;
+    GoldfishDto?: ModelFactory<GoldfishDto>;
     PetBaseDto?: ModelFactory<PetBaseDto>;
     PetDto?: ModelFactory<PetDto>;
+    WorkingDogDto?: ModelFactory<WorkingDogDto>;
 }
 
 export interface SamplePropertyValues {
@@ -279,6 +285,14 @@ export class TestSampleData {
                 return this.sampleDogDto();
             case "Array<DogDto>":
                 return this.sampleArrayDogDto();
+            case "GenericDogDto":
+                return this.sampleGenericDogDto();
+            case "Array<GenericDogDto>":
+                return this.sampleArrayGenericDogDto();
+            case "GoldfishDto":
+                return this.sampleGoldfishDto();
+            case "Array<GoldfishDto>":
+                return this.sampleArrayGoldfishDto();
             case "PetBaseDto":
                 return this.samplePetBaseDto();
             case "Array<PetBaseDto>":
@@ -287,6 +301,10 @@ export class TestSampleData {
                 return this.samplePetDto();
             case "Array<PetDto>":
                 return this.sampleArrayPetDto();
+            case "WorkingDogDto":
+                return this.sampleWorkingDogDto();
+            case "Array<WorkingDogDto>":
+                return this.sampleArrayWorkingDogDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
@@ -342,7 +360,6 @@ export class TestSampleData {
                 { containerClass, propertyName: "id", isNullable: false },
                 () => this.sampleString("", "null")
             ),
-            pet_type: "Cat",
             name: this.generate(
                 template?.name,
                 { containerClass, propertyName: "name", isNullable: false },
@@ -358,6 +375,7 @@ export class TestSampleData {
                 { containerClass, propertyName: "ownerAddress", example: "null", isNullable: false },
                 () => this.sampleAddressDto()
             ),
+            pet_type: "Cat",
             hunts: this.generate(
                 template?.hunts,
                 { containerClass, propertyName: "hunts", example: "null", isNullable: false },
@@ -392,7 +410,6 @@ export class TestSampleData {
                 { containerClass, propertyName: "id", isNullable: false },
                 () => this.sampleString("", "null")
             ),
-            pet_type: "Dog",
             name: this.generate(
                 template?.name,
                 { containerClass, propertyName: "name", isNullable: false },
@@ -416,8 +433,9 @@ export class TestSampleData {
             breed: this.generate(
                 template?.breed,
                 { containerClass, propertyName: "breed", example: "null", isNullable: false },
-                () => this.pickOne(DogDtoBreedEnumValues)
+                () => this.pickOne(GenericDogDtoBreedEnumValues)
             ),
+            pet_type: "Dog",
         };
     }
 
@@ -431,8 +449,8 @@ export class TestSampleData {
         );
     }
 
-    samplePetBaseDto(template?: Factory<PetBaseDto>): PetBaseDto {
-        const containerClass = "PetBaseDto";
+    sampleGenericDogDto(template?: Factory<GenericDogDto>): GenericDogDto {
+        const containerClass = "GenericDogDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
@@ -442,9 +460,78 @@ export class TestSampleData {
                 { containerClass, propertyName: "id", isNullable: false },
                 () => this.sampleString("", "null")
             ),
-            pet_type: this.generate(
-                template?.pet_type,
-                { containerClass, propertyName: "pet_type", isNullable: false },
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            birth_date: this.generate(
+                template?.birth_date,
+                { containerClass, propertyName: "birth_date", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            ownerAddress: this.generate(
+                template?.ownerAddress,
+                { containerClass, propertyName: "ownerAddress", example: "null", isNullable: false },
+                () => this.sampleAddressDto()
+            ),
+            bark: this.generate(
+                template?.bark,
+                { containerClass, propertyName: "bark", example: "null", isNullable: false },
+                () => this.sampleboolean()
+            ),
+            breed: this.generate(
+                template?.breed,
+                { containerClass, propertyName: "breed", example: "null", isNullable: false },
+                () => this.pickOne(GenericDogDtoBreedEnumValues)
+            ),
+        };
+    }
+
+    sampleArrayGenericDogDto(
+        length?: number,
+        template?: Factory<GenericDogDto>
+    ): readonly GenericDogDto[] {
+        return this.randomArray(
+            () => this.sampleGenericDogDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleGoldfishDto(template?: Factory<GoldfishDto>): GoldfishDto {
+        const containerClass = "GoldfishDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            pet_type: "Goldfish",
+            species: this.generate(
+                template?.species,
+                { containerClass, propertyName: "species", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayGoldfishDto(
+        length?: number,
+        template?: Factory<GoldfishDto>
+    ): readonly GoldfishDto[] {
+        return this.randomArray(
+            () => this.sampleGoldfishDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    samplePetBaseDto(template?: Factory<PetBaseDto>): PetBaseDto {
+        const containerClass = "PetBaseDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            id: this.generate(
+                template?.id,
+                { containerClass, propertyName: "id", isNullable: false },
                 () => this.sampleString("", "null")
             ),
             name: this.generate(
@@ -485,11 +572,21 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        const pet_type = this.pickOneString(["Cat", "Dog"])
+        const pet_type = this.pickOneString(["WorkingDog", "Cat", "Goldfish", "Dog"])
         switch (pet_type) {
+            case "WorkingDog":
+                return {
+                    ...this.sampleWorkingDogDto(),
+                    pet_type,
+                };
             case "Cat":
                 return {
                     ...this.sampleCatDto(),
+                    pet_type,
+                };
+            case "Goldfish":
+                return {
+                    ...this.sampleGoldfishDto(),
                     pet_type,
                 };
             case "Dog":
@@ -506,6 +603,61 @@ export class TestSampleData {
     ): readonly PetDto[] {
         return this.randomArray(
             () => this.samplePetDto(factory),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleWorkingDogDto(template?: Factory<WorkingDogDto>): WorkingDogDto {
+        const containerClass = "WorkingDogDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            id: this.generate(
+                template?.id,
+                { containerClass, propertyName: "id", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            birth_date: this.generate(
+                template?.birth_date,
+                { containerClass, propertyName: "birth_date", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            ownerAddress: this.generate(
+                template?.ownerAddress,
+                { containerClass, propertyName: "ownerAddress", example: "null", isNullable: false },
+                () => this.sampleAddressDto()
+            ),
+            bark: this.generate(
+                template?.bark,
+                { containerClass, propertyName: "bark", example: "null", isNullable: false },
+                () => this.sampleboolean()
+            ),
+            breed: this.generate(
+                template?.breed,
+                { containerClass, propertyName: "breed", example: "null", isNullable: false },
+                () => this.pickOne(GenericDogDtoBreedEnumValues)
+            ),
+            pet_type: "WorkingDog",
+            capabilities: this.generate(
+                template?.capabilities,
+                { containerClass, propertyName: "capabilities", example: null, isNullable: false },
+                () => this.sampleArrayString()
+            ),
+        };
+    }
+
+    sampleArrayWorkingDogDto(
+        length?: number,
+        template?: Factory<WorkingDogDto>
+    ): readonly WorkingDogDto[] {
+        return this.randomArray(
+            () => this.sampleWorkingDogDto(template),
             length ?? this.arrayLength()
         );
     }

@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -262,12 +263,22 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         codegenModel.parentModel = codegenModel.interfaceModels.get(0);
                         codegenModel.parent = codegenModel.parentModel.classname;
                         codegenModel.parentVars = codegenModel.parentModel.vars;
-                        for (CodegenProperty var : codegenModel.vars) {
+                        for (CodegenProperty var : codegenModel.allVars) {
                             for (CodegenProperty inheritedVar : codegenModel.parentModel.allVars) {
                                 if (inheritedVar.name.equals(var.name)) {
+                                    if (Objects.equals(inheritedVar.get_enum(), var.get_enum())) {
+                                        var.datatypeWithEnum = inheritedVar.datatypeWithEnum;
+                                    }
+
                                     var.isInherited = inheritedVar.datatypeWithEnum.equals(var.datatypeWithEnum);
                                     var.required = var.required || inheritedVar.required;
                                 }
+                            }
+                        }
+                        codegenModel.vars = new ArrayList<>();
+                        for (CodegenProperty var : codegenModel.allVars) {
+                            if (!var.isInherited) {
+                                codegenModel.vars.add(var.clone());
                             }
                         }
                         codegenModel.allOf = new TreeSet<>();

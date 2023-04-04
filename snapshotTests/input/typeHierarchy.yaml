@@ -36,34 +36,51 @@ components:
         - country
     PetBase:
       required:
-        - pet_type
+        - name
       properties:
         id:
           type: string
           readOnly: true
-        pet_type:
-          type: string
         name:
           type: string
         birth_date:
           type: string
         ownerAddress:
           $ref: '#/components/schemas/Address'
-      discriminator:
-        propertyName: pet_type
-    Dog:     # "Dog" is a value for the pet_type property (the discriminator value)
-      allOf: # Combines the main `Pet` schema with `Dog`-specific properties
+    GenericDog:
+      allOf:
         - $ref: '#/components/schemas/PetBase'
         - type: object
-          # all other properties specific to a `Dog`
           properties:
-            pet_type:
-              enum: ["Dog"]
             bark:
               type: boolean
             breed:
               type: string
               enum: [Dingo, Husky, Retriever, Shepherd]
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/GenericDog'
+        - type: object
+          properties:
+            pet_type:
+              enum: ["Dog"]
+          required:
+            - pet_type
+    WorkingDog:
+      allOf:
+        - $ref: '#/components/schemas/GenericDog'
+        - type: object
+          properties:
+            pet_type:
+              enum: ["WorkingDog"]
+            capabilities:
+              type: array
+              items:
+                type: string
+                enum: [Guide, Rescue, Search]
+          required:
+            - pet_type
+            - capabilities
     Cat:     # "Cat" is a value for the pet_type property (the discriminator value)
       allOf: # Combines the main `Pet` schema with `Cat`-specific properties
         - $ref: '#/components/schemas/PetBase'
@@ -77,9 +94,22 @@ components:
             age:
               type: integer
               readOnly: true
+          required:
+            - pet_type
+    Goldfish:
+      type: object
+      properties:
+        pet_type:
+          enum: ["Goldfish"]
+        species:
+          type: string
+      required:
+        - pet_type
     Pet:
       oneOf:
         - $ref: '#/components/schemas/Cat'
         - $ref: '#/components/schemas/Dog'
+        - $ref: '#/components/schemas/WorkingDog'
+        - $ref: '#/components/schemas/Goldfish'
       discriminator:
         propertyName: pet_type

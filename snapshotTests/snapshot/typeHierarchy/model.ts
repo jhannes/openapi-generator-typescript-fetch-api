@@ -23,36 +23,60 @@ export interface CatDto extends PetBaseDto {
     readonly age?: number;
 }
 
-export interface DogDto extends PetBaseDto {
+export interface DogDto extends GenericDogDto {
     pet_type: "Dog";
-    bark?: boolean;
-    breed?: DogDtoBreedEnum;
 }
 
-export const DogDtoBreedEnumValues = [
+export interface GenericDogDto extends PetBaseDto {
+    bark?: boolean;
+    breed?: GenericDogDtoBreedEnum;
+}
+
+export const GenericDogDtoBreedEnumValues = [
     "Dingo",
     "Husky",
     "Retriever",
     "Shepherd",
 ] as const;
 
-export type DogDtoBreedEnum = typeof DogDtoBreedEnumValues[number];
+export type GenericDogDtoBreedEnum = typeof GenericDogDtoBreedEnumValues[number];
+
+export interface GoldfishDto {
+    pet_type: "Goldfish";
+    species?: string;
+}
 
 export interface PetBaseDto {
     readonly id?: string;
-    pet_type: string;
-    name?: string;
+    name: string;
     birth_date?: string;
     ownerAddress?: AddressDto;
 }
 
 export type PetDto =
+    { pet_type: "WorkingDog" } & WorkingDogDto |
     { pet_type: "Cat" } & CatDto |
+    { pet_type: "Goldfish" } & GoldfishDto |
     { pet_type: "Dog" } & DogDto;
 
 export const PetDtoDescriminators = [
+    "WorkingDog",
     "Cat",
+    "Goldfish",
     "Dog",
 ] as const;
 
 export type PetDtoDescriminator = typeof PetDtoDescriminators[number];
+
+export interface WorkingDogDto extends GenericDogDto {
+    pet_type: "WorkingDog";
+    capabilities: Array<WorkingDogDtoCapabilitiesEnum>;
+}
+
+export const WorkingDogDtoCapabilitiesEnumValues = [
+    "Guide",
+    "Rescue",
+    "Search",
+] as const;
+
+export type WorkingDogDtoCapabilitiesEnum = typeof WorkingDogDtoCapabilitiesEnumValues[number];
