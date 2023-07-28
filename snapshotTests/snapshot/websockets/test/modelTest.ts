@@ -490,6 +490,16 @@ export class TestSampleData {
         return {
             ...this.sampleChangeTrackedDto(template),
             ...this.samplePersonDto(template),
+            type: this.generate(
+                template?.type,
+                { containerClass, propertyName: "type", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", example: "null", isNullable: false },
+                () => this.samplePersonNameDto()
+            ),
             extra: this.generate(
                 template?.extra,
                 { containerClass, propertyName: "extra", isNullable: false },

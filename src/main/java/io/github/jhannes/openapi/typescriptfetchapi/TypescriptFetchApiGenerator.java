@@ -316,8 +316,9 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                     if (inheritedVar.get_enum() != null && Objects.equals(inheritedVar.get_enum(), var.get_enum())) {
                         var.datatypeWithEnum = inheritedVar.datatypeWithEnum;
                     }
-                    var.isInherited = inheritedVar.datatypeWithEnum.equals(var.datatypeWithEnum);
                     var.required = var.required || inheritedVar.required;
+                    var.isInherited = inheritedVar.datatypeWithEnum.equals(var.datatypeWithEnum)
+                        && var.required == inheritedVar.required;
                 }
             }
         }

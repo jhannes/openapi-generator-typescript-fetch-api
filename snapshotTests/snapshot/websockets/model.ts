@@ -37,6 +37,8 @@ export interface PersonNameDto {
 }
 
 export type PersonSnapshotDto = ChangeTrackedDto & PersonDto & {
+    type: string;
+    name: PersonNameDto;
     extra?: string;
 };
 
