@@ -23,17 +23,28 @@ export interface CreatePersonCommandDto {
     person: PersonDto;
 }
 
-export interface PersonDto {
+export interface PersonDto extends RecipientDto {
     readonly id?: string;
-    type: string;
-    givenName: string;
-    familyName: string;
-    email?: string;
+    type?: string;
+    name?: PersonNameDto;
     phone?: string;
     birthDate?: Date;
 }
 
-export type PersonSnapshotDto = ChangeTrackedDto & PersonDto;
+export interface PersonNameDto {
+    givenName?: string;
+    familyName?: string;
+}
+
+export interface PersonSnapshotAllOfDto {
+    extra?: string;
+}
+
+export type PersonSnapshotDto = ChangeTrackedDto & PersonDto & PersonSnapshotAllOfDto;
+
+export interface RecipientDto {
+    email?: string;
+}
 
 export interface StringSnapshotDto extends ChangeTrackedDto {
     name?: string;

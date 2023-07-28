@@ -2,7 +2,10 @@ import {
     ChangeTrackedDto,
     CreatePersonCommandDto,
     PersonDto,
+    PersonNameDto,
+    PersonSnapshotAllOfDto,
     PersonSnapshotDto,
+    RecipientDto,
     StringSnapshotDto,
     SubscribeDto,
     UnsubscribeDto,
@@ -78,7 +81,10 @@ export interface SampleModelFactories {
     ChangeTrackedDto?: ModelFactory<ChangeTrackedDto>;
     CreatePersonCommandDto?: ModelFactory<CreatePersonCommandDto>;
     PersonDto?: ModelFactory<PersonDto>;
+    PersonNameDto?: ModelFactory<PersonNameDto>;
+    PersonSnapshotAllOfDto?: ModelFactory<PersonSnapshotAllOfDto>;
     PersonSnapshotDto?: ModelFactory<PersonSnapshotDto>;
+    RecipientDto?: ModelFactory<RecipientDto>;
     StringSnapshotDto?: ModelFactory<StringSnapshotDto>;
     SubscribeDto?: ModelFactory<SubscribeDto>;
     UnsubscribeDto?: ModelFactory<UnsubscribeDto>;
@@ -290,10 +296,22 @@ export class TestSampleData {
                 return this.samplePersonDto();
             case "Array<PersonDto>":
                 return this.sampleArrayPersonDto();
+            case "PersonNameDto":
+                return this.samplePersonNameDto();
+            case "Array<PersonNameDto>":
+                return this.sampleArrayPersonNameDto();
+            case "PersonSnapshotAllOfDto":
+                return this.samplePersonSnapshotAllOfDto();
+            case "Array<PersonSnapshotAllOfDto>":
+                return this.sampleArrayPersonSnapshotAllOfDto();
             case "PersonSnapshotDto":
                 return this.samplePersonSnapshotDto();
             case "Array<PersonSnapshotDto>":
                 return this.sampleArrayPersonSnapshotDto();
+            case "RecipientDto":
+                return this.sampleRecipientDto();
+            case "Array<RecipientDto>":
+                return this.sampleArrayRecipientDto();
             case "StringSnapshotDto":
                 return this.sampleStringSnapshotDto();
             case "Array<StringSnapshotDto>":
@@ -402,6 +420,7 @@ export class TestSampleData {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
+            ...this.sampleRecipientDto(template),
             id: this.generate(
                 template?.id,
                 { containerClass, propertyName: "id", isNullable: false },
@@ -412,20 +431,10 @@ export class TestSampleData {
                 { containerClass, propertyName: "type", isNullable: false },
                 () => this.sampleString("", "null")
             ),
-            givenName: this.generate(
-                template?.givenName,
-                { containerClass, propertyName: "givenName", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            familyName: this.generate(
-                template?.familyName,
-                { containerClass, propertyName: "familyName", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            email: this.generate(
-                template?.email,
-                { containerClass, propertyName: "email", isNullable: false },
-                () => this.sampleString("email", "null")
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", example: "null", isNullable: false },
+                () => this.samplePersonNameDto()
             ),
             phone: this.generate(
                 template?.phone,
@@ -446,6 +455,59 @@ export class TestSampleData {
     ): readonly PersonDto[] {
         return this.randomArray(
             () => this.samplePersonDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    samplePersonNameDto(template?: Factory<PersonNameDto>): PersonNameDto {
+        const containerClass = "PersonNameDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            givenName: this.generate(
+                template?.givenName,
+                { containerClass, propertyName: "givenName", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            familyName: this.generate(
+                template?.familyName,
+                { containerClass, propertyName: "familyName", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayPersonNameDto(
+        length?: number,
+        template?: Factory<PersonNameDto>
+    ): readonly PersonNameDto[] {
+        return this.randomArray(
+            () => this.samplePersonNameDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    samplePersonSnapshotAllOfDto(template?: Factory<PersonSnapshotAllOfDto>): PersonSnapshotAllOfDto {
+        const containerClass = "PersonSnapshotAllOfDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            extra: this.generate(
+                template?.extra,
+                { containerClass, propertyName: "extra", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayPersonSnapshotAllOfDto(
+        length?: number,
+        template?: Factory<PersonSnapshotAllOfDto>
+    ): readonly PersonSnapshotAllOfDto[] {
+        return this.randomArray(
+            () => this.samplePersonSnapshotAllOfDto(template),
             length ?? this.arrayLength()
         );
     }
@@ -476,6 +538,11 @@ export class TestSampleData {
                 { containerClass, propertyName: "updatedBy", isNullable: false },
                 () => this.sampleString("username", "null")
             ),
+            email: this.generate(
+                template?.email,
+                { containerClass, propertyName: "email", isNullable: false },
+                () => this.sampleString("email", "null")
+            ),
             id: this.generate(
                 template?.id,
                 { containerClass, propertyName: "id", isNullable: false },
@@ -486,20 +553,10 @@ export class TestSampleData {
                 { containerClass, propertyName: "type", isNullable: false },
                 () => this.sampleString("", "null")
             ),
-            givenName: this.generate(
-                template?.givenName,
-                { containerClass, propertyName: "givenName", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            familyName: this.generate(
-                template?.familyName,
-                { containerClass, propertyName: "familyName", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            email: this.generate(
-                template?.email,
-                { containerClass, propertyName: "email", isNullable: false },
-                () => this.sampleString("email", "null")
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", example: "null", isNullable: false },
+                () => this.samplePersonNameDto()
             ),
             phone: this.generate(
                 template?.phone,
@@ -511,6 +568,11 @@ export class TestSampleData {
                 { containerClass, propertyName: "birthDate", example: "null", isNullable: false },
                 () => this.sampleDate()
             ),
+            extra: this.generate(
+                template?.extra,
+                { containerClass, propertyName: "extra", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
         };
     }
 
@@ -520,6 +582,30 @@ export class TestSampleData {
     ): readonly PersonSnapshotDto[] {
         return this.randomArray(
             () => this.samplePersonSnapshotDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleRecipientDto(template?: Factory<RecipientDto>): RecipientDto {
+        const containerClass = "RecipientDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            email: this.generate(
+                template?.email,
+                { containerClass, propertyName: "email", isNullable: false },
+                () => this.sampleString("email", "null")
+            ),
+        };
+    }
+
+    sampleArrayRecipientDto(
+        length?: number,
+        template?: Factory<RecipientDto>
+    ): readonly RecipientDto[] {
+        return this.randomArray(
+            () => this.sampleRecipientDto(template),
             length ?? this.arrayLength()
         );
     }

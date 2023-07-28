@@ -7,6 +7,8 @@ import {
     GoldfishDto,
     PetBaseDto,
     PetDto,
+    WorkingDogCapabilityDto,
+    WorkingDogCapabilityDtoValues,
     WorkingDogDto,
 } from "../model";
 
@@ -80,6 +82,7 @@ export interface SampleModelFactories {
     GoldfishDto?: ModelFactory<GoldfishDto>;
     PetBaseDto?: ModelFactory<PetBaseDto>;
     PetDto?: ModelFactory<PetDto>;
+    WorkingDogCapabilityDto?: ModelFactory<WorkingDogCapabilityDto>;
     WorkingDogDto?: ModelFactory<WorkingDogDto>;
 }
 
@@ -301,6 +304,10 @@ export class TestSampleData {
                 return this.samplePetDto();
             case "Array<PetDto>":
                 return this.sampleArrayPetDto();
+            case "WorkingDogCapabilityDto":
+                return this.sampleWorkingDogCapabilityDto();
+            case "Array<WorkingDogCapabilityDto>":
+                return this.sampleArrayWorkingDogCapabilityDto();
             case "WorkingDogDto":
                 return this.sampleWorkingDogDto();
             case "Array<WorkingDogDto>":
@@ -335,6 +342,11 @@ export class TestSampleData {
                 template?.country,
                 { containerClass, propertyName: "country", isNullable: false },
                 () => this.sampleString("", "null")
+            ),
+            addressTypes: this.generate(
+                template?.addressTypes,
+                { containerClass, propertyName: "addressTypes", example: null, isNullable: false },
+                () => this.sampleArrayString()
             ),
         };
     }
@@ -438,6 +450,11 @@ export class TestSampleData {
         }
         return {
             pet_type: "Goldfish",
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
             species: this.generate(
                 template?.species,
                 { containerClass, propertyName: "species", isNullable: false },
@@ -540,6 +557,21 @@ export class TestSampleData {
         );
     }
 
+    sampleWorkingDogCapabilityDto(): WorkingDogCapabilityDto {
+        const containerClass = "WorkingDogCapabilityDto";
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return this.pickOne(WorkingDogCapabilityDtoValues);
+    }
+
+    sampleArrayWorkingDogCapabilityDto(length?: number): readonly WorkingDogCapabilityDto[] {
+        return this.randomArray(
+            () => this.sampleWorkingDogCapabilityDto(),
+            length ?? this.arrayLength()
+        );
+    }
+
     sampleWorkingDogDto(template?: Factory<WorkingDogDto>): WorkingDogDto {
         const containerClass = "WorkingDogDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
@@ -551,7 +583,7 @@ export class TestSampleData {
             capabilities: this.generate(
                 template?.capabilities,
                 { containerClass, propertyName: "capabilities", example: null, isNullable: false },
-                () => this.sampleArrayString()
+                () => this.sampleArrayWorkingDogCapabilityDto()
             ),
         };
     }

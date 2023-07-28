@@ -20,13 +20,13 @@ components:
   schemas:
     WebSocketMessage:
       oneOf:
-      - $ref: '#/components/schemas/WebSocketCommand'
-      - $ref: '#/components/schemas/WebSocketRequest'
+        - $ref: '#/components/schemas/WebSocketCommand'
+        - $ref: '#/components/schemas/WebSocketRequest'
       discriminator:
         propertyName: command
     WebSocketRequest:
       oneOf:
-      - $ref: '#/components/schemas/Subscribe'
+        - $ref: '#/components/schemas/Subscribe'
       discriminator:
         propertyName: request
     Subscribe:
@@ -41,8 +41,8 @@ components:
       required: [ request ]
     WebSocketCommand:
       oneOf:
-      - $ref: '#/components/schemas/CreatePersonCommand'
-      - $ref: '#/components/schemas/UpdatePersonCommand'
+        - $ref: '#/components/schemas/CreatePersonCommand'
+        - $ref: '#/components/schemas/UpdatePersonCommand'
       discriminator:
         propertyName: command
         mapping:
@@ -68,31 +68,36 @@ components:
         person:
           $ref: "#/components/schemas/Person"
       required: [ command, id, person ]
-    Person:
+    Recipient:
       properties:
-        id:
+        email:
           type: string
-          format: uuid
-          readOnly: true
-        type:
-          type: string
+          format: email
+    Person:
+      allOf:
+        - $ref: "#/components/schemas/Recipient"
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              readOnly: true
+            type:
+              type: string
+            name:
+              $ref: "#/components/schemas/PersonName"
+            phone:
+              type: string
+              format: phone
+            birthDate:
+              type: string
+              format: date
+    PersonName:
+      properties:
         givenName:
           type: string
         familyName:
           type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-          format: phone
-        birthDate:
-          type: string
-          format: date
-      required:
-      - type
-      - givenName
-      - familyName
     ChangeTracked:
       properties:
         createdAt:
@@ -108,20 +113,27 @@ components:
           type: string
           format: username
       required:
-      - createdAt
-      - createdBy
+        - createdAt
+        - createdBy
     PersonSnapshot:
       allOf:
-      - $ref: "#/components/schemas/ChangeTracked"
-      - $ref: "#/components/schemas/Person"
+        - $ref: "#/components/schemas/ChangeTracked"
+        - $ref: "#/components/schemas/Person"
+        - type: object
+          properties:
+            extra:
+              type: string
+      required:
+        - type
+        - name
     StringSnapshot:
       allOf:
-      - $ref: "#/components/schemas/ChangeTracked"
-      - type: object
-        properties:
-          name:
-            type: string
-      - type: object
-        properties:
-          type:
-            type: string
+        - $ref: "#/components/schemas/ChangeTracked"
+        - type: object
+          properties:
+            name:
+              type: string
+        - type: object
+          properties:
+            type:
+              type: string

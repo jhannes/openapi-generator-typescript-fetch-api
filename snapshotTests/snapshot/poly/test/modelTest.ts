@@ -366,19 +366,24 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        const code = this.pickOneString(["IllegalEmailAddressError", "DuplicateIdentifierError", "GeneralError"])
+        const code = this.pickOneString(["duplicateIdentifier", "generalError", "illegalAddress", "networkError"])
         switch (code) {
-            case "IllegalEmailAddressError":
-                return {
-                    ...this.sampleIllegalEmailAddressErrorDto(),
-                    code,
-                };
-            case "DuplicateIdentifierError":
+            case "duplicateIdentifier":
                 return {
                     ...this.sampleDuplicateIdentifierErrorDto(),
                     code,
                 };
-            case "GeneralError":
+            case "generalError":
+                return {
+                    ...this.sampleGeneralErrorDto(),
+                    code,
+                };
+            case "illegalAddress":
+                return {
+                    ...this.sampleIllegalEmailAddressErrorDto(),
+                    code,
+                };
+            case "networkError":
                 return {
                     ...this.sampleGeneralErrorDto(),
                     code,
@@ -679,24 +684,29 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        const code = this.pickOneString(["IllegalEmailAddressError", "DuplicateIdentifierError", "GeneralError", "NotFoundError"])
+        const code = this.pickOneString(["duplicateIdentifier", "generalError", "illegalAddress", "networkError", "notFound"])
         switch (code) {
-            case "IllegalEmailAddressError":
-                return {
-                    ...this.sampleIllegalEmailAddressErrorDto(),
-                    code,
-                };
-            case "DuplicateIdentifierError":
+            case "duplicateIdentifier":
                 return {
                     ...this.sampleDuplicateIdentifierErrorDto(),
                     code,
                 };
-            case "GeneralError":
+            case "generalError":
                 return {
                     ...this.sampleGeneralErrorDto(),
                     code,
                 };
-            case "NotFoundError":
+            case "illegalAddress":
+                return {
+                    ...this.sampleIllegalEmailAddressErrorDto(),
+                    code,
+                };
+            case "networkError":
+                return {
+                    ...this.sampleGeneralErrorDto(),
+                    code,
+                };
+            case "notFound":
                 return {
                     ...this.sampleNotFoundErrorDto(),
                     code,

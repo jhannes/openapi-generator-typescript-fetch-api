@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Conversations
+  description: Conversations for real time and offline peer-to-peer web chat
+  version: 1.0.0
+servers:
+  - url: '/'
+paths:
+  /api/conversations:
+    get:
+      responses:
+        200:
+          description: Current ongoing conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConversationSnapshot"
+  /api/commands:
+    post:
+      requestBody:
+        description: A command sent to the server
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommandToServer"
+      responses:
+        200:
+          description: Command was accepted
+        400:
+          description: Command was rejected
+components:
+  schemas:
+    ConversationSnapshot:
+      allOf:
+        - $ref: "#/components/schemas/ChangeTracked"
+        - properties:
+            id:
+              type: string
+              format: uuid
+            info:
+              $ref: "#/components/schemas/ConversationInfo"
+            messages:
+              additionalProperties:
+                $ref: "#/components/schemas/ConversationMessageSnapshot"
+          required: [ id , info, messages ]
+    ConversationMessageSnapshot:
+      allOf:
+        - $ref: "#/components/schemas/ChangeTracked"
+        - $ref: "#/components/schemas/ConversationMessage"
+
+    ConversationInfo:
+      properties:
+        title:
+          type: string
+        summary:
+          type: string
+      required: [ title ]
+    ConversationMessage:
+      properties:
+        text:
+          type: string
+      required: [ text ]
+
+    ChangeTracked:
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [ createdAt, updatedAt ]
+
+    CommandToServer:
+      properties:
+        id:
+          type: string
+          format: uuid
+        clientTime:
+          type: string
+          format: date-time
+        delta:
+          $ref: "#/components/schemas/Delta"
+      required: [id, clientTime, delta]
+
+    Delta:
+      oneOf:
+        - $ref: "#/components/schemas/CreateConversationDelta"
+        - $ref: "#/components/schemas/UpdateConversationDelta"
+        - $ref: "#/components/schemas/AddMessageToConversationDelta"
+      discriminator:
+        propertyName: "delta"
+
+    CreateConversationDelta:
+      properties:
+        delta:
+          enum: [ CreateConversationDelta ]
+        conversationId:
+          type: string
+          format: uuid
+        info:
+          $ref: "#/components/schemas/ConversationInfo"
+      required: [ delta, conversationId, info ]
+    UpdateConversationDelta:
+      properties:
+        delta:
+          enum: [ UpdateConversationDelta ]
+        conversationId:
+          type: string
+          format: uuid
+        info:
+          $ref: "#/components/schemas/ConversationInfo"
+      required: [ delta, conversationId, info ]
+    AddMessageToConversationDelta:
+      properties:
+        delta:
+          enum: [ AddMessageToConversationDelta ]
+        conversationId:
+          type: string
+          format: uuid
+        messageId:
+          type: string
+          format: uuid
+        message:
+          $ref: "#/components/schemas/ConversationMessage"
+      required: [ delta, conversationId, messageId, message ]
+
+    MessageToServer:
+      oneOf:
+        - $ref: "#/components/schemas/CommandToServer"
+        - $ref: "#/components/schemas/RequestToServer"
+    MessageFromServer:
+      oneOf:
+        - $ref: "#/components/schemas/SnapshotSet"
+        - $ref: "#/components/schemas/EventFromServer"
+
+    SnapshotSet:
+      properties:
+        conversations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConversationSnapshot"
+      required: [conversations]
+    EventFromServer:
+      allOf:
+        - $ref: "#/components/schemas/CommandToServer"
+        - properties:
+            serverTime:
+              type: string
+              format: date-time
+            username:
+              type: string
+          required: [serverTime, username]
+
+    RequestToServer:
+      oneOf:
+        - $ref: "#/components/schemas/SubscribeRequest"
+      discriminator:
+        propertyName: request
+
+    SubscribeRequest:
+      properties:
+        request:
+          enum: [SubscribeRequest]
+        clientId:
+          type: string
+          format: uuid
+      required: [request, clientId]

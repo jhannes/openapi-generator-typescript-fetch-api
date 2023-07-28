@@ -19,6 +19,7 @@ import {
     GoldfishDto,
     PetBaseDto,
     PetDto,
+    WorkingDogCapabilityDto,
     WorkingDogDto,
 } from "../model";
 

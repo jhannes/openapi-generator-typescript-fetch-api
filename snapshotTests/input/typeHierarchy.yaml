@@ -31,6 +31,10 @@ components:
           type: string
         country:
           type: string
+        addressTypes:
+          type: array
+          items:
+            enum: [ SHIPPING, BILLING ]
       required:
         - city
         - country
@@ -51,6 +55,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - type: object
+          # all other properties specific to a `Dog`
           properties:
             bark:
               type: boolean
@@ -76,11 +81,12 @@ components:
             capabilities:
               type: array
               items:
-                type: string
-                enum: [Guide, Rescue, Search]
+                $ref: "#/components/schemas/WorkingDogCapability"
           required:
             - pet_type
             - capabilities
+    WorkingDogCapability:
+      enum: [Guide, Rescue, Search]
     Cat:     # "Cat" is a value for the pet_type property (the discriminator value)
       allOf: # Combines the main `Pet` schema with `Cat`-specific properties
         - $ref: '#/components/schemas/PetBase'
@@ -101,6 +107,8 @@ components:
       properties:
         pet_type:
           enum: ["Goldfish"]
+        name:
+          type: string
         species:
           type: string
       required:

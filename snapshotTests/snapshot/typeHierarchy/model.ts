@@ -15,7 +15,15 @@ export interface AddressDto {
     addressLine2?: string;
     city: string;
     country: string;
+    addressTypes?: Array<AddressDtoAddressTypesEnum>;
 }
+
+export const AddressDtoAddressTypesEnumValues = [
+    "SHIPPING",
+    "BILLING",
+] as const;
+
+export type AddressDtoAddressTypesEnum = typeof AddressDtoAddressTypesEnumValues[number];
 
 export interface CatDto extends PetBaseDto {
     pet_type: "Cat";
@@ -43,6 +51,7 @@ export type GenericDogDtoBreedEnum = typeof GenericDogDtoBreedEnumValues[number]
 
 export interface GoldfishDto {
     pet_type: "Goldfish";
+    name?: string;
     species?: string;
 }
 
@@ -67,16 +76,15 @@ export const PetDtoDescriminators = [
 ] as const;
 
 export type PetDtoDescriminator = typeof PetDtoDescriminators[number];
-
-export interface WorkingDogDto extends GenericDogDto {
-    pet_type: "WorkingDog";
-    capabilities: Array<WorkingDogDtoCapabilitiesEnum>;
-}
-
-export const WorkingDogDtoCapabilitiesEnumValues = [
+export const WorkingDogCapabilityDtoValues = [
     "Guide",
     "Rescue",
     "Search",
 ] as const;
 
-export type WorkingDogDtoCapabilitiesEnum = typeof WorkingDogDtoCapabilitiesEnumValues[number];
+export type WorkingDogCapabilityDto = typeof WorkingDogCapabilityDtoValues[number];
+
+export interface WorkingDogDto extends GenericDogDto {
+    pet_type: "WorkingDog";
+    capabilities: Array<WorkingDogCapabilityDto>;
+}

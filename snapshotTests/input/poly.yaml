@@ -140,6 +140,11 @@ components:
         - $ref: '#/components/schemas/IllegalEmailAddressError'
       discriminator:
         propertyName: code
+        mapping:
+          generalError: '#/components/schemas/GeneralError'
+          networkError: '#/components/schemas/GeneralError'
+          duplicateIdentifier: '#/components/schemas/DuplicateIdentifierError'
+          illegalAddress: '#/components/schemas/IllegalEmailAddressError'
     UpdateError:
       oneOf:
         - $ref: '#/components/schemas/GeneralError'
@@ -148,6 +153,12 @@ components:
         - $ref: '#/components/schemas/IllegalEmailAddressError'
       discriminator:
         propertyName: code
+        mapping:
+          generalError: '#/components/schemas/GeneralError'
+          networkError: '#/components/schemas/GeneralError'
+          notFound: '#/components/schemas/NotFoundError'
+          duplicateIdentifier: '#/components/schemas/DuplicateIdentifierError'
+          illegalAddress: '#/components/schemas/IllegalEmailAddressError'
     GeneralError:
       properties:
         code:

@@ -22,14 +22,16 @@ export const AnyPartyDtoDescriminators = [
 export type AnyPartyDtoDescriminator = typeof AnyPartyDtoDescriminators[number];
 
 export type CreationErrorDto =
-    { code: "IllegalEmailAddressError" } & IllegalEmailAddressErrorDto |
-    { code: "DuplicateIdentifierError" } & DuplicateIdentifierErrorDto |
-    { code: "GeneralError" } & GeneralErrorDto;
+    { code: "duplicateIdentifier" } & DuplicateIdentifierErrorDto |
+    { code: "generalError" } & GeneralErrorDto |
+    { code: "illegalAddress" } & IllegalEmailAddressErrorDto |
+    { code: "networkError" } & GeneralErrorDto;
 
 export const CreationErrorDtoDescriminators = [
-    "IllegalEmailAddressError",
-    "DuplicateIdentifierError",
-    "GeneralError",
+    "duplicateIdentifier",
+    "generalError",
+    "illegalAddress",
+    "networkError",
 ] as const;
 
 export type CreationErrorDtoDescriminator = typeof CreationErrorDtoDescriminators[number];
@@ -84,16 +86,18 @@ export interface PersonDto {
 }
 
 export type UpdateErrorDto =
-    { code: "IllegalEmailAddressError" } & IllegalEmailAddressErrorDto |
-    { code: "DuplicateIdentifierError" } & DuplicateIdentifierErrorDto |
-    { code: "GeneralError" } & GeneralErrorDto |
-    { code: "NotFoundError" } & NotFoundErrorDto;
+    { code: "duplicateIdentifier" } & DuplicateIdentifierErrorDto |
+    { code: "generalError" } & GeneralErrorDto |
+    { code: "illegalAddress" } & IllegalEmailAddressErrorDto |
+    { code: "networkError" } & GeneralErrorDto |
+    { code: "notFound" } & NotFoundErrorDto;
 
 export const UpdateErrorDtoDescriminators = [
-    "IllegalEmailAddressError",
-    "DuplicateIdentifierError",
-    "GeneralError",
-    "NotFoundError",
+    "duplicateIdentifier",
+    "generalError",
+    "illegalAddress",
+    "networkError",
+    "notFound",
 ] as const;
 
 export type UpdateErrorDtoDescriminator = typeof UpdateErrorDtoDescriminators[number];
