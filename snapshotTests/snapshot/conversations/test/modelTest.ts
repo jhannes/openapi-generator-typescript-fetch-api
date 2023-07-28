@@ -514,21 +514,8 @@ export class TestSampleData {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            createdAt: this.generate(
-                template?.createdAt,
-                { containerClass, propertyName: "createdAt", example: "null", isNullable: false },
-                () => this.sampleDate()
-            ),
-            updatedAt: this.generate(
-                template?.updatedAt,
-                { containerClass, propertyName: "updatedAt", example: "null", isNullable: false },
-                () => this.sampleDate()
-            ),
-            text: this.generate(
-                template?.text,
-                { containerClass, propertyName: "text", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
+            ...this.sampleChangeTrackedDto(template),
+            ...this.sampleConversationMessageDto(template),
         };
     }
 

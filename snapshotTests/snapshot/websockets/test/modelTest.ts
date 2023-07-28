@@ -3,7 +3,6 @@ import {
     CreatePersonCommandDto,
     PersonDto,
     PersonNameDto,
-    PersonSnapshotAllOfDto,
     PersonSnapshotDto,
     RecipientDto,
     StringSnapshotDto,
@@ -82,7 +81,6 @@ export interface SampleModelFactories {
     CreatePersonCommandDto?: ModelFactory<CreatePersonCommandDto>;
     PersonDto?: ModelFactory<PersonDto>;
     PersonNameDto?: ModelFactory<PersonNameDto>;
-    PersonSnapshotAllOfDto?: ModelFactory<PersonSnapshotAllOfDto>;
     PersonSnapshotDto?: ModelFactory<PersonSnapshotDto>;
     RecipientDto?: ModelFactory<RecipientDto>;
     StringSnapshotDto?: ModelFactory<StringSnapshotDto>;
@@ -300,10 +298,6 @@ export class TestSampleData {
                 return this.samplePersonNameDto();
             case "Array<PersonNameDto>":
                 return this.sampleArrayPersonNameDto();
-            case "PersonSnapshotAllOfDto":
-                return this.samplePersonSnapshotAllOfDto();
-            case "Array<PersonSnapshotAllOfDto>":
-                return this.sampleArrayPersonSnapshotAllOfDto();
             case "PersonSnapshotDto":
                 return this.samplePersonSnapshotDto();
             case "Array<PersonSnapshotDto>":
@@ -488,86 +482,14 @@ export class TestSampleData {
         );
     }
 
-    samplePersonSnapshotAllOfDto(template?: Factory<PersonSnapshotAllOfDto>): PersonSnapshotAllOfDto {
-        const containerClass = "PersonSnapshotAllOfDto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        return {
-            extra: this.generate(
-                template?.extra,
-                { containerClass, propertyName: "extra", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-        };
-    }
-
-    sampleArrayPersonSnapshotAllOfDto(
-        length?: number,
-        template?: Factory<PersonSnapshotAllOfDto>
-    ): readonly PersonSnapshotAllOfDto[] {
-        return this.randomArray(
-            () => this.samplePersonSnapshotAllOfDto(template),
-            length ?? this.arrayLength()
-        );
-    }
-
     samplePersonSnapshotDto(template?: Factory<PersonSnapshotDto>): PersonSnapshotDto {
         const containerClass = "PersonSnapshotDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            createdAt: this.generate(
-                template?.createdAt,
-                { containerClass, propertyName: "createdAt", example: "null", isNullable: false },
-                () => this.sampleDate()
-            ),
-            createdBy: this.generate(
-                template?.createdBy,
-                { containerClass, propertyName: "createdBy", isNullable: false },
-                () => this.sampleString("username", "null")
-            ),
-            updatedAt: this.generate(
-                template?.updatedAt,
-                { containerClass, propertyName: "updatedAt", example: "null", isNullable: false },
-                () => this.sampleDate()
-            ),
-            updatedBy: this.generate(
-                template?.updatedBy,
-                { containerClass, propertyName: "updatedBy", isNullable: false },
-                () => this.sampleString("username", "null")
-            ),
-            email: this.generate(
-                template?.email,
-                { containerClass, propertyName: "email", isNullable: false },
-                () => this.sampleString("email", "null")
-            ),
-            id: this.generate(
-                template?.id,
-                { containerClass, propertyName: "id", isNullable: false },
-                () => this.sampleString("uuid", "null")
-            ),
-            type: this.generate(
-                template?.type,
-                { containerClass, propertyName: "type", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-            name: this.generate(
-                template?.name,
-                { containerClass, propertyName: "name", example: "null", isNullable: false },
-                () => this.samplePersonNameDto()
-            ),
-            phone: this.generate(
-                template?.phone,
-                { containerClass, propertyName: "phone", isNullable: false },
-                () => this.sampleString("phone", "null")
-            ),
-            birthDate: this.generate(
-                template?.birthDate,
-                { containerClass, propertyName: "birthDate", example: "null", isNullable: false },
-                () => this.sampleDate()
-            ),
+            ...this.sampleChangeTrackedDto(template),
+            ...this.samplePersonDto(template),
             extra: this.generate(
                 template?.extra,
                 { containerClass, propertyName: "extra", isNullable: false },

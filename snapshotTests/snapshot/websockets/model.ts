@@ -36,11 +36,9 @@ export interface PersonNameDto {
     familyName?: string;
 }
 
-export interface PersonSnapshotAllOfDto {
+export type PersonSnapshotDto = ChangeTrackedDto & PersonDto & {
     extra?: string;
-}
-
-export type PersonSnapshotDto = ChangeTrackedDto & PersonDto & PersonSnapshotAllOfDto;
+};
 
 export interface RecipientDto {
     email?: string;

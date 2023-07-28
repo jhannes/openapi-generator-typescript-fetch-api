@@ -322,6 +322,9 @@ export class TestSampleData {
 {{~#if parent}}
             ...this.sample{{parent}}(template),
 {{~/if~}}
+{{~#interfaceModels}}
+            ...this.sample{{name}}Dto(template),
+{{~/interfaceModels}}
 {{~#vars}}
 {{~#if isDateTime}}
             {{name}}: this.generate(

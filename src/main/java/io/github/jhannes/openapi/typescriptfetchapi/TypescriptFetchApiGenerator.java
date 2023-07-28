@@ -242,7 +242,14 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                     List<CodegenModel> interfacesToBeRemoved = codegenModel.interfaceModels.stream()
                             .filter(element -> element.name.startsWith(codegenModel.name + "_allOf"))
                             .collect(Collectors.toList());
-                    if (codegenModel.interfaceModels.size() == interfacesToBeRemoved.size() + 1) {
+
+                    for (CodegenModel itf : interfacesToBeRemoved) {
+                        codegenModel.allOf.remove(itf.classname);
+                        elementsToBeRemoved.add(itf.name);
+                        codegenModel.interfaceModels.removeIf(e -> e.name.equals(itf.name));
+                    }
+
+                    if (codegenModel.interfaceModels.size() == 1) {
                         for (CodegenModel itf : interfacesToBeRemoved) {
                             codegenModel.allOf.remove(itf.classname);
                             elementsToBeRemoved.add(itf.name);
@@ -251,21 +258,15 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         codegenModel.parentModel = codegenModel.interfaceModels.get(0);
                         codegenModel.parent = codegenModel.parentModel.classname;
                         codegenModel.parentVars = codegenModel.parentModel.allVars;
-                        for (CodegenProperty var : codegenModel.allVars) {
-                            for (CodegenProperty inheritedVar : codegenModel.parentModel.allVars) {
-                                if (inheritedVar.name.equals(var.name)) {
-                                    if (Objects.equals(inheritedVar.get_enum(), var.get_enum())) {
-                                        var.datatypeWithEnum = inheritedVar.datatypeWithEnum;
-                                    }
-
-                                    var.isInherited = inheritedVar.datatypeWithEnum.equals(var.datatypeWithEnum);
-                                    var.required = var.required || inheritedVar.required;
-                                }
-                            }
-                        }
                         codegenModel.allOf = new TreeSet<>();
                         codegenModel.interfaceModels = new ArrayList<>();
                         codegenModel.interfaces = new ArrayList<>();
+                        updateInheritedVariables(codegenModel, codegenModel.parentModel);
+                    }
+                }
+                if (codegenModel.interfaceModels != null) {
+                    for (CodegenModel interfaceModel : codegenModel.interfaceModels) {
+                        updateInheritedVariables(codegenModel, interfaceModel);
                     }
                 }
             }
@@ -304,6 +305,20 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 codegenModel.readOnlyVars.add(var.clone());
             } else if (!var.isWriteOnly) {
                 codegenModel.readWriteVars.add(var.clone());
+            }
+        }
+    }
+
+    private static void updateInheritedVariables(CodegenModel subtype, CodegenModel supertype) {
+        for (CodegenProperty var : subtype.allVars) {
+            for (CodegenProperty inheritedVar : supertype.allVars) {
+                if (inheritedVar.name.equals(var.name)) {
+                    if (inheritedVar.get_enum() != null && Objects.equals(inheritedVar.get_enum(), var.get_enum())) {
+                        var.datatypeWithEnum = inheritedVar.datatypeWithEnum;
+                    }
+                    var.isInherited = inheritedVar.datatypeWithEnum.equals(var.datatypeWithEnum);
+                    var.required = var.required || inheritedVar.required;
+                }
             }
         }
     }

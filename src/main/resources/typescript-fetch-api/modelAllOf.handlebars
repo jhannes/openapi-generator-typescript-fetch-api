@@ -4,4 +4,8 @@
  */
 {{~/if}}
 export type {{classname}} =
-{{~#allOf}} {{.}}{{#unless @last}} &{{/unless}}{{/allOf}};
+{{~#allOf}} {{.}}{{#unless @last}} &{{/unless}}{{/allOf}}{{#if vars}} & {
+{{~#vars}}
+    {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{#isReadOnly}}?{{/isReadOnly}}{{/required}}: {{#if isEnum}}{{{datatypeWithEnum}}}{{else if isFile}}Blob{{else}}{{{dataType}}}{{/if}}{{#isNullable}} | null{{/isNullable}};
+{{~/vars}}
+}{{/if}};
