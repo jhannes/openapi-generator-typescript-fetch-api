@@ -19,8 +19,8 @@ import {
     UnknownResourceDto,
     UserDto,
     UsersGet200ResponseDto,
-    UsersIdDelete200Response1Dto,
-    UsersIdDelete200ResponseDto,
+    UsersIdGet200ResponseDto,
+    UsersIdPut200ResponseDto,
 } from "./model";
 
 import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
@@ -83,7 +83,7 @@ export interface DefaultApiInterface {
      */
     usersIdGet(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UsersIdDelete200ResponseDto>;
+    } & RequestCallOptions): Promise<UsersIdGet200ResponseDto>;
     /**
      *
      * @summary Updates a user
@@ -92,7 +92,7 @@ export interface DefaultApiInterface {
      */
     usersIdPatch(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UsersIdDelete200Response1Dto>;
+    } & RequestCallOptions): Promise<UsersIdPut200ResponseDto>;
     /**
      *
      * @summary Updates a user
@@ -101,7 +101,7 @@ export interface DefaultApiInterface {
      */
     usersIdPut(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UsersIdDelete200Response1Dto>;
+    } & RequestCallOptions): Promise<UsersIdPut200ResponseDto>;
 }
 
 /**
@@ -204,7 +204,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async usersIdGet(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UsersIdDelete200ResponseDto> {
+    } & RequestCallOptions): Promise<UsersIdGet200ResponseDto> {
         return await this.fetch(
             this.url("/users/{id}", params.pathParams), params
         );
@@ -217,7 +217,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async usersIdPatch(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UsersIdDelete200Response1Dto> {
+    } & RequestCallOptions): Promise<UsersIdPut200ResponseDto> {
         return await this.fetch(
             this.url("/users/{id}", params.pathParams),
             {
@@ -234,7 +234,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async usersIdPut(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UsersIdDelete200Response1Dto> {
+    } & RequestCallOptions): Promise<UsersIdPut200ResponseDto> {
         return await this.fetch(
             this.url("/users/{id}", params.pathParams),
             {

@@ -53,10 +53,10 @@ export interface UsersGet200ResponseDto {
     data?: Array<UserDto>;
 }
 
-export interface UsersIdDelete200Response1Dto {
-    updatedAt?: string;
+export interface UsersIdGet200ResponseDto {
+    data?: UserDto;
 }
 
-export interface UsersIdDelete200ResponseDto {
-    data?: UserDto;
+export interface UsersIdPut200ResponseDto {
+    updatedAt?: string;
 }

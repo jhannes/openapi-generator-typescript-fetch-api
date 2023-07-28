@@ -19,8 +19,8 @@ import {
     UnknownResourceDto,
     UserDto,
     UsersGet200ResponseDto,
-    UsersIdDelete200Response1Dto,
-    UsersIdDelete200ResponseDto,
+    UsersIdGet200ResponseDto,
+    UsersIdPut200ResponseDto,
 } from "../model";
 
 import {

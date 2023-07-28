@@ -6,8 +6,8 @@ import {
     UnknownResourceDto,
     UserDto,
     UsersGet200ResponseDto,
-    UsersIdDelete200Response1Dto,
-    UsersIdDelete200ResponseDto,
+    UsersIdGet200ResponseDto,
+    UsersIdPut200ResponseDto,
 } from "../model";
 
 export class Random {
@@ -80,8 +80,8 @@ export interface SampleModelFactories {
     UnknownResourceDto?: ModelFactory<UnknownResourceDto>;
     UserDto?: ModelFactory<UserDto>;
     UsersGet200ResponseDto?: ModelFactory<UsersGet200ResponseDto>;
-    UsersIdDelete200Response1Dto?: ModelFactory<UsersIdDelete200Response1Dto>;
-    UsersIdDelete200ResponseDto?: ModelFactory<UsersIdDelete200ResponseDto>;
+    UsersIdGet200ResponseDto?: ModelFactory<UsersIdGet200ResponseDto>;
+    UsersIdPut200ResponseDto?: ModelFactory<UsersIdPut200ResponseDto>;
 }
 
 export interface SamplePropertyValues {
@@ -302,14 +302,14 @@ export class TestSampleData {
                 return this.sampleUsersGet200ResponseDto();
             case "Array<UsersGet200ResponseDto>":
                 return this.sampleArrayUsersGet200ResponseDto();
-            case "UsersIdDelete200Response1Dto":
-                return this.sampleUsersIdDelete200Response1Dto();
-            case "Array<UsersIdDelete200Response1Dto>":
-                return this.sampleArrayUsersIdDelete200Response1Dto();
-            case "UsersIdDelete200ResponseDto":
-                return this.sampleUsersIdDelete200ResponseDto();
-            case "Array<UsersIdDelete200ResponseDto>":
-                return this.sampleArrayUsersIdDelete200ResponseDto();
+            case "UsersIdGet200ResponseDto":
+                return this.sampleUsersIdGet200ResponseDto();
+            case "Array<UsersIdGet200ResponseDto>":
+                return this.sampleArrayUsersIdGet200ResponseDto();
+            case "UsersIdPut200ResponseDto":
+                return this.sampleUsersIdPut200ResponseDto();
+            case "Array<UsersIdPut200ResponseDto>":
+                return this.sampleArrayUsersIdPut200ResponseDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
@@ -558,32 +558,8 @@ export class TestSampleData {
         );
     }
 
-    sampleUsersIdDelete200Response1Dto(template?: Factory<UsersIdDelete200Response1Dto>): UsersIdDelete200Response1Dto {
-        const containerClass = "UsersIdDelete200Response1Dto";
-        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        return {
-            updatedAt: this.generate(
-                template?.updatedAt,
-                { containerClass, propertyName: "updatedAt", isNullable: false },
-                () => this.sampleString("", "null")
-            ),
-        };
-    }
-
-    sampleArrayUsersIdDelete200Response1Dto(
-        length?: number,
-        template?: Factory<UsersIdDelete200Response1Dto>
-    ): readonly UsersIdDelete200Response1Dto[] {
-        return this.randomArray(
-            () => this.sampleUsersIdDelete200Response1Dto(template),
-            length ?? this.arrayLength()
-        );
-    }
-
-    sampleUsersIdDelete200ResponseDto(template?: Factory<UsersIdDelete200ResponseDto>): UsersIdDelete200ResponseDto {
-        const containerClass = "UsersIdDelete200ResponseDto";
+    sampleUsersIdGet200ResponseDto(template?: Factory<UsersIdGet200ResponseDto>): UsersIdGet200ResponseDto {
+        const containerClass = "UsersIdGet200ResponseDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
@@ -596,12 +572,36 @@ export class TestSampleData {
         };
     }
 
-    sampleArrayUsersIdDelete200ResponseDto(
+    sampleArrayUsersIdGet200ResponseDto(
         length?: number,
-        template?: Factory<UsersIdDelete200ResponseDto>
-    ): readonly UsersIdDelete200ResponseDto[] {
+        template?: Factory<UsersIdGet200ResponseDto>
+    ): readonly UsersIdGet200ResponseDto[] {
         return this.randomArray(
-            () => this.sampleUsersIdDelete200ResponseDto(template),
+            () => this.sampleUsersIdGet200ResponseDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleUsersIdPut200ResponseDto(template?: Factory<UsersIdPut200ResponseDto>): UsersIdPut200ResponseDto {
+        const containerClass = "UsersIdPut200ResponseDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            updatedAt: this.generate(
+                template?.updatedAt,
+                { containerClass, propertyName: "updatedAt", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayUsersIdPut200ResponseDto(
+        length?: number,
+        template?: Factory<UsersIdPut200ResponseDto>
+    ): readonly UsersIdPut200ResponseDto[] {
+        return this.randomArray(
+            () => this.sampleUsersIdPut200ResponseDto(template),
             length ?? this.arrayLength()
         );
     }
