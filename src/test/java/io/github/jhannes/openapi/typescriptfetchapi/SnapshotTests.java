@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class SnapshotTests extends AbstractSnapshotTests {
+public class SnapshotTests extends AbstractSnapshotTest {
 
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
