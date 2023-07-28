@@ -2,6 +2,7 @@ import {
     ChangeTrackedDto,
     CreatePersonCommandDto,
     PersonDto,
+    PersonDtoGenderEnumValues,
     PersonNameDto,
     PersonSnapshotDto,
     RecipientDto,
@@ -439,6 +440,11 @@ export class TestSampleData {
                 template?.birthDate,
                 { containerClass, propertyName: "birthDate", example: "null", isNullable: false },
                 () => this.sampleDate()
+            ),
+            gender: this.generate(
+                template?.gender,
+                { containerClass, propertyName: "gender", example: "null", isNullable: false },
+                () => this.pickOne(PersonDtoGenderEnumValues)
             ),
         };
     }

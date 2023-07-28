@@ -29,7 +29,17 @@ export interface PersonDto extends RecipientDto {
     name?: PersonNameDto;
     phone?: string;
     birthDate?: Date;
+    gender?: PersonDtoGenderEnum;
 }
+
+export const PersonDtoGenderEnumValues = [
+    "male",
+    "female",
+    "other",
+    "unspecified",
+] as const;
+
+export type PersonDtoGenderEnum = typeof PersonDtoGenderEnumValues[number];
 
 export interface PersonNameDto {
     givenName?: string;
