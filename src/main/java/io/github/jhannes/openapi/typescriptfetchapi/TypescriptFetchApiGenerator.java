@@ -198,23 +198,6 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 model.put("hasReadOnly", codegenModel.allVars.stream().anyMatch(v -> v.isReadOnly));
                 model.put("hasWriteOnly", codegenModel.allVars.stream().anyMatch(v -> v.isWriteOnly));
 
-                for (CodegenProperty variable : codegenModel.vars) {
-                    if (variable.get_enum() != null && variable.get_enum().size() == 1) {
-                        variable.dataType = "\"" + variable.get_enum().get(0) + "\"";
-                        variable.isEnum = false;
-                        // This is abusing uniqueItems - we use it to note that there is only one enum alternative - i.e. the property is constant
-                        variable.setUniqueItems(true);
-                    }
-                    if (variable.dataType.equals("object")) {
-                        variable.dataType = variable.datatypeWithEnum = "unknown";
-                    }
-                    if (variable.isArray && variable.maxItems != null && variable.maxItems <= 5) {
-                        String toupleType = "[" + IntStream.range(0, variable.maxItems)
-                                .mapToObj(i -> variable.items.dataType + (i >= variable.minItems ? "?" : ""))
-                                .collect(Collectors.joining(", ")) + "]";
-                        variable.dataType = variable.datatypeWithEnum = toupleType;
-                    }
-                }
                 for (CodegenProperty variable : codegenModel.allVars) {
                     if (variable.get_enum() != null && variable.get_enum().size() == 1) {
                         variable.dataType = "\"" + variable.get_enum().get(0) + "\"";
@@ -225,6 +208,12 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                     if (variable.dataType.equals("object")) {
                         variable.dataType = variable.datatypeWithEnum = "unknown";
                     }
+                    if (variable.isArray && variable.maxItems != null && variable.maxItems <= 5) {
+                        String tupleType = "[" + IntStream.range(0, variable.maxItems)
+                                .mapToObj(i -> variable.items.dataType + (i >= variable.minItems ? "?" : ""))
+                                .collect(Collectors.joining(", ")) + "]";
+                        variable.dataType = variable.datatypeWithEnum = tupleType;
+                    }
                 }
 
                 if (!codegenModel.oneOf.isEmpty()) {
@@ -233,9 +222,8 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         HashMap<String, String> mapping = new HashMap<>();
                         for (String className : codegenModel.oneOf) {
 
-                            ModelsMap subtypeModelMap = result.entrySet().stream()
-                                    .filter(e -> ((Map<String, Object>) e.getValue()).get("classname").equals(className))
-                                    .map(Map.Entry::getValue)
+                            ModelsMap subtypeModelMap = result.values().stream()
+                                    .filter(modelsMap -> ((Map<String, Object>) modelsMap).get("classname").equals(className))
                                     .findFirst()
                                     .orElseThrow(() -> new IllegalArgumentException("Undefined model " + className + " referenced from " + codegenModel.getClassname()));
 
@@ -262,7 +250,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
 
                         codegenModel.parentModel = codegenModel.interfaceModels.get(0);
                         codegenModel.parent = codegenModel.parentModel.classname;
-                        codegenModel.parentVars = codegenModel.parentModel.vars;
+                        codegenModel.parentVars = codegenModel.parentModel.allVars;
                         for (CodegenProperty var : codegenModel.allVars) {
                             for (CodegenProperty inheritedVar : codegenModel.parentModel.allVars) {
                                 if (inheritedVar.name.equals(var.name)) {
@@ -275,12 +263,6 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                                 }
                             }
                         }
-                        codegenModel.vars = new ArrayList<>();
-                        for (CodegenProperty var : codegenModel.allVars) {
-                            if (!var.isInherited) {
-                                codegenModel.vars.add(var.clone());
-                            }
-                        }
                         codegenModel.allOf = new TreeSet<>();
                         codegenModel.interfaceModels = new ArrayList<>();
                         codegenModel.interfaces = new ArrayList<>();
@@ -291,7 +273,39 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         for (var element : elementsToBeRemoved) {
             result.remove(element);
         }
+        for (ModelsMap modelsMap : result.values()) {
+            for (ModelMap model : modelsMap.getModels()) {
+                updateVariablesLists(model.getModel());
+            }
+        }
         return result;
+    }
+
+    private static void updateVariablesLists(CodegenModel codegenModel) {
+        codegenModel.vars = new ArrayList<>();
+        codegenModel.parentVars = new ArrayList<>();
+        codegenModel.optionalVars = new ArrayList<>();
+        codegenModel.readOnlyVars = new ArrayList<>();
+        codegenModel.readOnlyVars = new ArrayList<>();
+        for (CodegenProperty var : codegenModel.allVars) {
+            if (var.isInherited) {
+                codegenModel.parentVars.add(var.clone());
+            } else {
+                codegenModel.vars.add(var.clone());
+            }
+
+            if (var.required) {
+                codegenModel.requiredVars.add(var.clone());
+            } else {
+                codegenModel.optionalVars.add(var.clone());
+            }
+
+            if (var.isReadOnly) {
+                codegenModel.readOnlyVars.add(var.clone());
+            } else if (!var.isWriteOnly) {
+                codegenModel.readWriteVars.add(var.clone());
+            }
+        }
     }
 
     @Override
@@ -313,12 +327,6 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             if(!withoutPrefixEnums) {
                 cm.imports = new TreeSet<>(cm.imports);
                 // name enum with model name, e.g. StatusEnum => PetStatusEnum
-                for (CodegenProperty var : cm.vars) {
-                    if (Boolean.TRUE.equals(var.isEnum)) {
-                        var.datatypeWithEnum = var.datatypeWithEnum.replace(var.enumName, cm.classname + var.enumName);
-                        var.enumName = var.enumName.replace(var.enumName, cm.classname + var.enumName);
-                    }
-                }
                 for (CodegenProperty var : cm.allVars) {
                     if (Boolean.TRUE.equals(var.isEnum)) {
                         var.datatypeWithEnum = var.datatypeWithEnum.replace(var.enumName, cm.classname + var.enumName);
