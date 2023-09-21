@@ -5,14 +5,20 @@
 {{~/if}}
 export type {{classname}} ={{#and discriminator discriminator.mappedModels.length}}{{#discriminator}}
 {{~#mappedModels}}
-    { {{discriminator.propertyName}}: "{{mappingName}}" } & {{modelName}}{{#unless @last}} |{{/unless}}{{/mappedModels}}
+    {{#unless children}}{ {{discriminator.propertyName}}: "{{mappingName}}" } & {{/unless}}{{modelName}}{{#unless @last}} |{{/unless}}{{/mappedModels}}
 {{~^mappedModels}}{{#oneOf}}{{{.}}}{{#unless @last}} | {{/unless}}{{/oneOf}}{{/mappedModels}}{{/discriminator}}{{else}} {{dataType}}{{/and}};
 
 {{~#and discriminator discriminator.mappedModels.length}}
 {{#discriminator}}
 export const {{classname}}Descriminators = [
 {{~#mappedModels}}
+    {{~#if children}}
+        {{~#children}}
+    "{{.}}",
+        {{~/children}}
+    {{~else}}
     "{{mappingName}}",
+    {{~/if}}
 {{~/mappedModels}}
 ] as const;
 {{/discriminator}}

@@ -15,6 +15,8 @@ import {
     SnapshotSetDto,
     SubscribeRequestDto,
     UpdateConversationDeltaDto,
+    UpdateConversationSummaryDeltaDto,
+    UpdateConversationTitleDeltaDto,
 } from "../model";
 
 export class Random {
@@ -96,6 +98,8 @@ export interface SampleModelFactories {
     SnapshotSetDto?: ModelFactory<SnapshotSetDto>;
     SubscribeRequestDto?: ModelFactory<SubscribeRequestDto>;
     UpdateConversationDeltaDto?: ModelFactory<UpdateConversationDeltaDto>;
+    UpdateConversationSummaryDeltaDto?: ModelFactory<UpdateConversationSummaryDeltaDto>;
+    UpdateConversationTitleDeltaDto?: ModelFactory<UpdateConversationTitleDeltaDto>;
 }
 
 export interface SamplePropertyValues {
@@ -352,6 +356,14 @@ export class TestSampleData {
                 return this.sampleUpdateConversationDeltaDto();
             case "Array<UpdateConversationDeltaDto>":
                 return this.sampleArrayUpdateConversationDeltaDto();
+            case "UpdateConversationSummaryDeltaDto":
+                return this.sampleUpdateConversationSummaryDeltaDto();
+            case "Array<UpdateConversationSummaryDeltaDto>":
+                return this.sampleArrayUpdateConversationSummaryDeltaDto();
+            case "UpdateConversationTitleDeltaDto":
+                return this.sampleUpdateConversationTitleDeltaDto();
+            case "Array<UpdateConversationTitleDeltaDto>":
+                return this.sampleArrayUpdateConversationTitleDeltaDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
@@ -612,10 +624,7 @@ export class TestSampleData {
                     delta,
                 };
             case "UpdateConversationDelta":
-                return {
-                    ...this.sampleUpdateConversationDeltaDto(),
-                    delta,
-                };
+                return this.sampleUpdateConversationDeltaDto();
             case "CreateConversationDelta":
                 return {
                     ...this.sampleCreateConversationDeltaDto(),
@@ -795,32 +804,97 @@ export class TestSampleData {
         );
     }
 
-    sampleUpdateConversationDeltaDto(template?: Factory<UpdateConversationDeltaDto>): UpdateConversationDeltaDto {
+    sampleUpdateConversationDeltaDto(
+        factory?: (sampleData: TestSampleData) => UpdateConversationDeltaDto
+    ): UpdateConversationDeltaDto {
         const containerClass = "UpdateConversationDeltaDto";
+        if (factory) {
+            return factory(this);
+        }
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        const delta = this.pickOneString(["UpdateConversationTitleDelta", "UpdateConversationSummaryDelta"])
+        switch (delta) {
+            case "UpdateConversationTitleDelta":
+                return {
+                    ...this.sampleUpdateConversationTitleDeltaDto(),
+                    delta,
+                };
+            case "UpdateConversationSummaryDelta":
+                return {
+                    ...this.sampleUpdateConversationSummaryDeltaDto(),
+                    delta,
+                };
+        }
+    }
+
+    sampleArrayUpdateConversationDeltaDto(
+        length?: number,
+        factory?: (sampleData: TestSampleData) => UpdateConversationDeltaDto
+    ): readonly UpdateConversationDeltaDto[] {
+        return this.randomArray(
+            () => this.sampleUpdateConversationDeltaDto(factory),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleUpdateConversationSummaryDeltaDto(template?: Factory<UpdateConversationSummaryDeltaDto>): UpdateConversationSummaryDeltaDto {
+        const containerClass = "UpdateConversationSummaryDeltaDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
         return {
-            delta: "UpdateConversationDelta",
+            delta: "UpdateConversationSummaryDelta",
             conversationId: this.generate(
                 template?.conversationId,
                 { containerClass, propertyName: "conversationId", isNullable: false },
                 () => this.sampleString("uuid", "null")
             ),
-            info: this.generate(
-                template?.info,
-                { containerClass, propertyName: "info", example: "null", isNullable: false },
-                () => this.sampleConversationInfoDto()
+            summary: this.generate(
+                template?.summary,
+                { containerClass, propertyName: "summary", isNullable: false },
+                () => this.sampleString("", "null")
             ),
         };
     }
 
-    sampleArrayUpdateConversationDeltaDto(
+    sampleArrayUpdateConversationSummaryDeltaDto(
         length?: number,
-        template?: Factory<UpdateConversationDeltaDto>
-    ): readonly UpdateConversationDeltaDto[] {
+        template?: Factory<UpdateConversationSummaryDeltaDto>
+    ): readonly UpdateConversationSummaryDeltaDto[] {
         return this.randomArray(
-            () => this.sampleUpdateConversationDeltaDto(template),
+            () => this.sampleUpdateConversationSummaryDeltaDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleUpdateConversationTitleDeltaDto(template?: Factory<UpdateConversationTitleDeltaDto>): UpdateConversationTitleDeltaDto {
+        const containerClass = "UpdateConversationTitleDeltaDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            delta: "UpdateConversationTitleDelta",
+            conversationId: this.generate(
+                template?.conversationId,
+                { containerClass, propertyName: "conversationId", isNullable: false },
+                () => this.sampleString("uuid", "null")
+            ),
+            title: this.generate(
+                template?.title,
+                { containerClass, propertyName: "title", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayUpdateConversationTitleDeltaDto(
+        length?: number,
+        template?: Factory<UpdateConversationTitleDeltaDto>
+    ): readonly UpdateConversationTitleDeltaDto[] {
+        return this.randomArray(
+            () => this.sampleUpdateConversationTitleDeltaDto(template),
             length ?? this.arrayLength()
         );
     }

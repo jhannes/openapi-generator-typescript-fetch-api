@@ -28,6 +28,8 @@ import {
     SnapshotSetDto,
     SubscribeRequestDto,
     UpdateConversationDeltaDto,
+    UpdateConversationSummaryDeltaDto,
+    UpdateConversationTitleDeltaDto,
 } from "../model";
 
 import {

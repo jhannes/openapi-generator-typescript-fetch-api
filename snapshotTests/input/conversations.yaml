@@ -92,7 +92,7 @@ components:
         - $ref: "#/components/schemas/UpdateConversationDelta"
         - $ref: "#/components/schemas/AddMessageToConversationDelta"
       discriminator:
-        propertyName: "delta"
+        propertyName: delta
 
     CreateConversationDelta:
       properties:
@@ -105,15 +105,31 @@ components:
           $ref: "#/components/schemas/ConversationInfo"
       required: [ delta, conversationId, info ]
     UpdateConversationDelta:
+      oneOf:
+        - $ref: "#/components/schemas/UpdateConversationTitleDelta"
+        - $ref: "#/components/schemas/UpdateConversationSummaryDelta"
+      discriminator:
+        propertyName: delta
+    UpdateConversationTitleDelta:
       properties:
         delta:
-          enum: [ UpdateConversationDelta ]
+          enum: [ UpdateConversationTitleDelta ]
         conversationId:
           type: string
           format: uuid
-        info:
-          $ref: "#/components/schemas/ConversationInfo"
-      required: [ delta, conversationId, info ]
+        title:
+          type: string
+      required: [ delta, conversationId, title ]
+    UpdateConversationSummaryDelta:
+      properties:
+        delta:
+          enum: [ UpdateConversationSummaryDelta ]
+        conversationId:
+          type: string
+          format: uuid
+        summary:
+          type: string
+      required: [ delta, conversationId, summary ]
     AddMessageToConversationDelta:
       properties:
         delta:

@@ -34,13 +34,9 @@ public class AbstractSnapshotTest {
     }
 
     private static CodegenConfigurator createBaseConfigurator(String modelName, Path input, Path outputDir) {
-        return createBaseConfigurator(modelName)
-                .setInputSpec(getInputSpec(input))
-                .setOutputDir(outputDir.toString());
-    }
-
-    private static CodegenConfigurator createBaseConfigurator(String modelName) {
         return new CodegenConfigurator()
+                .setInputSpec(getInputSpec(input))
+                .setOutputDir(outputDir.toString())
                 .setModelNameSuffix("Dto")
                 .addAdditionalProperty("npmName", modelName)
                 .addAdditionalProperty("withInterfaces", "true")

@@ -18,6 +18,7 @@ import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationsMap;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -220,19 +221,20 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                     if (codegenModel.discriminator != null && codegenModel.discriminator.getMapping() == null) {
                         Set<CodegenDiscriminator.MappedModel> mappedModels = new HashSet<>();
                         HashMap<String, String> mapping = new HashMap<>();
-                        for (String className : codegenModel.oneOf) {
+                        for (ModelMap subModel : getChildModels(codegenModel, result.values())) {
+                            CodegenModel subCodegenModel = subModel.getModel();
+                            mapping.put(subCodegenModel.name, subModel.getModel().classname);
+                            if (subCodegenModel.oneOf.isEmpty()) {
+                                mappedModels.add(new CodegenDiscriminator.MappedModel(subCodegenModel.name, subModel.getModel().classname));
+                            } else {
+                                Set<String> childNames = new TreeSet<>();
 
-                            ModelsMap subtypeModelMap = result.values().stream()
-                                    .filter(modelsMap -> ((Map<String, Object>) modelsMap).get("classname").equals(className))
-                                    .findFirst()
-                                    .orElseThrow(() -> new IllegalArgumentException("Undefined model " + className + " referenced from " + codegenModel.getClassname()));
-
-                            for (ModelMap subModel : subtypeModelMap.getModels()) {
-                                CodegenModel subCodegenModel = subModel.getModel();
-                                if (subCodegenModel.oneOf.isEmpty()) {
-                                    mapping.put(subCodegenModel.name, className);
-                                    mappedModels.add(new CodegenDiscriminator.MappedModel(subCodegenModel.name, className));
+                                for (ModelMap childModel : getChildModels(subCodegenModel, result.values())) {
+                                    childNames.add(childModel.getModel().name);
                                 }
+                                mappedModels.add(new CodegenDiscriminator.MappedModel(subCodegenModel.name, subModel.getModel().classname) {
+                                    public final Set<String> children = childNames;
+                                });
                             }
                         }
                         codegenModel.discriminator.setMapping(mapping);
@@ -278,6 +280,18 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             for (ModelMap model : modelsMap.getModels()) {
                 updateVariablesLists(model.getModel());
             }
+        }
+        return result;
+    }
+
+    private List<ModelMap> getChildModels(CodegenModel codegenModel, Collection<ModelsMap> allModels) {
+        List<ModelMap> result = new ArrayList<>();
+        for (String subtype : codegenModel.oneOf) {
+            ModelsMap subtypeModelMap = allModels.stream()
+                    .filter(modelsMap -> ((Map<String, Object>) modelsMap).get("classname").equals(subtype))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Undefined model " + subtype + " referenced from " + codegenModel.getClassname()));
+            result.addAll(subtypeModelMap.getModels());
         }
         return result;
     }

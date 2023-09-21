@@ -53,12 +53,13 @@ export interface CreateConversationDeltaDto {
 
 export type DeltaDto =
     { delta: "AddMessageToConversationDelta" } & AddMessageToConversationDeltaDto |
-    { delta: "UpdateConversationDelta" } & UpdateConversationDeltaDto |
+    UpdateConversationDeltaDto |
     { delta: "CreateConversationDelta" } & CreateConversationDeltaDto;
 
 export const DeltaDtoDescriminators = [
     "AddMessageToConversationDelta",
-    "UpdateConversationDelta",
+    "UpdateConversationSummaryDelta",
+    "UpdateConversationTitleDelta",
     "CreateConversationDelta",
 ] as const;
 
@@ -91,8 +92,25 @@ export interface SubscribeRequestDto {
     clientId: string;
 }
 
-export interface UpdateConversationDeltaDto {
-    delta: "UpdateConversationDelta";
+export type UpdateConversationDeltaDto =
+    { delta: "UpdateConversationTitleDelta" } & UpdateConversationTitleDeltaDto |
+    { delta: "UpdateConversationSummaryDelta" } & UpdateConversationSummaryDeltaDto;
+
+export const UpdateConversationDeltaDtoDescriminators = [
+    "UpdateConversationTitleDelta",
+    "UpdateConversationSummaryDelta",
+] as const;
+
+export type UpdateConversationDeltaDtoDescriminator = typeof UpdateConversationDeltaDtoDescriminators[number];
+
+export interface UpdateConversationSummaryDeltaDto {
+    delta: "UpdateConversationSummaryDelta";
     conversationId: string;
-    info: ConversationInfoDto;
+    summary: string;
+}
+
+export interface UpdateConversationTitleDeltaDto {
+    delta: "UpdateConversationTitleDelta";
+    conversationId: string;
+    title: string;
 }

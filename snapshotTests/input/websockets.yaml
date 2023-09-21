@@ -22,8 +22,6 @@ components:
       oneOf:
         - $ref: '#/components/schemas/WebSocketCommand'
         - $ref: '#/components/schemas/WebSocketRequest'
-      discriminator:
-        propertyName: command
     WebSocketRequest:
       oneOf:
         - $ref: '#/components/schemas/Subscribe'
