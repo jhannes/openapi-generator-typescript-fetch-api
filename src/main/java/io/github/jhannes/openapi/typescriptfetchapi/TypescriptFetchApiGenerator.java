@@ -273,7 +273,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 }
             }
         }
-        for (var element : elementsToBeRemoved) {
+        for (String element : elementsToBeRemoved) {
             result.remove(element);
         }
         for (ModelsMap modelsMap : result.values()) {
