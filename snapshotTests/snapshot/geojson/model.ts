@@ -23,13 +23,13 @@ export type GeometryDto =
     { type: "Polygon" } & PolygonDto |
     { type: "LineString" } & LineStringDto;
 
-export const GeometryDtoDescriminators = [
+export const GeometryDtoDiscriminators = [
     "Point",
     "Polygon",
     "LineString",
 ] as const;
 
-export type GeometryDtoDescriminator = typeof GeometryDtoDescriminators[number];
+export type GeometryDtoDiscriminator = typeof GeometryDtoDiscriminators[number];
 
 export interface LineStringDto {
     type: "LineString";

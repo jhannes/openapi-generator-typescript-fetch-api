@@ -10,7 +10,7 @@ export type {{classname}} ={{#and discriminator discriminator.mappedModels.lengt
 
 {{~#and discriminator discriminator.mappedModels.length}}
 {{#discriminator}}
-export const {{classname}}Descriminators = [
+export const {{classname}}Discriminators = [
 {{~#mappedModels}}
     {{~#if children}}
         {{~#children}}
@@ -22,5 +22,5 @@ export const {{classname}}Descriminators = [
 {{~/mappedModels}}
 ] as const;
 {{/discriminator}}
-export type {{classname}}Descriminator = typeof {{classname}}Descriminators[number];
+export type {{classname}}Discriminator = typeof {{classname}}Discriminators[number];
 {{~/and}}

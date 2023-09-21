@@ -56,14 +56,14 @@ export type DeltaDto =
     UpdateConversationDeltaDto |
     { delta: "CreateConversationDelta" } & CreateConversationDeltaDto;
 
-export const DeltaDtoDescriminators = [
+export const DeltaDtoDiscriminators = [
     "AddMessageToConversationDelta",
     "UpdateConversationSummaryDelta",
     "UpdateConversationTitleDelta",
     "CreateConversationDelta",
 ] as const;
 
-export type DeltaDtoDescriminator = typeof DeltaDtoDescriminators[number];
+export type DeltaDtoDiscriminator = typeof DeltaDtoDiscriminators[number];
 
 export interface EventFromServerDto extends CommandToServerDto {
     serverTime: Date;
@@ -77,11 +77,11 @@ export type MessageToServerDto = CommandToServerDto | RequestToServerDto;
 export type RequestToServerDto =
     { request: "SubscribeRequest" } & SubscribeRequestDto;
 
-export const RequestToServerDtoDescriminators = [
+export const RequestToServerDtoDiscriminators = [
     "SubscribeRequest",
 ] as const;
 
-export type RequestToServerDtoDescriminator = typeof RequestToServerDtoDescriminators[number];
+export type RequestToServerDtoDiscriminator = typeof RequestToServerDtoDiscriminators[number];
 
 export interface SnapshotSetDto {
     conversations: Array<ConversationSnapshotDto>;
@@ -96,12 +96,12 @@ export type UpdateConversationDeltaDto =
     { delta: "UpdateConversationTitleDelta" } & UpdateConversationTitleDeltaDto |
     { delta: "UpdateConversationSummaryDelta" } & UpdateConversationSummaryDeltaDto;
 
-export const UpdateConversationDeltaDtoDescriminators = [
+export const UpdateConversationDeltaDtoDiscriminators = [
     "UpdateConversationTitleDelta",
     "UpdateConversationSummaryDelta",
 ] as const;
 
-export type UpdateConversationDeltaDtoDescriminator = typeof UpdateConversationDeltaDtoDescriminators[number];
+export type UpdateConversationDeltaDtoDiscriminator = typeof UpdateConversationDeltaDtoDiscriminators[number];
 
 export interface UpdateConversationSummaryDeltaDto {
     delta: "UpdateConversationSummaryDelta";

@@ -14,12 +14,12 @@ export type AnyPartyDto =
     { type: "organization" } & OrganizationDto |
     { type: "person" } & PersonDto;
 
-export const AnyPartyDtoDescriminators = [
+export const AnyPartyDtoDiscriminators = [
     "organization",
     "person",
 ] as const;
 
-export type AnyPartyDtoDescriminator = typeof AnyPartyDtoDescriminators[number];
+export type AnyPartyDtoDiscriminator = typeof AnyPartyDtoDiscriminators[number];
 
 export type CreationErrorDto =
     { code: "duplicateIdentifier" } & DuplicateIdentifierErrorDto |
@@ -27,14 +27,14 @@ export type CreationErrorDto =
     { code: "illegalAddress" } & IllegalEmailAddressErrorDto |
     { code: "networkError" } & GeneralErrorDto;
 
-export const CreationErrorDtoDescriminators = [
+export const CreationErrorDtoDiscriminators = [
     "duplicateIdentifier",
     "generalError",
     "illegalAddress",
     "networkError",
 ] as const;
 
-export type CreationErrorDtoDescriminator = typeof CreationErrorDtoDescriminators[number];
+export type CreationErrorDtoDiscriminator = typeof CreationErrorDtoDiscriminators[number];
 
 export interface DuplicateIdentifierErrorDto {
     code: string;
@@ -92,7 +92,7 @@ export type UpdateErrorDto =
     { code: "networkError" } & GeneralErrorDto |
     { code: "notFound" } & NotFoundErrorDto;
 
-export const UpdateErrorDtoDescriminators = [
+export const UpdateErrorDtoDiscriminators = [
     "duplicateIdentifier",
     "generalError",
     "illegalAddress",
@@ -100,4 +100,4 @@ export const UpdateErrorDtoDescriminators = [
     "notFound",
 ] as const;
 
-export type UpdateErrorDtoDescriminator = typeof UpdateErrorDtoDescriminators[number];
+export type UpdateErrorDtoDiscriminator = typeof UpdateErrorDtoDiscriminators[number];

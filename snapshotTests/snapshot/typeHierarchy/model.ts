@@ -68,14 +68,14 @@ export type PetDto =
     { pet_type: "Goldfish" } & GoldfishDto |
     { pet_type: "Dog" } & DogDto;
 
-export const PetDtoDescriminators = [
+export const PetDtoDiscriminators = [
     "WorkingDog",
     "Cat",
     "Goldfish",
     "Dog",
 ] as const;
 
-export type PetDtoDescriminator = typeof PetDtoDescriminators[number];
+export type PetDtoDiscriminator = typeof PetDtoDiscriminators[number];
 export const WorkingDogCapabilityDtoValues = [
     "Guide",
     "Rescue",

@@ -79,20 +79,20 @@ export type WebSocketCommandDto =
     { command: "createPerson" } & CreatePersonCommandDto |
     { command: "updatePerson" } & UpdatePersonCommandDto;
 
-export const WebSocketCommandDtoDescriminators = [
+export const WebSocketCommandDtoDiscriminators = [
     "createPerson",
     "updatePerson",
 ] as const;
 
-export type WebSocketCommandDtoDescriminator = typeof WebSocketCommandDtoDescriminators[number];
+export type WebSocketCommandDtoDiscriminator = typeof WebSocketCommandDtoDiscriminators[number];
 
 export type WebSocketMessageDto = WebSocketCommandDto | WebSocketRequestDto;
 
 export type WebSocketRequestDto =
     { request: "Subscribe" } & SubscribeDto;
 
-export const WebSocketRequestDtoDescriminators = [
+export const WebSocketRequestDtoDiscriminators = [
     "Subscribe",
 ] as const;
 
-export type WebSocketRequestDtoDescriminator = typeof WebSocketRequestDtoDescriminators[number];
+export type WebSocketRequestDtoDiscriminator = typeof WebSocketRequestDtoDiscriminators[number];
