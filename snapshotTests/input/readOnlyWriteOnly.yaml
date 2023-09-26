@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: User database
+  description: User database
+  version: 1.0.0
+paths:
+  /users:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        204:
+          description: Created ok
+
+    get:
+      responses:
+        200:
+          description: List all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        403:
+          description: If the current user doesn't have access to see users
+components:
+  schemas:
+    User:
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        username:
+          type: string
+        emailAddress:
+          type: string
+          format: email
+        updatedAt:
+          type: string
+          format: date-time
+        password:
+          type: string
+          writeOnly: true
+        permissions:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserPermission"
+      required:
+        - id
+        - username
+        - updatedAt
+        - password
+        - permissions
+    UserPermission:
+      properties:
+        permission:
+          enum:
+            - create users
+            - list users
+            - create groups
+            - list groups
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - permission
+        - updatedAt
