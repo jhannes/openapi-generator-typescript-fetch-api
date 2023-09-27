@@ -23,7 +23,7 @@ import java.util.Arrays;
  */
 public class FocusedExampleTest {
 
-    public static final Path SPEC = SnapshotTests.SNAPSHOT_ROOT.resolve("input/readOnlyWriteOnly.yaml");
+    public static final Path SPEC = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
 
     @TestFactory
     DynamicNode snapshotShouldVerify() {

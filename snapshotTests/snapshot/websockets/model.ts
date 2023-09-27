@@ -54,6 +54,8 @@ export type PersonSnapshotDto = ChangeTrackedDto & PersonDto & {
     extra?: string;
 };
 
+export type PersonSnapshotDtoRequest = Omit<PersonSnapshotDto, "id">;
+
 export interface RecipientDto {
     email?: string;
 }

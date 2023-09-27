@@ -9,3 +9,12 @@ export type {{classname}} =
     {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{#isReadOnly}}?{{/isReadOnly}}{{/required}}: {{#if isEnum}}{{{datatypeWithEnum}}}{{else if isFile}}Blob{{else}}{{{dataType}}}{{/if}}{{#isNullable}} | null{{/isNullable}};
 {{~/vars}}
 }{{/if}};
+{{~#if vendorExtensions.ts-fetch-api-omitted-in-request}}
+
+export type {{classname}}Request = Omit<{{classname}}, {{#vendorExtensions.ts-fetch-api-omitted-in-request}}"{{name}}"{{#unless @last}}|{{/unless}}{{/vendorExtensions.ts-fetch-api-omitted-in-request}}>{{#vars}}{{#vendorExtensions.ts-fetch-api-request-type}}
+    & { {{name}}: {{{.}}} }{{/vendorExtensions.ts-fetch-api-request-type}}{{/vars}};
+{{~/if}}
+{{~#if vendorExtensions.ts-fetch-api-omitted-in-response}}
+
+export type {{classname}}Response = Omit<{{classname}}, {{#vendorExtensions.ts-fetch-api-omitted-in-response}}"{{name}}"{{#unless @last}}|{{/unless}}{{/vendorExtensions.ts-fetch-api-omitted-in-response}}>;
+{{~/if}}
