@@ -6,6 +6,7 @@ import org.openapitools.codegen.CliOption;
 import org.openapitools.codegen.CodegenDiscriminator;
 import org.openapitools.codegen.CodegenModel;
 import org.openapitools.codegen.CodegenOperation;
+import org.openapitools.codegen.CodegenParameter;
 import org.openapitools.codegen.CodegenProperty;
 import org.openapitools.codegen.CodegenResponse;
 import org.openapitools.codegen.SupportingFile;
@@ -171,9 +172,35 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             'multipartFormData' for the template to work with.
          */
         for (CodegenOperation operation : operations) {
+            for (CodegenParameter bodyParam : operation.bodyParams) {
+                if (bodyParam.isArray && bodyParam.items.isModel) {
+                    if (hasVendorExtensionCollection(allModels, bodyParam.items.dataType, "ts-fetch-api-omitted-in-request")) {
+                        bodyParam.dataType = "Array<" + bodyParam.baseType + "Request>";
+                    }
+                } else if (bodyParam.isModel) {
+                    if (hasVendorExtensionCollection(allModels, bodyParam.dataType, "ts-fetch-api-omitted-in-request")) {
+                        bodyParam.dataType = bodyParam.baseType + "Request";
+                    }
+                }
+            }
+
             for (CodegenResponse response : operation.responses) {
                 if (response.code.equals("204") && response.dataType == null) {
                     response.isNull = true;
+                }
+                if (response.code.equals("200")) {
+                    if (response.isArray) {
+                        boolean hasWriteOnlyVars = hasVendorExtensionCollection(allModels, response.items.dataType, "ts-fetch-api-omitted-in-response");
+                        if (hasWriteOnlyVars) {
+                            operation.returnType = "Array<" + response.items.dataType + "Response>";
+                        }
+                    } else if (response.isModel) {
+                        boolean hasWriteOnlyVars = hasVendorExtensionCollection(allModels, response.dataType, "ts-fetch-api-omitted-in-response");
+                        if (hasWriteOnlyVars) {
+                            operation.returnType = response.dataType + "Response";
+                        }
+
+                    }
                 }
             }
         }
@@ -184,6 +211,14 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 .filter(op -> op.consumes.stream().anyMatch(opc -> opc.values().stream().anyMatch("multipart/form-data"::equals)))
                 .forEach(op -> op.vendorExtensions.putIfAbsent("multipartFormData", true));
         return objs;
+    }
+
+    private static Boolean hasVendorExtensionCollection(List<ModelMap> allModels, String items, String extension) {
+        return allModels.stream().filter(m -> m.getModel().classname.equals(items))
+                .findFirst()
+                .filter(m -> m.getModel().getVendorExtensions().containsKey(extension))
+                .map(m -> !((Collection<?>) m.getModel().getVendorExtensions().get(extension)).isEmpty())
+                .orElse(false);
     }
 
     @Override
@@ -278,7 +313,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         }
         for (ModelsMap modelsMap : result.values()) {
             for (ModelMap model : modelsMap.getModels()) {
-                updateVariablesLists(model.getModel());
+                updateVariablesLists(model.getModel(), objs);
             }
         }
         return result;
@@ -296,13 +331,29 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         return result;
     }
 
-    private static void updateVariablesLists(CodegenModel codegenModel) {
+    private static void updateVariablesLists(CodegenModel codegenModel, Map<String, ModelsMap> allModels) {
         codegenModel.vars = new ArrayList<>();
         codegenModel.parentVars = new ArrayList<>();
         codegenModel.optionalVars = new ArrayList<>();
         codegenModel.readOnlyVars = new ArrayList<>();
-        codegenModel.readOnlyVars = new ArrayList<>();
+        codegenModel.readWriteVars = new ArrayList<>();
+        List<CodegenProperty> omittedInRequest = new ArrayList<>();
+        List<CodegenProperty> omittedInResponse = new ArrayList<>();
         for (CodegenProperty var : codegenModel.allVars) {
+            if (var.isModel) {
+                var.vendorExtensions.put("ts-fetch-api-has-readonly", false);
+            }
+            if (var.isArray && var.items.isModel) {
+                allModels.values().stream()
+                        .flatMap(m -> m.getModels().stream())
+                        .filter(m -> m.getModel().classname.equals(var.items.dataType))
+                        .forEach(m -> {
+                            if (!m.getModel().readOnlyVars.isEmpty()) {
+                                omittedInRequest.add(var.clone());
+                                var.vendorExtensions.put("ts-fetch-api-request-type", "Array<" + var.items.dataType + "Request>");
+                            }
+                        });
+            }
             if (var.isInherited) {
                 codegenModel.parentVars.add(var.clone());
             } else {
@@ -316,10 +367,16 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             }
 
             if (var.isReadOnly) {
+                omittedInRequest.add(var.clone());
                 codegenModel.readOnlyVars.add(var.clone());
-            } else if (!var.isWriteOnly) {
-                codegenModel.readWriteVars.add(var.clone());
             }
+            if (var.isWriteOnly) {
+                omittedInResponse.add(var.clone());
+            }
+        }
+        if (codegenModel.oneOf.isEmpty()) {
+            codegenModel.vendorExtensions.put("ts-fetch-api-omitted-in-request", omittedInRequest);
+            codegenModel.vendorExtensions.put("ts-fetch-api-omitted-in-response", omittedInResponse);
         }
     }
 

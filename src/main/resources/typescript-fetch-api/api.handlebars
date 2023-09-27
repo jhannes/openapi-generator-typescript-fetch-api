@@ -4,8 +4,9 @@
 import {
 {{~#models}}
     {{~#model}}
-    {{classname}},
-    {{~/model}}
+    {{classname}},{{#if vendorExtensions.ts-fetch-api-omitted-in-response}}
+    {{classname}}Response,{{/if}}{{~#if vendorExtensions.ts-fetch-api-omitted-in-request}}
+    {{classname}}Request,{{/if}}{{~/model}}
 {{~/models}}
 } from "./model";
 
