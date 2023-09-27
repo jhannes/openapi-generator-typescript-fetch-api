@@ -13,7 +13,10 @@
 
 import {
     UserDto,
+    UserDtoResponse,
+    UserDtoRequest,
     UserPermissionDto,
+    UserPermissionDtoRequest,
 } from "./model";
 
 import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
@@ -32,13 +35,13 @@ export interface DefaultApiInterface {
      * @throws {HttpError}
      */
     usersAllPost(params: {
-        userDto: Array<UserDto>;
+        userDto: Array<UserDtoRequest>;
     } & RequestCallOptions): Promise<void>;
     /**
      *
      * @throws {HttpError}
      */
-    usersGet(params?: RequestCallOptions): Promise<Array<UserDto>>;
+    usersGet(params?: RequestCallOptions): Promise<Array<UserDtoResponse>>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -46,14 +49,14 @@ export interface DefaultApiInterface {
      */
     usersIdGet(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UserDto>;
+    } & RequestCallOptions): Promise<UserDtoResponse>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     usersPost(params: {
-        userDto: UserDto;
+        userDto: UserDtoRequest;
     } & RequestCallOptions): Promise<void>;
 }
 
@@ -67,7 +70,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {HttpError}
      */
     public async usersAllPost(params: {
-        userDto: Array<UserDto>;
+        userDto: Array<UserDtoRequest>;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/users/all",
@@ -86,7 +89,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      *
      * @throws {HttpError}
      */
-    public async usersGet(params: RequestCallOptions = {}): Promise<Array<UserDto>> {
+    public async usersGet(params: RequestCallOptions = {}): Promise<Array<UserDtoResponse>> {
         return await this.fetch(
             this.basePath + "/users", params
         );
@@ -98,7 +101,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async usersIdGet(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UserDto> {
+    } & RequestCallOptions): Promise<UserDtoResponse> {
         return await this.fetch(
             this.url("/users/{id}", params.pathParams), params
         );
@@ -109,7 +112,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {HttpError}
      */
     public async usersPost(params: {
-        userDto: UserDto;
+        userDto: UserDtoRequest;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/users",

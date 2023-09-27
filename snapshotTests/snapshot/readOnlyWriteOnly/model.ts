@@ -11,18 +11,25 @@
  */
 
 export interface UserDto {
-    readonly id?: number;
+    id: number;
     username: string;
     emailAddress?: string;
-    readonly updatedAt?: Date;
+    updatedAt: Date;
     password: string;
     permissions: Array<UserPermissionDto>;
 }
 
+export type UserDtoRequest = Omit<UserDto, "id"|"updatedAt"|"permissions">
+    & { permissions: Array<UserPermissionDtoRequest> };
+
+export type UserDtoResponse = Omit<UserDto, "password">;
+
 export interface UserPermissionDto {
     permission: UserPermissionDtoPermissionEnum;
-    readonly updatedAt?: Date;
+    updatedAt: Date;
 }
+
+export type UserPermissionDtoRequest = Omit<UserPermissionDto, "updatedAt">;
 
 export const UserPermissionDtoPermissionEnumValues = [
     "create users",
