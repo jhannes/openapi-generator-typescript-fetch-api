@@ -11,14 +11,16 @@
  */
 
 export interface CaseWorkerDto {
-    readonly id?: string;
+    id?: string;
     fullName: string;
     email: string;
     role: UserRoleDto;
 }
 
+export type CaseWorkerDtoRequest = Omit<CaseWorkerDto, "id">;
+
 export interface ExposureDto {
-    readonly id?: string;
+    id?: string;
     exposedPersonName?: string;
     exposedPersonPhoneNumber?: string;
     exposedDate?: Date;
@@ -37,6 +39,8 @@ export interface ExposureDto {
     status: ExposureDtoStatusEnum;
     delayAfterInfection?: ExposureDtoDelayAfterInfectionEnum;
 }
+
+export type ExposureDtoRequest = Omit<ExposureDto, "id">;
 
 export const ExposureDtoStatusEnumValues = [
     "unidentified",
@@ -61,10 +65,13 @@ export const ExposureDtoDelayAfterInfectionEnumValues = [
 export type ExposureDtoDelayAfterInfectionEnum = typeof ExposureDtoDelayAfterInfectionEnumValues[number];
 
 export interface InfectionDto {
-    readonly id?: string;
+    id: string;
     information: InfectionInformationDto;
     registeredExposures: Array<ExposureDto>;
 }
+
+export type InfectionDtoRequest = Omit<InfectionDto, "id"|"registeredExposures">
+    & { registeredExposures: Array<ExposureDtoRequest> };
 
 export interface InfectionInformationDto {
     patientName?: string;

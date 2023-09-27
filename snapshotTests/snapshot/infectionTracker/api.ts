@@ -13,8 +13,11 @@
 
 import {
     CaseWorkerDto,
+    CaseWorkerDtoRequest,
     ExposureDto,
+    ExposureDtoRequest,
     InfectionDto,
+    InfectionDtoRequest,
     InfectionInformationDto,
     UserRoleDto,
 } from "./model";
@@ -42,7 +45,7 @@ export interface CaseWorkersApiInterface {
      * @throws {HttpError}
      */
     registerCaseWorker(params: {
-        caseWorkerDto: CaseWorkerDto;
+        caseWorkerDto: CaseWorkerDtoRequest;
     } & RequestCallOptions): Promise<void>;
 }
 
@@ -65,7 +68,7 @@ export class CaseWorkersApi extends BaseAPI implements CaseWorkersApiInterface {
      * @throws {HttpError}
      */
     public async registerCaseWorker(params: {
-        caseWorkerDto: CaseWorkerDto;
+        caseWorkerDto: CaseWorkerDtoRequest;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/api/caseWorkers",
@@ -114,7 +117,7 @@ export interface CasesApiInterface {
      */
     registerExposure(params: {
         pathParams: { caseId: string };
-        exposureDto?: ExposureDto;
+        exposureDto?: ExposureDtoRequest;
     } & RequestCallOptions): Promise<void>;
 }
 
@@ -171,7 +174,7 @@ export class CasesApi extends BaseAPI implements CasesApiInterface {
      */
     public async registerExposure(params: {
         pathParams: { caseId: string };
-        exposureDto?: ExposureDto;
+        exposureDto?: ExposureDtoRequest;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/api/cases/{caseId}/exposures", params.pathParams),
@@ -207,7 +210,7 @@ export interface ExposuresApiInterface {
      */
     updateExposure(params: {
         pathParams: { exposureId: string };
-        exposureDto?: ExposureDto;
+        exposureDto?: ExposureDtoRequest;
     } & RequestCallOptions): Promise<void>;
 }
 
@@ -235,7 +238,7 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
      */
     public async updateExposure(params: {
         pathParams: { exposureId: string };
-        exposureDto?: ExposureDto;
+        exposureDto?: ExposureDtoRequest;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/api/exposures/{exposureId}", params.pathParams),

@@ -65,18 +65,20 @@ export interface NotFoundErrorDto {
 }
 
 export interface OrganizationDto {
-    readonly id?: string;
+    id?: string;
     type: string;
     name: string;
     organizationId?: string;
     url?: string;
     email?: string;
-    readonly emailDomains?: Array<string>;
+    emailDomains?: Array<string>;
     phone?: string;
 }
 
+export type OrganizationDtoRequest = Omit<OrganizationDto, "id"|"emailDomains">;
+
 export interface PersonDto {
-    readonly id?: string;
+    id?: string;
     type: string;
     givenName: string;
     familyName: string;
@@ -84,6 +86,8 @@ export interface PersonDto {
     phone?: string;
     birthDate?: Date;
 }
+
+export type PersonDtoRequest = Omit<PersonDto, "id">;
 
 export type UpdateErrorDto =
     { code: "duplicateIdentifier" } & DuplicateIdentifierErrorDto |

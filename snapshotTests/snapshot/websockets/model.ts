@@ -24,13 +24,15 @@ export interface CreatePersonCommandDto {
 }
 
 export interface PersonDto extends RecipientDto {
-    readonly id?: string;
+    id?: string;
     type?: string;
     name?: PersonNameDto;
     phone?: string;
     birthDate?: Date;
     gender?: PersonDtoGenderEnum;
 }
+
+export type PersonDtoRequest = Omit<PersonDto, "id">;
 
 export const PersonDtoGenderEnumValues = [
     "male",

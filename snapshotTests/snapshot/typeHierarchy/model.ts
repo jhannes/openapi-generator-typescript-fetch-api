@@ -28,17 +28,23 @@ export type AddressDtoAddressTypesEnum = typeof AddressDtoAddressTypesEnumValues
 export interface CatDto extends PetBaseDto {
     pet_type: "Cat";
     hunts?: boolean;
-    readonly age?: number;
+    age?: number;
 }
+
+export type CatDtoRequest = Omit<CatDto, "id"|"age">;
 
 export interface DogDto extends GenericDogDto {
     pet_type: "Dog";
 }
 
+export type DogDtoRequest = Omit<DogDto, "id">;
+
 export interface GenericDogDto extends PetBaseDto {
     bark?: boolean;
     breed?: GenericDogDtoBreedEnum;
 }
+
+export type GenericDogDtoRequest = Omit<GenericDogDto, "id">;
 
 export const GenericDogDtoBreedEnumValues = [
     "Dingo",
@@ -56,11 +62,13 @@ export interface GoldfishDto {
 }
 
 export interface PetBaseDto {
-    readonly id?: string;
+    id?: string;
     name: string;
     birth_date?: string;
     ownerAddress?: AddressDto;
 }
+
+export type PetBaseDtoRequest = Omit<PetBaseDto, "id">;
 
 export type PetDto =
     { pet_type: "WorkingDog" } & WorkingDogDto |
@@ -88,3 +96,5 @@ export interface WorkingDogDto extends GenericDogDto {
     pet_type: "WorkingDog";
     capabilities: Array<WorkingDogCapabilityDto>;
 }
+
+export type WorkingDogDtoRequest = Omit<WorkingDogDto, "id">;
