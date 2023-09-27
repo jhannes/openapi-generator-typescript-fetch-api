@@ -35,7 +35,9 @@ export function mockDefaultApi(
     operations: Partial<DefaultApiInterface> = {}
 ): DefaultApiInterface {
     return {
+        usersAllPost: operations.usersAllPost || reject("DefaultApi.usersAllPost"),
         usersGet: operations.usersGet || reject("DefaultApi.usersGet"),
+        usersIdGet: operations.usersIdGet || reject("DefaultApi.usersIdGet"),
         usersPost: operations.usersPost || reject("DefaultApi.usersPost"),
     };
 }

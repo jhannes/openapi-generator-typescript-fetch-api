@@ -14,7 +14,7 @@ export interface UserDto {
     readonly id?: number;
     username: string;
     emailAddress?: string;
-    updatedAt: Date;
+    readonly updatedAt?: Date;
     password: string;
     permissions: Array<UserPermissionDto>;
 }

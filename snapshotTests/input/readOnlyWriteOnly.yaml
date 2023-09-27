@@ -15,7 +15,6 @@ paths:
       responses:
         204:
           description: Created ok
-
     get:
       responses:
         200:
@@ -28,6 +27,35 @@ paths:
                   $ref: "#/components/schemas/User"
         403:
           description: If the current user doesn't have access to see users
+  /users/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Single user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /users/all:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
+      responses:
+        204:
+          description: Created ok
 components:
   schemas:
     User:
@@ -44,6 +72,7 @@ components:
         updatedAt:
           type: string
           format: date-time
+          readOnly: true
         password:
           type: string
           writeOnly: true

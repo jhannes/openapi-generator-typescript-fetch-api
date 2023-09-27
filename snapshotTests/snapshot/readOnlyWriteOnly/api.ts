@@ -28,9 +28,25 @@ export interface ApplicationApis {
 export interface DefaultApiInterface {
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    usersAllPost(params: {
+        userDto: Array<UserDto>;
+    } & RequestCallOptions): Promise<void>;
+    /**
+     *
      * @throws {HttpError}
      */
     usersGet(params?: RequestCallOptions): Promise<Array<UserDto>>;
+    /**
+     *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    usersIdGet(params: {
+        pathParams: { id: number };
+    } & RequestCallOptions): Promise<UserDto>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -47,11 +63,44 @@ export interface DefaultApiInterface {
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    public async usersAllPost(params: {
+        userDto: Array<UserDto>;
+    } & RequestCallOptions): Promise<void> {
+        return await this.fetch(
+            this.basePath + "/users/all",
+            {
+                ...params,
+                method: "POST",
+                body: JSON.stringify(params.userDto),
+                headers: {
+                    ...this.removeEmpty(params.headers),
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+    }
+    /**
+     *
      * @throws {HttpError}
      */
     public async usersGet(params: RequestCallOptions = {}): Promise<Array<UserDto>> {
         return await this.fetch(
             this.basePath + "/users", params
+        );
+    }
+    /**
+     *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    public async usersIdGet(params: {
+        pathParams: { id: number };
+    } & RequestCallOptions): Promise<UserDto> {
+        return await this.fetch(
+            this.url("/users/{id}", params.pathParams), params
         );
     }
     /**
