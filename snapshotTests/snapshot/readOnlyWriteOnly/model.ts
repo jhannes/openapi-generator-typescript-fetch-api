@@ -22,8 +22,6 @@ export interface UserDto {
 export type UserDtoRequest = Omit<UserDto, "id"|"updatedAt"|"permissions">
     & { permissions: Array<UserPermissionDtoRequest> };
 
-export type UserDtoResponse = Omit<UserDto, "password">;
-
 export interface UserPermissionDto {
     permission: UserPermissionDtoPermissionEnum;
     updatedAt: Date;

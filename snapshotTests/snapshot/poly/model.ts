@@ -75,8 +75,6 @@ export interface OrganizationDto {
     phone?: string;
 }
 
-export type OrganizationDtoRequest = Omit<OrganizationDto, "id"|"emailDomains">;
-
 export interface PersonDto {
     id?: string;
     type: string;
@@ -86,8 +84,6 @@ export interface PersonDto {
     phone?: string;
     birthDate?: Date;
 }
-
-export type PersonDtoRequest = Omit<PersonDto, "id">;
 
 export type UpdateErrorDto =
     { code: "duplicateIdentifier" } & DuplicateIdentifierErrorDto |

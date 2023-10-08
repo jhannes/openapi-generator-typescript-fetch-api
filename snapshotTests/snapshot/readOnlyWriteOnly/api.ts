@@ -13,7 +13,6 @@
 
 import {
     UserDto,
-    UserDtoResponse,
     UserDtoRequest,
     UserPermissionDto,
     UserPermissionDtoRequest,
@@ -41,7 +40,7 @@ export interface DefaultApiInterface {
      *
      * @throws {HttpError}
      */
-    usersGet(params?: RequestCallOptions): Promise<Array<UserDtoResponse>>;
+    usersGet(params?: RequestCallOptions): Promise<Array<UserDto>>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -49,7 +48,7 @@ export interface DefaultApiInterface {
      */
     usersIdGet(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UserDtoResponse>;
+    } & RequestCallOptions): Promise<UserDto>;
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
@@ -89,7 +88,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      *
      * @throws {HttpError}
      */
-    public async usersGet(params: RequestCallOptions = {}): Promise<Array<UserDtoResponse>> {
+    public async usersGet(params: RequestCallOptions = {}): Promise<Array<UserDto>> {
         return await this.fetch(
             this.basePath + "/users", params
         );
@@ -101,7 +100,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async usersIdGet(params: {
         pathParams: { id: number };
-    } & RequestCallOptions): Promise<UserDtoResponse> {
+    } & RequestCallOptions): Promise<UserDto> {
         return await this.fetch(
             this.url("/users/{id}", params.pathParams), params
         );

@@ -32,8 +32,6 @@ export interface PersonDto extends RecipientDto {
     gender?: PersonDtoGenderEnum;
 }
 
-export type PersonDtoRequest = Omit<PersonDto, "id">;
-
 export const PersonDtoGenderEnumValues = [
     "male",
     "female",
@@ -53,8 +51,6 @@ export type PersonSnapshotDto = ChangeTrackedDto & PersonDto & {
     name: PersonNameDto;
     extra?: string;
 };
-
-export type PersonSnapshotDtoRequest = Omit<PersonSnapshotDto, "id">;
 
 export interface RecipientDto {
     email?: string;

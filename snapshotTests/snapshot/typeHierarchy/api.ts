@@ -14,18 +14,13 @@
 import {
     AddressDto,
     CatDto,
-    CatDtoRequest,
     DogDto,
-    DogDtoRequest,
     GenericDogDto,
-    GenericDogDtoRequest,
     GoldfishDto,
     PetBaseDto,
-    PetBaseDtoRequest,
     PetDto,
     WorkingDogCapabilityDto,
     WorkingDogDto,
-    WorkingDogDtoRequest,
 } from "./model";
 
 import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";

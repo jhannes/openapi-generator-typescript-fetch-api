@@ -20,9 +20,7 @@ import {
     LogMessageDto,
     NotFoundErrorDto,
     OrganizationDto,
-    OrganizationDtoRequest,
     PersonDto,
-    PersonDtoRequest,
     UpdateErrorDto,
 } from "./model";
 

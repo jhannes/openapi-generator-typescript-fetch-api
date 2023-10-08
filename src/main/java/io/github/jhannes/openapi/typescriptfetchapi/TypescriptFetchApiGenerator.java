@@ -348,7 +348,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         .flatMap(m -> m.getModels().stream())
                         .filter(m -> m.getModel().classname.equals(var.items.dataType))
                         .forEach(m -> {
-                            if (!m.getModel().readOnlyVars.isEmpty()) {
+                            if (m.getModel().vars.stream().anyMatch(v -> v.isReadOnly && v.required)) {
                                 omittedInRequest.add(var.clone());
                                 var.vendorExtensions.put("ts-fetch-api-request-type", "Array<" + var.items.dataType + "Request>");
                             }
@@ -366,11 +366,11 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 codegenModel.optionalVars.add(var.clone());
             }
 
-            if (var.isReadOnly) {
+            if (var.isReadOnly && var.required) {
                 omittedInRequest.add(var.clone());
                 codegenModel.readOnlyVars.add(var.clone());
             }
-            if (var.isWriteOnly) {
+            if (var.isWriteOnly && !var.required) {
                 omittedInResponse.add(var.clone());
             }
         }
