@@ -44,7 +44,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
     post:
       operationId: addPet
       parameters:

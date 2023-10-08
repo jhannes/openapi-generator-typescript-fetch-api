@@ -227,13 +227,13 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                             if (subCodegenModel.oneOf.isEmpty()) {
                                 mappedModels.add(new CodegenDiscriminator.MappedModel(subCodegenModel.name, subModel.getModel().classname));
                             } else {
-                                Set<String> childNames = new TreeSet<>();
+                                List<String> childNames = new ArrayList<>();
 
                                 for (ModelMap childModel : getChildModels(subCodegenModel, result.values())) {
                                     childNames.add(childModel.getModel().name);
                                 }
                                 mappedModels.add(new CodegenDiscriminator.MappedModel(subCodegenModel.name, subModel.getModel().classname) {
-                                    public final Set<String> children = childNames;
+                                    public final List<String> children = childNames;
                                 });
                             }
                         }

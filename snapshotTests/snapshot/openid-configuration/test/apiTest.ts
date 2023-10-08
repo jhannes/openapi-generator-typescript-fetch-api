@@ -13,16 +13,22 @@
 
 import {
     DiscoveryDocumentDto,
+    GrantTypeDto,
     JwksDocumentDto,
     JwksKeyDto,
     JwtHeaderDto,
     JwtPayloadDto,
+    OauthErrorDto,
+    ResponseTypeDto,
     TokenResponseDto,
+    UserinfoDto,
 } from "../model";
 
 import {
     ApplicationApis,
-    DefaultApiInterface,
+    DiscoveryApiInterface,
+    IdentityClientApiInterface,
+    IdentityProviderApiInterface,
 } from "../api";
 
 function reject(operation: string) {
@@ -30,17 +36,36 @@ function reject(operation: string) {
 }
 
 export function mockApplicationApis({
-    defaultApi = mockDefaultApi(),
+    discoveryApi = mockDiscoveryApi(),
+    identityClientApi = mockIdentityClientApi(),
+    identityProviderApi = mockIdentityProviderApi(),
 }: Partial<ApplicationApis> = {}): ApplicationApis {
-    return { defaultApi };
+    return { discoveryApi, identityClientApi, identityProviderApi };
 }
 
-export function mockDefaultApi(
-    operations: Partial<DefaultApiInterface> = {}
-): DefaultApiInterface {
+export function mockDiscoveryApi(
+    operations: Partial<DiscoveryApiInterface> = {}
+): DiscoveryApiInterface {
     return {
-        fetchToken: operations.fetchToken || reject("DefaultApi.fetchToken"),
-        wellKnownKeysGet: operations.wellKnownKeysGet || reject("DefaultApi.wellKnownKeysGet"),
-        wellKnownOpenidConfigurationGet: operations.wellKnownOpenidConfigurationGet || reject("DefaultApi.wellKnownOpenidConfigurationGet"),
+        getDiscoveryDocument: operations.getDiscoveryDocument || reject("DiscoveryApi.getDiscoveryDocument"),
+        getJwksDocument: operations.getJwksDocument || reject("DiscoveryApi.getJwksDocument"),
+    };
+}
+
+export function mockIdentityClientApi(
+    operations: Partial<IdentityClientApiInterface> = {}
+): IdentityClientApiInterface {
+    return {
+        handleCallback: operations.handleCallback || reject("IdentityClientApi.handleCallback"),
+    };
+}
+
+export function mockIdentityProviderApi(
+    operations: Partial<IdentityProviderApiInterface> = {}
+): IdentityProviderApiInterface {
+    return {
+        fetchToken: operations.fetchToken || reject("IdentityProviderApi.fetchToken"),
+        getUserinfo: operations.getUserinfo || reject("IdentityProviderApi.getUserinfo"),
+        startAuthorization: operations.startAuthorization || reject("IdentityProviderApi.startAuthorization"),
     };
 }

@@ -13,56 +13,140 @@
 
 import {
     DiscoveryDocumentDto,
+    GrantTypeDto,
     JwksDocumentDto,
     JwksKeyDto,
     JwtHeaderDto,
     JwtPayloadDto,
+    OauthErrorDto,
+    ResponseTypeDto,
     TokenResponseDto,
+    UserinfoDto,
 } from "./model";
 
 import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";
 
 export interface ApplicationApis {
-    defaultApi: DefaultApiInterface;
+    discoveryApi: DiscoveryApiInterface;
+    identityClientApi: IdentityClientApiInterface;
+    identityProviderApi: IdentityProviderApiInterface;
 }
 
 /**
- * DefaultApi - object-oriented interface
+ * DiscoveryApi - object-oriented interface
  */
-export interface DefaultApiInterface {
+export interface DiscoveryApiInterface {
+    /**
+     *
+     * @throws {HttpError}
+     */
+    getDiscoveryDocument(params?: RequestCallOptions): Promise<DiscoveryDocumentDto>;
+    /**
+     *
+     * @throws {HttpError}
+     */
+    getJwksDocument(params?: RequestCallOptions): Promise<JwksDocumentDto>;
+}
+
+/**
+ * DiscoveryApi - object-oriented interface
+ */
+export class DiscoveryApi extends BaseAPI implements DiscoveryApiInterface {
+    /**
+     *
+     * @throws {HttpError}
+     */
+    public async getDiscoveryDocument(params: RequestCallOptions = {}): Promise<DiscoveryDocumentDto> {
+        return await this.fetch(
+            this.basePath + "/.well-known/openid-configuration", params
+        );
+    }
+    /**
+     *
+     * @throws {HttpError}
+     */
+    public async getJwksDocument(params: RequestCallOptions = {}): Promise<JwksDocumentDto> {
+        return await this.fetch(
+            this.basePath + "/.well-known/keys", params
+        );
+    }
+}
+
+/**
+ * IdentityClientApi - object-oriented interface
+ */
+export interface IdentityClientApiInterface {
+    /**
+     *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    handleCallback(params?: {
+        queryParams?: { state?: string; code?: string; error?: string; error_description?: string };
+    } & RequestCallOptions): Promise<void>;
+}
+
+/**
+ * IdentityClientApi - object-oriented interface
+ */
+export class IdentityClientApi extends BaseAPI implements IdentityClientApiInterface {
+    /**
+     *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
+     * @throws {HttpError}
+     */
+    public async handleCallback(params?: {
+        queryParams?: { state?: string; code?: string; error?: string; error_description?: string };
+    } & RequestCallOptions): Promise<void> {
+        return await this.fetch(
+            this.url("/callback", {}, params?.queryParams, {}), params
+        );
+    }
+}
+
+/**
+ * IdentityProviderApi - object-oriented interface
+ */
+export interface IdentityProviderApiInterface {
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     fetchToken(params: {
-        formParams: { code: string; clientId: string; clientSecret: string; redirectUri: string; subjectToken: string; audience: string; }
-        headers?: { "Authorization"?: string };
+        formParams: { grant_type: GrantTypeDto; code: string; client_id: string; client_secret?: string; redirect_uri?: string; subject_token?: string; audience?: string };
+        headers: { "Authorization"?: string };
     } & RequestCallOptions): Promise<TokenResponseDto>;
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    wellKnownKeysGet(params?: RequestCallOptions): Promise<JwksDocumentDto>;
+    getUserinfo(params: {
+        headers: { "Authorization": string };
+    } & RequestCallOptions): Promise<UserinfoDto>;
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    wellKnownOpenidConfigurationGet(params?: RequestCallOptions): Promise<DiscoveryDocumentDto>;
+    startAuthorization(params: {
+        queryParams?: { response_type?: ResponseTypeDto; client_id: string; state?: string; redirect_uri?: string; scope?: string };
+    } & RequestCallOptions): Promise<void>;
 }
 
 /**
- * DefaultApi - object-oriented interface
+ * IdentityProviderApi - object-oriented interface
  */
-export class DefaultApi extends BaseAPI implements DefaultApiInterface {
+export class IdentityProviderApi extends BaseAPI implements IdentityProviderApiInterface {
     /**
      *
      * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
     public async fetchToken(params: {
-        formParams: { code: string; clientId: string; clientSecret: string; redirectUri: string; subjectToken: string; audience: string; }
-        headers?: { "Authorization"?: string };
+        formParams: { grant_type: GrantTypeDto; code: string; client_id: string; client_secret?: string; redirect_uri?: string; subject_token?: string; audience?: string };
+        headers: { "Authorization"?: string };
     } & RequestCallOptions): Promise<TokenResponseDto> {
         return await this.fetch(
             this.basePath + "/token",
@@ -79,20 +163,29 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async wellKnownKeysGet(params: RequestCallOptions = {}): Promise<JwksDocumentDto> {
+    public async getUserinfo(params: {
+        headers: { "Authorization": string };
+    } & RequestCallOptions): Promise<UserinfoDto> {
         return await this.fetch(
-            this.basePath + "/.well-known/keys", params
+            this.basePath + "/userinfo",
+            {
+                ...params,
+            }
         );
     }
     /**
      *
+     * @param {*} [params] Request parameters, including pathParams, queryParams (including bodyParams) and http options.
      * @throws {HttpError}
      */
-    public async wellKnownOpenidConfigurationGet(params: RequestCallOptions = {}): Promise<DiscoveryDocumentDto> {
+    public async startAuthorization(params: {
+        queryParams?: { response_type?: ResponseTypeDto; client_id: string; state?: string; redirect_uri?: string; scope?: string };
+    } & RequestCallOptions): Promise<void> {
         return await this.fetch(
-            this.basePath + "/.well-known/openid-configuration", params
+            this.url("/authorize", {}, params?.queryParams, {}), params
         );
     }
 }
@@ -102,7 +195,9 @@ type ServerNames =
 
 export const servers: Record<ServerNames, ApplicationApis> = {
     default: {
-        defaultApi: new DefaultApi(""),
+        discoveryApi: new DiscoveryApi(""),
+        identityClientApi: new IdentityClientApi(""),
+        identityProviderApi: new IdentityProviderApi(""),
     },
 };
 

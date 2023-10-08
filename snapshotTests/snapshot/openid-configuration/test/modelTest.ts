@@ -1,10 +1,16 @@
 import {
     DiscoveryDocumentDto,
+    GrantTypeDto,
+    GrantTypeDtoValues,
     JwksDocumentDto,
     JwksKeyDto,
     JwtHeaderDto,
     JwtPayloadDto,
+    OauthErrorDto,
+    ResponseTypeDto,
+    ResponseTypeDtoValues,
     TokenResponseDto,
+    UserinfoDto,
 } from "../model";
 
 export class Random {
@@ -71,11 +77,15 @@ type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
 
 export interface SampleModelFactories {
     DiscoveryDocumentDto?: ModelFactory<DiscoveryDocumentDto>;
+    GrantTypeDto?: ModelFactory<GrantTypeDto>;
     JwksDocumentDto?: ModelFactory<JwksDocumentDto>;
     JwksKeyDto?: ModelFactory<JwksKeyDto>;
     JwtHeaderDto?: ModelFactory<JwtHeaderDto>;
     JwtPayloadDto?: ModelFactory<JwtPayloadDto>;
+    OauthErrorDto?: ModelFactory<OauthErrorDto>;
+    ResponseTypeDto?: ModelFactory<ResponseTypeDto>;
     TokenResponseDto?: ModelFactory<TokenResponseDto>;
+    UserinfoDto?: ModelFactory<UserinfoDto>;
 }
 
 export interface SamplePropertyValues {
@@ -272,6 +282,10 @@ export class TestSampleData {
                 return this.sampleDiscoveryDocumentDto();
             case "Array<DiscoveryDocumentDto>":
                 return this.sampleArrayDiscoveryDocumentDto();
+            case "GrantTypeDto":
+                return this.sampleGrantTypeDto();
+            case "Array<GrantTypeDto>":
+                return this.sampleArrayGrantTypeDto();
             case "JwksDocumentDto":
                 return this.sampleJwksDocumentDto();
             case "Array<JwksDocumentDto>":
@@ -288,10 +302,22 @@ export class TestSampleData {
                 return this.sampleJwtPayloadDto();
             case "Array<JwtPayloadDto>":
                 return this.sampleArrayJwtPayloadDto();
+            case "OauthErrorDto":
+                return this.sampleOauthErrorDto();
+            case "Array<OauthErrorDto>":
+                return this.sampleArrayOauthErrorDto();
+            case "ResponseTypeDto":
+                return this.sampleResponseTypeDto();
+            case "Array<ResponseTypeDto>":
+                return this.sampleArrayResponseTypeDto();
             case "TokenResponseDto":
                 return this.sampleTokenResponseDto();
             case "Array<TokenResponseDto>":
                 return this.sampleArrayTokenResponseDto();
+            case "UserinfoDto":
+                return this.sampleUserinfoDto();
+            case "Array<UserinfoDto>":
+                return this.sampleArrayUserinfoDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
@@ -311,27 +337,47 @@ export class TestSampleData {
             authorization_endpoint: this.generate(
                 template?.authorization_endpoint,
                 { containerClass, propertyName: "authorization_endpoint", isNullable: false },
-                () => this.sampleString("url", "null")
+                () => this.sampleString("uri", "null")
             ),
             token_endpoint: this.generate(
                 template?.token_endpoint,
                 { containerClass, propertyName: "token_endpoint", isNullable: false },
-                () => this.sampleString("url", "null")
+                () => this.sampleString("uri", "null")
+            ),
+            userinfo_endpoint: this.generate(
+                template?.userinfo_endpoint,
+                { containerClass, propertyName: "userinfo_endpoint", isNullable: false },
+                () => this.sampleString("uri", "null")
             ),
             end_session_endpoint: this.generate(
                 template?.end_session_endpoint,
                 { containerClass, propertyName: "end_session_endpoint", isNullable: false },
-                () => this.sampleString("url", "null")
+                () => this.sampleString("uri", "null")
             ),
             jwks_uri: this.generate(
                 template?.jwks_uri,
                 { containerClass, propertyName: "jwks_uri", isNullable: false },
-                () => this.sampleString("url", "null")
+                () => this.sampleString("uri", "null")
+            ),
+            grant_types_supported: this.generate(
+                template?.grant_types_supported,
+                { containerClass, propertyName: "grant_types_supported", example: null, isNullable: false },
+                () => this.sampleArrayGrantTypeDto()
+            ),
+            scopes_supported: this.generate(
+                template?.scopes_supported,
+                { containerClass, propertyName: "scopes_supported", example: null, isNullable: false },
+                () => this.sampleArrayString()
+            ),
+            claims_supported: this.generate(
+                template?.claims_supported,
+                { containerClass, propertyName: "claims_supported", example: null, isNullable: false },
+                () => this.sampleArrayString()
             ),
             response_types_supported: this.generate(
                 template?.response_types_supported,
                 { containerClass, propertyName: "response_types_supported", example: null, isNullable: false },
-                () => this.sampleArrayString()
+                () => this.sampleArrayResponseTypeDto()
             ),
             response_modes_supported: this.generate(
                 template?.response_modes_supported,
@@ -367,6 +413,21 @@ export class TestSampleData {
     ): readonly DiscoveryDocumentDto[] {
         return this.randomArray(
             () => this.sampleDiscoveryDocumentDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleGrantTypeDto(): GrantTypeDto {
+        const containerClass = "GrantTypeDto";
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return this.pickOne(GrantTypeDtoValues);
+    }
+
+    sampleArrayGrantTypeDto(length?: number): readonly GrantTypeDto[] {
+        return this.randomArray(
+            () => this.sampleGrantTypeDto(),
             length ?? this.arrayLength()
         );
     }
@@ -527,6 +588,50 @@ export class TestSampleData {
         );
     }
 
+    sampleOauthErrorDto(template?: Factory<OauthErrorDto>): OauthErrorDto {
+        const containerClass = "OauthErrorDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            error: this.generate(
+                template?.error,
+                { containerClass, propertyName: "error", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            error_description: this.generate(
+                template?.error_description,
+                { containerClass, propertyName: "error_description", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+        };
+    }
+
+    sampleArrayOauthErrorDto(
+        length?: number,
+        template?: Factory<OauthErrorDto>
+    ): readonly OauthErrorDto[] {
+        return this.randomArray(
+            () => this.sampleOauthErrorDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleResponseTypeDto(): ResponseTypeDto {
+        const containerClass = "ResponseTypeDto";
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return this.pickOne(ResponseTypeDtoValues);
+    }
+
+    sampleArrayResponseTypeDto(length?: number): readonly ResponseTypeDto[] {
+        return this.randomArray(
+            () => this.sampleResponseTypeDto(),
+            length ?? this.arrayLength()
+        );
+    }
+
     sampleTokenResponseDto(template?: Factory<TokenResponseDto>): TokenResponseDto {
         const containerClass = "TokenResponseDto";
         if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
@@ -572,6 +677,40 @@ export class TestSampleData {
     ): readonly TokenResponseDto[] {
         return this.randomArray(
             () => this.sampleTokenResponseDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleUserinfoDto(template?: Factory<UserinfoDto>): UserinfoDto {
+        const containerClass = "UserinfoDto";
+        if (!template && typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        return {
+            sub: this.generate(
+                template?.sub,
+                { containerClass, propertyName: "sub", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            name: this.generate(
+                template?.name,
+                { containerClass, propertyName: "name", isNullable: false },
+                () => this.sampleString("", "null")
+            ),
+            email: this.generate(
+                template?.email,
+                { containerClass, propertyName: "email", isNullable: false },
+                () => this.sampleString("email", "null")
+            ),
+        };
+    }
+
+    sampleArrayUserinfoDto(
+        length?: number,
+        template?: Factory<UserinfoDto>
+    ): readonly UserinfoDto[] {
+        return this.randomArray(
+            () => this.sampleUserinfoDto(template),
             length ?? this.arrayLength()
         );
     }
