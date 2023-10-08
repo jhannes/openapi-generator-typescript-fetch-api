@@ -64,7 +64,7 @@ export interface DefaultApiInterface {
      * @throws {HttpError}
      */
     usersGet(params?: {
-        queryParams?: { page?: number, per_page?: number, };
+        queryParams?: { page?: number; per_page?: number };
     } & RequestCallOptions): Promise<UsersGet200ResponseDto>;
     /**
      *
@@ -173,7 +173,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {HttpError}
      */
     public async usersGet(params?: {
-        queryParams?: { page?: number, per_page?: number,  };
+        queryParams?: { page?: number; per_page?: number };
     } & RequestCallOptions): Promise<UsersGet200ResponseDto> {
         return await this.fetch(
             this.url("/users", {}, params?.queryParams, {}), params

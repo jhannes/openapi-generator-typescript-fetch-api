@@ -14,27 +14,24 @@ export interface DiscoveryDocumentDto {
     issuer?: string;
     authorization_endpoint?: string;
     token_endpoint?: string;
+    userinfo_endpoint?: string;
     end_session_endpoint?: string;
     jwks_uri?: string;
-    response_types_supported?: Array<DiscoveryDocumentDtoResponseTypesSupportedEnum>;
-    response_modes_supported?: Array<DiscoveryDocumentDtoResponseModesSupportedEnum>;
-    subject_types_supported?: Array<DiscoveryDocumentDtoSubjectTypesSupportedEnum>;
-    code_challenge_methods_supported?: Array<DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum>;
+    grant_types_supported?: Set<GrantTypeDto>;
+    scopes_supported?: Set<string>;
+    claims_supported?: Set<string>;
+    response_types_supported: Set<ResponseTypeDto>;
+    response_modes_supported?: Set<DiscoveryDocumentDtoResponseModesSupportedEnum>;
+    subject_types_supported?: Set<DiscoveryDocumentDtoSubjectTypesSupportedEnum>;
+    code_challenge_methods_supported?: Set<DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum>;
     id_token_signing_alg_values_supported?: Array<DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnum>;
     x_sso_frame?: string;
 }
 
-export const DiscoveryDocumentDtoResponseTypesSupportedEnumValues = [
-    "code",
-    "token",
-    "id_token",
-] as const;
-
-export type DiscoveryDocumentDtoResponseTypesSupportedEnum = typeof DiscoveryDocumentDtoResponseTypesSupportedEnumValues[number];
-
 export const DiscoveryDocumentDtoResponseModesSupportedEnumValues = [
     "query",
     "fragment",
+    "form_post",
 ] as const;
 
 export type DiscoveryDocumentDtoResponseModesSupportedEnum = typeof DiscoveryDocumentDtoResponseModesSupportedEnumValues[number];
@@ -58,9 +55,18 @@ export const DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues = [
 ] as const;
 
 export type DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnum = typeof DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues[number];
+export const GrantTypeDtoValues = [
+    "implicit",
+    "authorization_code",
+    "client_credentials",
+    "refresh_token",
+    "urn:ietf:params:oauth:grant-type:token-exchange",
+] as const;
+
+export type GrantTypeDto = typeof GrantTypeDtoValues[number];
 
 export interface JwksDocumentDto {
-    keys?: Array<JwksKeyDto>;
+    keys: Array<JwksKeyDto>;
 }
 
 export interface JwksKeyDto {
@@ -120,6 +126,20 @@ export interface JwtPayloadDto {
     pid?: string;
 }
 
+export interface OauthErrorDto {
+    error: string;
+    error_description: string;
+}
+export const ResponseTypeDtoValues = [
+    "code",
+    "token",
+    "id_token",
+    "code id_token",
+    "id_token token",
+] as const;
+
+export type ResponseTypeDto = typeof ResponseTypeDtoValues[number];
+
 /**
  * Token response according to https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
  */
@@ -142,4 +162,13 @@ export interface TokenResponseDto {
      */
     id_token?: string;
     refresh_token?: string;
+}
+
+export interface UserinfoDto {
+    /**
+     * Subject identifier
+     */
+    sub: string;
+    name?: string;
+    email?: string;
 }

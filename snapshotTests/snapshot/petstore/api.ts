@@ -59,7 +59,7 @@ export interface PetApiInterface {
      * @throws {HttpError}
      */
     findPetsByStatus(params: {
-        queryParams?: { status?: Array<"available" | "pending" | "sold">, };
+        queryParams?: { status?: Array<"available" | "pending" | "sold"> };
         security: petstore_auth;
     } & RequestCallOptions): Promise<Array<PetDto>>;
     /**
@@ -69,7 +69,7 @@ export interface PetApiInterface {
      * @throws {HttpError}
      */
     findPetsByTags(params: {
-        queryParams?: { tags?: Array<string>, };
+        queryParams?: { tags?: Array<string> };
         security: petstore_auth;
     } & RequestCallOptions): Promise<Array<PetDto>>;
     /**
@@ -100,7 +100,7 @@ export interface PetApiInterface {
      */
     updatePetWithForm(params: {
         pathParams: { petId: string };
-        formParams: { name: string; status: string; }
+        formParams: { name?: string; status?: string };
         security: petstore_auth;
     } & RequestCallOptions): Promise<void>;
     /**
@@ -111,7 +111,7 @@ export interface PetApiInterface {
      */
     uploadFile(params: {
         pathParams: { petId: number };
-        formParams: { additionalMetadata: string; file: Blob; }
+        formParams: { additionalMetadata?: string; file?: Blob };
         security: petstore_auth;
     } & RequestCallOptions): Promise<void>;
 }
@@ -174,7 +174,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      * @throws {HttpError}
      */
     public async findPetsByStatus(params: {
-        queryParams?: { status?: Array<"available" | "pending" | "sold">,  };
+        queryParams?: { status?: Array<"available" | "pending" | "sold"> };
         security: petstore_auth;
     } & RequestCallOptions): Promise<Array<PetDto>> {
         return await this.fetch(
@@ -195,7 +195,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      * @throws {HttpError}
      */
     public async findPetsByTags(params: {
-        queryParams?: { tags?: Array<string>,  };
+        queryParams?: { tags?: Array<string> };
         security: petstore_auth;
     } & RequestCallOptions): Promise<Array<PetDto>> {
         return await this.fetch(
@@ -262,7 +262,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async updatePetWithForm(params: {
         pathParams: { petId: string };
-        formParams: { name: string; status: string; }
+        formParams: { name?: string; status?: string };
         security: petstore_auth;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
@@ -287,7 +287,7 @@ export class PetApi extends BaseAPI implements PetApiInterface {
      */
     public async uploadFile(params: {
         pathParams: { petId: number };
-        formParams: { additionalMetadata: string; file: Blob; }
+        formParams: { additionalMetadata?: string; file?: Blob };
         security: petstore_auth;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
@@ -326,7 +326,7 @@ export interface StoreApiInterface {
      * @throws {HttpError}
      */
     getInventory(params: {
-        queryParams?: { effectiveDateTime?: Date, };
+        queryParams?: { effectiveDateTime?: Date };
         security: api_key;
     } & RequestCallOptions): Promise<{ [key: string]: number; }>;
     /**
@@ -377,7 +377,7 @@ export class StoreApi extends BaseAPI implements StoreApiInterface {
      * @throws {HttpError}
      */
     public async getInventory(params: {
-        queryParams?: { effectiveDateTime?: Date,  };
+        queryParams?: { effectiveDateTime?: Date };
         security: api_key;
     } & RequestCallOptions): Promise<{ [key: string]: number; }> {
         return await this.fetch(
@@ -492,7 +492,7 @@ export interface UserApiInterface {
      * @throws {HttpError}
      */
     loginUser(params?: {
-        queryParams?: { username?: string, password?: string, };
+        queryParams?: { username?: string; password?: string };
     } & RequestCallOptions): Promise<string>;
     /**
      *
@@ -638,7 +638,7 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @throws {HttpError}
      */
     public async loginUser(params?: {
-        queryParams?: { username?: string, password?: string,  };
+        queryParams?: { username?: string; password?: string };
     } & RequestCallOptions): Promise<string> {
         return await this.fetch(
             this.url("/user/login", {}, params?.queryParams, {}), params

@@ -42,7 +42,7 @@ export interface DefaultApiInterface {
      */
     addPetWithForm(params: {
         pathParams: { petId: string };
-        formParams: { name: string; status: string; }
+        formParams: { name: string; status?: string };
     } & RequestCallOptions): Promise<void>;
     /**
      *
@@ -51,8 +51,8 @@ export interface DefaultApiInterface {
      */
     listPets(params: {
         pathParams: { storeId: string };
-        queryParams?: { status: Array<string>, tags?: Array<string>, bornAfter: Date, };
-    } & RequestCallOptions): Promise<PetDto>;
+        queryParams?: { status: Array<string>; tags?: Array<string>; bornAfter: Date };
+    } & RequestCallOptions): Promise<Array<PetDto>>;
 }
 
 /**
@@ -88,7 +88,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async addPetWithForm(params: {
         pathParams: { petId: string };
-        formParams: { name: string; status: string; }
+        formParams: { name: string; status?: string };
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.url("/pets/{petId}", params.pathParams),
@@ -110,8 +110,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async listPets(params: {
         pathParams: { storeId: string };
-        queryParams?: { status: Array<string>, tags?: Array<string>, bornAfter: Date,  };
-    } & RequestCallOptions): Promise<PetDto> {
+        queryParams?: { status: Array<string>; tags?: Array<string>; bornAfter: Date };
+    } & RequestCallOptions): Promise<Array<PetDto>> {
         return await this.fetch(
             this.url("/{storeId}/pets", params.pathParams, params?.queryParams, {
                 status: { delimiter: " " },
