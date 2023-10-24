@@ -61,6 +61,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
 
         typeMapping.put("DateTime", "Date");
         typeMapping.put("date", "Date");
+        typeMapping.put("set", "Array");
 
         this.cliOptions.add(new CliOption(NPM_REPOSITORY, "Use this property to set an url of your private npmRepo in the package.json"));
         this.cliOptions.add(new CliOption(WITH_INTERFACES, "Setting this property to true will generate interfaces next to the default class implementations.", SchemaTypeUtil.BOOLEAN_TYPE).defaultValue(Boolean.FALSE.toString()));

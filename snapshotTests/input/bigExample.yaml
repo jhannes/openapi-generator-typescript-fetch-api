@@ -112,7 +112,6 @@ components:
     PetStore:
       properties:
         pets:
-          format: uuid
           additionalProperties:
             $ref: "#/components/schemas/Pet"
     PetLocations:
