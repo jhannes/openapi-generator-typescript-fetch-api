@@ -1,5 +1,9 @@
 import {
     DiscoveryDocumentDto,
+    DiscoveryDocumentDtoResponseModesSupportedEnumValues,
+    DiscoveryDocumentDtoSubjectTypesSupportedEnumValues,
+    DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnumValues,
+    DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues,
     GrantTypeDto,
     GrantTypeDtoValues,
     JwksDocumentDto,
@@ -382,22 +386,22 @@ export class TestSampleData {
             response_modes_supported: this.generate(
                 template?.response_modes_supported,
                 { containerClass, propertyName: "response_modes_supported", example: null, isNullable: false },
-                () => this.sampleArrayString()
+                () => this.pickSome(DiscoveryDocumentDtoResponseModesSupportedEnumValues)
             ),
             subject_types_supported: this.generate(
                 template?.subject_types_supported,
                 { containerClass, propertyName: "subject_types_supported", example: null, isNullable: false },
-                () => this.sampleArrayString()
+                () => this.pickSome(DiscoveryDocumentDtoSubjectTypesSupportedEnumValues)
             ),
             code_challenge_methods_supported: this.generate(
                 template?.code_challenge_methods_supported,
                 { containerClass, propertyName: "code_challenge_methods_supported", example: null, isNullable: false },
-                () => this.sampleArrayString()
+                () => this.pickSome(DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnumValues)
             ),
             id_token_signing_alg_values_supported: this.generate(
                 template?.id_token_signing_alg_values_supported,
                 { containerClass, propertyName: "id_token_signing_alg_values_supported", example: null, isNullable: false },
-                () => this.sampleArrayString()
+                () => this.pickSome(DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnumValues)
             ),
             x_sso_frame: this.generate(
                 template?.x_sso_frame,

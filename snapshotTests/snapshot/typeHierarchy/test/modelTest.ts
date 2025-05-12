@@ -1,5 +1,6 @@
 import {
     AddressDto,
+    AddressDtoAddressTypesEnumValues,
     CatDto,
     DogDto,
     GenericDogDto,
@@ -346,7 +347,7 @@ export class TestSampleData {
             addressTypes: this.generate(
                 template?.addressTypes,
                 { containerClass, propertyName: "addressTypes", example: null, isNullable: false },
-                () => this.sampleArrayString()
+                () => this.pickSome(AddressDtoAddressTypesEnumValues)
             ),
         };
     }

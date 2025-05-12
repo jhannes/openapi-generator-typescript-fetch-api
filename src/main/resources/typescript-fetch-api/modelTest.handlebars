@@ -7,8 +7,9 @@ import {
     {{~/if}}
 {{~^oneOf}}
 {{~#vars}}
-    {{~#isEnum}}{{~^isContainer}}
-    {{datatypeWithEnum}}Values,{{~/isContainer}}{{~/isEnum}}
+    {{~#isEnum}}{{~#if isContainer}}
+    {{items.datatypeWithEnum}}Values,{{else}}
+    {{datatypeWithEnum}}Values,{{~/if}}{{~/isEnum}}
 {{~/vars~}}
 {{~/oneOf}}
 {{~/model}}
@@ -339,7 +340,7 @@ export class TestSampleData {
             {{name}}: this.generate(
                 template?.{{name}},
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
-                () => {{#if items.isString}}this.sampleArrayString(){{else if items.isContainer}}{
+                () => {{#if items.isEnum}}this.pickSome({{items.datatypeWithEnum}}Values){{else if items.isString}}this.sampleArrayString(){{else if items.isContainer}}{
                     throw new Error("Can't automatically generate for {{{dataType}}}");
                 }{{else}}this.sampleArray{{{items.dataType}}}(){{/if}}
             ),{{~else if uniqueItems}}
