@@ -149,7 +149,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -326,7 +326,7 @@ export class TestSampleData {
     sampleArrayCaseWorkerDto(
         length?: number,
         template?: Factory<CaseWorkerDto>
-    ): readonly CaseWorkerDto[] {
+    ): CaseWorkerDto[] {
         return this.randomArray(
             () => this.sampleCaseWorkerDto(template),
             length ?? this.arrayLength()
@@ -390,7 +390,7 @@ export class TestSampleData {
     sampleArrayExposureDto(
         length?: number,
         template?: Factory<ExposureDto>
-    ): readonly ExposureDto[] {
+    ): ExposureDto[] {
         return this.randomArray(
             () => this.sampleExposureDto(template),
             length ?? this.arrayLength()
@@ -424,7 +424,7 @@ export class TestSampleData {
     sampleArrayInfectionDto(
         length?: number,
         template?: Factory<InfectionDto>
-    ): readonly InfectionDto[] {
+    ): InfectionDto[] {
         return this.randomArray(
             () => this.sampleInfectionDto(template),
             length ?? this.arrayLength()
@@ -463,7 +463,7 @@ export class TestSampleData {
     sampleArrayInfectionInformationDto(
         length?: number,
         template?: Factory<InfectionInformationDto>
-    ): readonly InfectionInformationDto[] {
+    ): InfectionInformationDto[] {
         return this.randomArray(
             () => this.sampleInfectionInformationDto(template),
             length ?? this.arrayLength()
@@ -478,7 +478,7 @@ export class TestSampleData {
         return this.pickOne(UserRoleDtoValues);
     }
 
-    sampleArrayUserRoleDto(length?: number): readonly UserRoleDto[] {
+    sampleArrayUserRoleDto(length?: number): UserRoleDto[] {
         return this.randomArray(
             () => this.sampleUserRoleDto(),
             length ?? this.arrayLength()

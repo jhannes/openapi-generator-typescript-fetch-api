@@ -172,7 +172,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -397,7 +397,7 @@ export class TestSampleData {
     sampleArrayAddMessageToConversationDeltaDto(
         length?: number,
         template?: Factory<AddMessageToConversationDeltaDto>
-    ): readonly AddMessageToConversationDeltaDto[] {
+    ): AddMessageToConversationDeltaDto[] {
         return this.randomArray(
             () => this.sampleAddMessageToConversationDeltaDto(template),
             length ?? this.arrayLength()
@@ -426,7 +426,7 @@ export class TestSampleData {
     sampleArrayChangeTrackedDto(
         length?: number,
         template?: Factory<ChangeTrackedDto>
-    ): readonly ChangeTrackedDto[] {
+    ): ChangeTrackedDto[] {
         return this.randomArray(
             () => this.sampleChangeTrackedDto(template),
             length ?? this.arrayLength()
@@ -460,7 +460,7 @@ export class TestSampleData {
     sampleArrayCommandToServerDto(
         length?: number,
         template?: Factory<CommandToServerDto>
-    ): readonly CommandToServerDto[] {
+    ): CommandToServerDto[] {
         return this.randomArray(
             () => this.sampleCommandToServerDto(template),
             length ?? this.arrayLength()
@@ -489,7 +489,7 @@ export class TestSampleData {
     sampleArrayConversationInfoDto(
         length?: number,
         template?: Factory<ConversationInfoDto>
-    ): readonly ConversationInfoDto[] {
+    ): ConversationInfoDto[] {
         return this.randomArray(
             () => this.sampleConversationInfoDto(template),
             length ?? this.arrayLength()
@@ -513,7 +513,7 @@ export class TestSampleData {
     sampleArrayConversationMessageDto(
         length?: number,
         template?: Factory<ConversationMessageDto>
-    ): readonly ConversationMessageDto[] {
+    ): ConversationMessageDto[] {
         return this.randomArray(
             () => this.sampleConversationMessageDto(template),
             length ?? this.arrayLength()
@@ -534,7 +534,7 @@ export class TestSampleData {
     sampleArrayConversationMessageSnapshotDto(
         length?: number,
         template?: Factory<ConversationMessageSnapshotDto>
-    ): readonly ConversationMessageSnapshotDto[] {
+    ): ConversationMessageSnapshotDto[] {
         return this.randomArray(
             () => this.sampleConversationMessageSnapshotDto(template),
             length ?? this.arrayLength()
@@ -569,7 +569,7 @@ export class TestSampleData {
     sampleArrayConversationSnapshotDto(
         length?: number,
         template?: Factory<ConversationSnapshotDto>
-    ): readonly ConversationSnapshotDto[] {
+    ): ConversationSnapshotDto[] {
         return this.randomArray(
             () => this.sampleConversationSnapshotDto(template),
             length ?? this.arrayLength()
@@ -599,7 +599,7 @@ export class TestSampleData {
     sampleArrayCreateConversationDeltaDto(
         length?: number,
         template?: Factory<CreateConversationDeltaDto>
-    ): readonly CreateConversationDeltaDto[] {
+    ): CreateConversationDeltaDto[] {
         return this.randomArray(
             () => this.sampleCreateConversationDeltaDto(template),
             length ?? this.arrayLength()
@@ -636,7 +636,7 @@ export class TestSampleData {
     sampleArrayDeltaDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => DeltaDto
-    ): readonly DeltaDto[] {
+    ): DeltaDto[] {
         return this.randomArray(
             () => this.sampleDeltaDto(factory),
             length ?? this.arrayLength()
@@ -666,7 +666,7 @@ export class TestSampleData {
     sampleArrayEventFromServerDto(
         length?: number,
         template?: Factory<EventFromServerDto>
-    ): readonly EventFromServerDto[] {
+    ): EventFromServerDto[] {
         return this.randomArray(
             () => this.sampleEventFromServerDto(template),
             length ?? this.arrayLength()
@@ -692,7 +692,7 @@ export class TestSampleData {
     sampleArrayMessageFromServerDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => MessageFromServerDto
-    ): readonly MessageFromServerDto[] {
+    ): MessageFromServerDto[] {
         return this.randomArray(
             () => this.sampleMessageFromServerDto(factory),
             length ?? this.arrayLength()
@@ -718,7 +718,7 @@ export class TestSampleData {
     sampleArrayMessageToServerDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => MessageToServerDto
-    ): readonly MessageToServerDto[] {
+    ): MessageToServerDto[] {
         return this.randomArray(
             () => this.sampleMessageToServerDto(factory),
             length ?? this.arrayLength()
@@ -748,7 +748,7 @@ export class TestSampleData {
     sampleArrayRequestToServerDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => RequestToServerDto
-    ): readonly RequestToServerDto[] {
+    ): RequestToServerDto[] {
         return this.randomArray(
             () => this.sampleRequestToServerDto(factory),
             length ?? this.arrayLength()
@@ -772,7 +772,7 @@ export class TestSampleData {
     sampleArraySnapshotSetDto(
         length?: number,
         template?: Factory<SnapshotSetDto>
-    ): readonly SnapshotSetDto[] {
+    ): SnapshotSetDto[] {
         return this.randomArray(
             () => this.sampleSnapshotSetDto(template),
             length ?? this.arrayLength()
@@ -797,7 +797,7 @@ export class TestSampleData {
     sampleArraySubscribeRequestDto(
         length?: number,
         template?: Factory<SubscribeRequestDto>
-    ): readonly SubscribeRequestDto[] {
+    ): SubscribeRequestDto[] {
         return this.randomArray(
             () => this.sampleSubscribeRequestDto(template),
             length ?? this.arrayLength()
@@ -832,7 +832,7 @@ export class TestSampleData {
     sampleArrayUpdateConversationDeltaDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => UpdateConversationDeltaDto
-    ): readonly UpdateConversationDeltaDto[] {
+    ): UpdateConversationDeltaDto[] {
         return this.randomArray(
             () => this.sampleUpdateConversationDeltaDto(factory),
             length ?? this.arrayLength()
@@ -862,7 +862,7 @@ export class TestSampleData {
     sampleArrayUpdateConversationSummaryDeltaDto(
         length?: number,
         template?: Factory<UpdateConversationSummaryDeltaDto>
-    ): readonly UpdateConversationSummaryDeltaDto[] {
+    ): UpdateConversationSummaryDeltaDto[] {
         return this.randomArray(
             () => this.sampleUpdateConversationSummaryDeltaDto(template),
             length ?? this.arrayLength()
@@ -892,7 +892,7 @@ export class TestSampleData {
     sampleArrayUpdateConversationTitleDeltaDto(
         length?: number,
         template?: Factory<UpdateConversationTitleDeltaDto>
-    ): readonly UpdateConversationTitleDeltaDto[] {
+    ): UpdateConversationTitleDeltaDto[] {
         return this.randomArray(
             () => this.sampleUpdateConversationTitleDeltaDto(template),
             length ?? this.arrayLength()

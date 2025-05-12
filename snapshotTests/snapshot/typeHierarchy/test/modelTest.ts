@@ -156,7 +156,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -354,7 +354,7 @@ export class TestSampleData {
     sampleArrayAddressDto(
         length?: number,
         template?: Factory<AddressDto>
-    ): readonly AddressDto[] {
+    ): AddressDto[] {
         return this.randomArray(
             () => this.sampleAddressDto(template),
             length ?? this.arrayLength()
@@ -385,7 +385,7 @@ export class TestSampleData {
     sampleArrayCatDto(
         length?: number,
         template?: Factory<CatDto>
-    ): readonly CatDto[] {
+    ): CatDto[] {
         return this.randomArray(
             () => this.sampleCatDto(template),
             length ?? this.arrayLength()
@@ -406,7 +406,7 @@ export class TestSampleData {
     sampleArrayDogDto(
         length?: number,
         template?: Factory<DogDto>
-    ): readonly DogDto[] {
+    ): DogDto[] {
         return this.randomArray(
             () => this.sampleDogDto(template),
             length ?? this.arrayLength()
@@ -436,7 +436,7 @@ export class TestSampleData {
     sampleArrayGenericDogDto(
         length?: number,
         template?: Factory<GenericDogDto>
-    ): readonly GenericDogDto[] {
+    ): GenericDogDto[] {
         return this.randomArray(
             () => this.sampleGenericDogDto(template),
             length ?? this.arrayLength()
@@ -466,7 +466,7 @@ export class TestSampleData {
     sampleArrayGoldfishDto(
         length?: number,
         template?: Factory<GoldfishDto>
-    ): readonly GoldfishDto[] {
+    ): GoldfishDto[] {
         return this.randomArray(
             () => this.sampleGoldfishDto(template),
             length ?? this.arrayLength()
@@ -505,7 +505,7 @@ export class TestSampleData {
     sampleArrayPetBaseDto(
         length?: number,
         template?: Factory<PetBaseDto>
-    ): readonly PetBaseDto[] {
+    ): PetBaseDto[] {
         return this.randomArray(
             () => this.samplePetBaseDto(template),
             length ?? this.arrayLength()
@@ -550,7 +550,7 @@ export class TestSampleData {
     sampleArrayPetDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => PetDto
-    ): readonly PetDto[] {
+    ): PetDto[] {
         return this.randomArray(
             () => this.samplePetDto(factory),
             length ?? this.arrayLength()
@@ -565,7 +565,7 @@ export class TestSampleData {
         return this.pickOne(WorkingDogCapabilityDtoValues);
     }
 
-    sampleArrayWorkingDogCapabilityDto(length?: number): readonly WorkingDogCapabilityDto[] {
+    sampleArrayWorkingDogCapabilityDto(length?: number): WorkingDogCapabilityDto[] {
         return this.randomArray(
             () => this.sampleWorkingDogCapabilityDto(),
             length ?? this.arrayLength()
@@ -591,7 +591,7 @@ export class TestSampleData {
     sampleArrayWorkingDogDto(
         length?: number,
         template?: Factory<WorkingDogDto>
-    ): readonly WorkingDogDto[] {
+    ): WorkingDogDto[] {
         return this.randomArray(
             () => this.sampleWorkingDogDto(template),
             length ?? this.arrayLength()

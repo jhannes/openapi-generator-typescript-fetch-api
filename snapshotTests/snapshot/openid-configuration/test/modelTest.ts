@@ -158,7 +158,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -410,7 +410,7 @@ export class TestSampleData {
     sampleArrayDiscoveryDocumentDto(
         length?: number,
         template?: Factory<DiscoveryDocumentDto>
-    ): readonly DiscoveryDocumentDto[] {
+    ): DiscoveryDocumentDto[] {
         return this.randomArray(
             () => this.sampleDiscoveryDocumentDto(template),
             length ?? this.arrayLength()
@@ -425,7 +425,7 @@ export class TestSampleData {
         return this.pickOne(GrantTypeDtoValues);
     }
 
-    sampleArrayGrantTypeDto(length?: number): readonly GrantTypeDto[] {
+    sampleArrayGrantTypeDto(length?: number): GrantTypeDto[] {
         return this.randomArray(
             () => this.sampleGrantTypeDto(),
             length ?? this.arrayLength()
@@ -449,7 +449,7 @@ export class TestSampleData {
     sampleArrayJwksDocumentDto(
         length?: number,
         template?: Factory<JwksDocumentDto>
-    ): readonly JwksDocumentDto[] {
+    ): JwksDocumentDto[] {
         return this.randomArray(
             () => this.sampleJwksDocumentDto(template),
             length ?? this.arrayLength()
@@ -488,7 +488,7 @@ export class TestSampleData {
     sampleArrayJwksKeyDto(
         length?: number,
         template?: Factory<JwksKeyDto>
-    ): readonly JwksKeyDto[] {
+    ): JwksKeyDto[] {
         return this.randomArray(
             () => this.sampleJwksKeyDto(template),
             length ?? this.arrayLength()
@@ -522,7 +522,7 @@ export class TestSampleData {
     sampleArrayJwtHeaderDto(
         length?: number,
         template?: Factory<JwtHeaderDto>
-    ): readonly JwtHeaderDto[] {
+    ): JwtHeaderDto[] {
         return this.randomArray(
             () => this.sampleJwtHeaderDto(template),
             length ?? this.arrayLength()
@@ -581,7 +581,7 @@ export class TestSampleData {
     sampleArrayJwtPayloadDto(
         length?: number,
         template?: Factory<JwtPayloadDto>
-    ): readonly JwtPayloadDto[] {
+    ): JwtPayloadDto[] {
         return this.randomArray(
             () => this.sampleJwtPayloadDto(template),
             length ?? this.arrayLength()
@@ -610,7 +610,7 @@ export class TestSampleData {
     sampleArrayOauthErrorDto(
         length?: number,
         template?: Factory<OauthErrorDto>
-    ): readonly OauthErrorDto[] {
+    ): OauthErrorDto[] {
         return this.randomArray(
             () => this.sampleOauthErrorDto(template),
             length ?? this.arrayLength()
@@ -625,7 +625,7 @@ export class TestSampleData {
         return this.pickOne(ResponseTypeDtoValues);
     }
 
-    sampleArrayResponseTypeDto(length?: number): readonly ResponseTypeDto[] {
+    sampleArrayResponseTypeDto(length?: number): ResponseTypeDto[] {
         return this.randomArray(
             () => this.sampleResponseTypeDto(),
             length ?? this.arrayLength()
@@ -674,7 +674,7 @@ export class TestSampleData {
     sampleArrayTokenResponseDto(
         length?: number,
         template?: Factory<TokenResponseDto>
-    ): readonly TokenResponseDto[] {
+    ): TokenResponseDto[] {
         return this.randomArray(
             () => this.sampleTokenResponseDto(template),
             length ?? this.arrayLength()
@@ -708,7 +708,7 @@ export class TestSampleData {
     sampleArrayUserinfoDto(
         length?: number,
         template?: Factory<UserinfoDto>
-    ): readonly UserinfoDto[] {
+    ): UserinfoDto[] {
         return this.randomArray(
             () => this.sampleUserinfoDto(template),
             length ?? this.arrayLength()

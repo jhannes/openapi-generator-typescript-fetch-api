@@ -146,7 +146,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -309,7 +309,7 @@ export class TestSampleData {
     sampleArrayGeometryCollectionDto(
         length?: number,
         template?: Factory<GeometryCollectionDto>
-    ): readonly GeometryCollectionDto[] {
+    ): GeometryCollectionDto[] {
         return this.randomArray(
             () => this.sampleGeometryCollectionDto(template),
             length ?? this.arrayLength()
@@ -349,7 +349,7 @@ export class TestSampleData {
     sampleArrayGeometryDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => GeometryDto
-    ): readonly GeometryDto[] {
+    ): GeometryDto[] {
         return this.randomArray(
             () => this.sampleGeometryDto(factory),
             length ?? this.arrayLength()
@@ -376,7 +376,7 @@ export class TestSampleData {
     sampleArrayLineStringDto(
         length?: number,
         template?: Factory<LineStringDto>
-    ): readonly LineStringDto[] {
+    ): LineStringDto[] {
         return this.randomArray(
             () => this.sampleLineStringDto(template),
             length ?? this.arrayLength()
@@ -401,7 +401,7 @@ export class TestSampleData {
     sampleArrayPointDto(
         length?: number,
         template?: Factory<PointDto>
-    ): readonly PointDto[] {
+    ): PointDto[] {
         return this.randomArray(
             () => this.samplePointDto(template),
             length ?? this.arrayLength()
@@ -428,7 +428,7 @@ export class TestSampleData {
     sampleArrayPolygonDto(
         length?: number,
         template?: Factory<PolygonDto>
-    ): readonly PolygonDto[] {
+    ): PolygonDto[] {
         return this.randomArray(
             () => this.samplePolygonDto(template),
             length ?? this.arrayLength()

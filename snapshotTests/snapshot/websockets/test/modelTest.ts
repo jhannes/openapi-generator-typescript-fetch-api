@@ -163,7 +163,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -372,7 +372,7 @@ export class TestSampleData {
     sampleArrayChangeTrackedDto(
         length?: number,
         template?: Factory<ChangeTrackedDto>
-    ): readonly ChangeTrackedDto[] {
+    ): ChangeTrackedDto[] {
         return this.randomArray(
             () => this.sampleChangeTrackedDto(template),
             length ?? this.arrayLength()
@@ -402,7 +402,7 @@ export class TestSampleData {
     sampleArrayCreatePersonCommandDto(
         length?: number,
         template?: Factory<CreatePersonCommandDto>
-    ): readonly CreatePersonCommandDto[] {
+    ): CreatePersonCommandDto[] {
         return this.randomArray(
             () => this.sampleCreatePersonCommandDto(template),
             length ?? this.arrayLength()
@@ -452,7 +452,7 @@ export class TestSampleData {
     sampleArrayPersonDto(
         length?: number,
         template?: Factory<PersonDto>
-    ): readonly PersonDto[] {
+    ): PersonDto[] {
         return this.randomArray(
             () => this.samplePersonDto(template),
             length ?? this.arrayLength()
@@ -481,7 +481,7 @@ export class TestSampleData {
     sampleArrayPersonNameDto(
         length?: number,
         template?: Factory<PersonNameDto>
-    ): readonly PersonNameDto[] {
+    ): PersonNameDto[] {
         return this.randomArray(
             () => this.samplePersonNameDto(template),
             length ?? this.arrayLength()
@@ -517,7 +517,7 @@ export class TestSampleData {
     sampleArrayPersonSnapshotDto(
         length?: number,
         template?: Factory<PersonSnapshotDto>
-    ): readonly PersonSnapshotDto[] {
+    ): PersonSnapshotDto[] {
         return this.randomArray(
             () => this.samplePersonSnapshotDto(template),
             length ?? this.arrayLength()
@@ -541,7 +541,7 @@ export class TestSampleData {
     sampleArrayRecipientDto(
         length?: number,
         template?: Factory<RecipientDto>
-    ): readonly RecipientDto[] {
+    ): RecipientDto[] {
         return this.randomArray(
             () => this.sampleRecipientDto(template),
             length ?? this.arrayLength()
@@ -571,7 +571,7 @@ export class TestSampleData {
     sampleArrayStringSnapshotDto(
         length?: number,
         template?: Factory<StringSnapshotDto>
-    ): readonly StringSnapshotDto[] {
+    ): StringSnapshotDto[] {
         return this.randomArray(
             () => this.sampleStringSnapshotDto(template),
             length ?? this.arrayLength()
@@ -591,7 +591,7 @@ export class TestSampleData {
     sampleArraySubscribeDto(
         length?: number,
         template?: Factory<SubscribeDto>
-    ): readonly SubscribeDto[] {
+    ): SubscribeDto[] {
         return this.randomArray(
             () => this.sampleSubscribeDto(template),
             length ?? this.arrayLength()
@@ -611,7 +611,7 @@ export class TestSampleData {
     sampleArrayUnsubscribeDto(
         length?: number,
         template?: Factory<UnsubscribeDto>
-    ): readonly UnsubscribeDto[] {
+    ): UnsubscribeDto[] {
         return this.randomArray(
             () => this.sampleUnsubscribeDto(template),
             length ?? this.arrayLength()
@@ -641,7 +641,7 @@ export class TestSampleData {
     sampleArrayUpdatePersonCommandDto(
         length?: number,
         template?: Factory<UpdatePersonCommandDto>
-    ): readonly UpdatePersonCommandDto[] {
+    ): UpdatePersonCommandDto[] {
         return this.randomArray(
             () => this.sampleUpdatePersonCommandDto(template),
             length ?? this.arrayLength()
@@ -676,7 +676,7 @@ export class TestSampleData {
     sampleArrayWebSocketCommandDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => WebSocketCommandDto
-    ): readonly WebSocketCommandDto[] {
+    ): WebSocketCommandDto[] {
         return this.randomArray(
             () => this.sampleWebSocketCommandDto(factory),
             length ?? this.arrayLength()
@@ -702,7 +702,7 @@ export class TestSampleData {
     sampleArrayWebSocketMessageDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => WebSocketMessageDto
-    ): readonly WebSocketMessageDto[] {
+    ): WebSocketMessageDto[] {
         return this.randomArray(
             () => this.sampleWebSocketMessageDto(factory),
             length ?? this.arrayLength()
@@ -732,7 +732,7 @@ export class TestSampleData {
     sampleArrayWebSocketRequestDto(
         length?: number,
         factory?: (sampleData: TestSampleData) => WebSocketRequestDto
-    ): readonly WebSocketRequestDto[] {
+    ): WebSocketRequestDto[] {
         return this.randomArray(
             () => this.sampleWebSocketRequestDto(factory),
             length ?? this.arrayLength()

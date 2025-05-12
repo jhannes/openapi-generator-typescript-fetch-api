@@ -141,7 +141,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -316,7 +316,7 @@ export class TestSampleData {
     sampleArrayUserDto(
         length?: number,
         template?: Factory<UserDto>
-    ): readonly UserDto[] {
+    ): UserDto[] {
         return this.randomArray(
             () => this.sampleUserDto(template),
             length ?? this.arrayLength()
@@ -345,7 +345,7 @@ export class TestSampleData {
     sampleArrayUserPermissionDto(
         length?: number,
         template?: Factory<UserPermissionDto>
-    ): readonly UserPermissionDto[] {
+    ): UserPermissionDto[] {
         return this.randomArray(
             () => this.sampleUserPermissionDto(template),
             length ?? this.arrayLength()

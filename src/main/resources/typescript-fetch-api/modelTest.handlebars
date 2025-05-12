@@ -153,7 +153,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -369,7 +369,7 @@ export class TestSampleData {
         length?: number,{{#if oneOf}}
         factory?: (sampleData: TestSampleData) => {{classname}}{{else}}
         template?: Factory<{{classname}}>{{/if}}
-    ){{/isEnum}}{{#isEnum}}(length?: number){{/isEnum}}: readonly {{classname}}[] {
+    ){{/isEnum}}{{#isEnum}}(length?: number){{/isEnum}}: {{classname}}[] {
         return this.randomArray(
             () => this.sample{{classname}}({{#if oneOf}}factory{{else}}{{^isEnum}}template{{/isEnum}}{{/if}}),
             length ?? this.arrayLength()

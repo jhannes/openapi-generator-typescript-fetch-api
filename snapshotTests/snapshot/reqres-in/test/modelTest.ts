@@ -154,7 +154,7 @@ export class TestSampleData {
         return this.pickOne(["foo", "bar", "baz"]);
     }
 
-    randomArray<T>(generator: (n: number) => T, length?: number): readonly T[] {
+    randomArray<T>(generator: (n: number) => T, length?: number): T[] {
         if (!length) length = this.nextInt(3) + 1;
         return Array.from({ length }).map((_, index) => generator(index));
     }
@@ -332,7 +332,7 @@ export class TestSampleData {
     sampleArrayLoginPost200ResponseDto(
         length?: number,
         template?: Factory<LoginPost200ResponseDto>
-    ): readonly LoginPost200ResponseDto[] {
+    ): LoginPost200ResponseDto[] {
         return this.randomArray(
             () => this.sampleLoginPost200ResponseDto(template),
             length ?? this.arrayLength()
@@ -356,7 +356,7 @@ export class TestSampleData {
     sampleArrayLoginPost400ResponseDto(
         length?: number,
         template?: Factory<LoginPost400ResponseDto>
-    ): readonly LoginPost400ResponseDto[] {
+    ): LoginPost400ResponseDto[] {
         return this.randomArray(
             () => this.sampleLoginPost400ResponseDto(template),
             length ?? this.arrayLength()
@@ -390,7 +390,7 @@ export class TestSampleData {
     sampleArrayLoginPostRequestDto(
         length?: number,
         template?: Factory<LoginPostRequestDto>
-    ): readonly LoginPostRequestDto[] {
+    ): LoginPostRequestDto[] {
         return this.randomArray(
             () => this.sampleLoginPostRequestDto(template),
             length ?? this.arrayLength()
@@ -419,7 +419,7 @@ export class TestSampleData {
     sampleArrayRegisterPost200ResponseDto(
         length?: number,
         template?: Factory<RegisterPost200ResponseDto>
-    ): readonly RegisterPost200ResponseDto[] {
+    ): RegisterPost200ResponseDto[] {
         return this.randomArray(
             () => this.sampleRegisterPost200ResponseDto(template),
             length ?? this.arrayLength()
@@ -463,7 +463,7 @@ export class TestSampleData {
     sampleArrayUnknownResourceDto(
         length?: number,
         template?: Factory<UnknownResourceDto>
-    ): readonly UnknownResourceDto[] {
+    ): UnknownResourceDto[] {
         return this.randomArray(
             () => this.sampleUnknownResourceDto(template),
             length ?? this.arrayLength()
@@ -507,7 +507,7 @@ export class TestSampleData {
     sampleArrayUserDto(
         length?: number,
         template?: Factory<UserDto>
-    ): readonly UserDto[] {
+    ): UserDto[] {
         return this.randomArray(
             () => this.sampleUserDto(template),
             length ?? this.arrayLength()
@@ -551,7 +551,7 @@ export class TestSampleData {
     sampleArrayUsersGet200ResponseDto(
         length?: number,
         template?: Factory<UsersGet200ResponseDto>
-    ): readonly UsersGet200ResponseDto[] {
+    ): UsersGet200ResponseDto[] {
         return this.randomArray(
             () => this.sampleUsersGet200ResponseDto(template),
             length ?? this.arrayLength()
@@ -575,7 +575,7 @@ export class TestSampleData {
     sampleArrayUsersIdGet200ResponseDto(
         length?: number,
         template?: Factory<UsersIdGet200ResponseDto>
-    ): readonly UsersIdGet200ResponseDto[] {
+    ): UsersIdGet200ResponseDto[] {
         return this.randomArray(
             () => this.sampleUsersIdGet200ResponseDto(template),
             length ?? this.arrayLength()
@@ -599,7 +599,7 @@ export class TestSampleData {
     sampleArrayUsersIdPut200ResponseDto(
         length?: number,
         template?: Factory<UsersIdPut200ResponseDto>
-    ): readonly UsersIdPut200ResponseDto[] {
+    ): UsersIdPut200ResponseDto[] {
         return this.randomArray(
             () => this.sampleUsersIdPut200ResponseDto(template),
             length ?? this.arrayLength()
