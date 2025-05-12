@@ -60,6 +60,8 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
 
         typeMapping.put("DateTime", "Date");
         typeMapping.put("date", "Date");
+        typeMapping.put("Set", "Array");
+        typeMapping.put("set", "Array");
 
         this.cliOptions.add(new CliOption(NPM_REPOSITORY, "Use this property to set an url of your private npmRepo in the package.json"));
         this.cliOptions.add(new CliOption(WITH_INTERFACES, "Setting this property to true will generate interfaces next to the default class implementations.", SchemaTypeUtil.BOOLEAN_TYPE).defaultValue(Boolean.FALSE.toString()));
@@ -358,7 +360,11 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                 cm.imports = new TreeSet<>(cm.imports);
                 // name enum with model name, e.g. StatusEnum => PetStatusEnum
                 for (CodegenProperty var : cm.allVars) {
-                    if (Boolean.TRUE.equals(var.isEnum)) {
+                    if (var.isEnum) {
+                        if (var.items != null) {
+                            var.items.datatypeWithEnum = var.items.datatypeWithEnum.replace(var.items.enumName, cm.classname + var.enumName);
+                            var.items.enumName = var.enumName.replace(var.enumName, cm.classname + var.enumName);
+                        }
                         var.datatypeWithEnum = var.datatypeWithEnum.replace(var.enumName, cm.classname + var.enumName);
                         var.enumName = var.enumName.replace(var.enumName, cm.classname + var.enumName);
                     }

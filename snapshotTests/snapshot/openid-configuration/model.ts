@@ -17,13 +17,13 @@ export interface DiscoveryDocumentDto {
     userinfo_endpoint?: string;
     end_session_endpoint?: string;
     jwks_uri?: string;
-    grant_types_supported?: Set<GrantTypeDto>;
-    scopes_supported?: Set<string>;
-    claims_supported?: Set<string>;
-    response_types_supported: Set<ResponseTypeDto>;
-    response_modes_supported?: Set<DiscoveryDocumentDtoResponseModesSupportedEnum>;
-    subject_types_supported?: Set<DiscoveryDocumentDtoSubjectTypesSupportedEnum>;
-    code_challenge_methods_supported?: Set<DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum>;
+    grant_types_supported?: Array<GrantTypeDto>;
+    scopes_supported?: Array<string>;
+    claims_supported?: Array<string>;
+    response_types_supported: Array<ResponseTypeDto>;
+    response_modes_supported?: Array<DiscoveryDocumentDtoResponseModesSupportedEnum>;
+    subject_types_supported?: Array<DiscoveryDocumentDtoSubjectTypesSupportedEnum>;
+    code_challenge_methods_supported?: Array<DiscoveryDocumentDtoCodeChallengeMethodsSupportedEnum>;
     id_token_signing_alg_values_supported?: Array<DiscoveryDocumentDtoIdTokenSigningAlgValuesSupportedEnum>;
     x_sso_frame?: string;
 }
