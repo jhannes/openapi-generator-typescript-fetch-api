@@ -348,7 +348,8 @@ export class TestSampleData {
             pets: this.generate(
                 template?.pets,
                 { containerClass, propertyName: "pets", example: null, isNullable: false },
-                () => this.sampleArrayPetDto()
+                () => Object.fromEntries(this.sampleArrayPetDto()
+                    .map(o => [this.uuidv4(), o]))
             ),
         };
     }

@@ -342,7 +342,8 @@ export class TestSampleData {
                 { containerClass, propertyName: "{{{name}}}", example: {{#example}}{{{example}}}{{/example}}{{^example}}undefined{{/example}}, isNullable: {{isNullable}} },
                 () => {{#if items.isEnum}}this.pickSome({{items.datatypeWithEnum}}Values){{else if items.isString}}this.sampleArrayString(){{else if items.isContainer}}{
                     throw new Error("Can't automatically generate for {{{dataType}}}");
-                }{{else}}this.sampleArray{{{items.dataType}}}(){{/if}}
+                }{{else if isMap}}Object.fromEntries(this.sampleArray{{{items.dataType}}}()
+                    .map(o => [this.uuidv4(), o])){{else}}this.sampleArray{{{items.dataType}}}(){{/if}}
             ),{{~else if uniqueItems}}
             {{name}}: {{{dataType}}},{{~else if isEnum}}
             {{name}}: this.generate(

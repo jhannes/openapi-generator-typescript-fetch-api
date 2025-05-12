@@ -561,7 +561,8 @@ export class TestSampleData {
             messages: this.generate(
                 template?.messages,
                 { containerClass, propertyName: "messages", example: null, isNullable: false },
-                () => this.sampleArrayConversationMessageSnapshotDto()
+                () => Object.fromEntries(this.sampleArrayConversationMessageSnapshotDto()
+                    .map(o => [this.uuidv4(), o]))
             ),
         };
     }
