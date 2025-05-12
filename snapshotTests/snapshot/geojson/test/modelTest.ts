@@ -393,7 +393,10 @@ export class TestSampleData {
             coordinates: this.generate(
                 template?.coordinates,
                 { containerClass, propertyName: "coordinates", example: null, isNullable: false },
-                () => this.sampleArraynumber()
+                () => {
+                    throw new Error("Can't automatically generate for [number, number, number?]");
+                }
+
             ),
         };
     }
