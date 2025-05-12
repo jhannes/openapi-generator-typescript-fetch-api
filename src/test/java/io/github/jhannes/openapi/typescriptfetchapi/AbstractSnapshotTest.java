@@ -10,54 +10,74 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class AbstractSnapshotTest {
+    static {
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "WARN");
+    }
+
     public static final Path SNAPSHOT_ROOT = Paths.get("snapshotTests");
     public static final Path LOCAL_SNAPSHOT_ROOT = Paths.get("localSnapshotTests");
 
-    protected static void generate(Path spec, String modelName, Path projectDir) {
-        try {
-            cleanDirectory(projectDir);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        CodegenConfigurator configurator = createConfigurator(modelName, spec, projectDir);
-        final ClientOptInput clientOptInput = configurator.toClientOptInput();
-        DefaultGenerator generator = new DefaultGenerator();
-        generator.opts(clientOptInput).generate();
-    }
-
-    private static CodegenConfigurator createConfigurator(String modelName, Path input, Path projectDir) {
-        return createBaseConfigurator(modelName, input, projectDir)
-                .setGeneratorName("typescript-fetch-api");
-    }
-
-    private static CodegenConfigurator createBaseConfigurator(String modelName, Path input, Path outputDir) {
+    protected static CodegenConfigurator createConfigurator(String modelName) {
         return new CodegenConfigurator()
-                .setInputSpec(getInputSpec(input))
-                .setOutputDir(outputDir.toString())
                 .setModelNameSuffix("Dto")
+                .addAdditionalProperty("hideGenerationTimestamp", "true")
+                .setGeneratorName("typescript-fetch-api")
+                .setPackageName("io.github.jhannes.openapi." + modelName)
                 .addAdditionalProperty("npmName", modelName)
                 .addAdditionalProperty("withInterfaces", "true")
                 .addAdditionalProperty("generateModelTests", "true");
     }
 
-    private static String getInputSpec(Path input) {
-        String spec = input.toString();
-        try {
-            if (input.getFileName().toString().endsWith(".link")) {
-                String path = Files.readAllLines(input).get(0);
-                if (path.matches("https?://.*")) {
-                    spec = path;
-                } else {
-                    spec = Paths.get(path).toString();
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public static String getInputSpec(Path input) {
+        if (!input.getFileName().toString().endsWith(".link")) {
+            return input.toString();
         }
-        return spec.replaceAll("\\\\", "/");
+        String path = readFirstLine(input).trim();
+        if (path.matches("https?://.*")) {
+            return path;
+        }
+        String[] parts = path.split("\\s+");
+        if (parts.length == 1) {
+            return Paths.get(path).toString().replaceAll("\\\\", "/");
+        } else {
+            return Paths.get(parts[0]).resolve(parts[1]).toString().replaceAll("\\\\", "/");
+        }
+    }
+
+    static Path getSnapshotDir(Path spec) {
+        return getBasePath(spec).map(p -> p.resolve("snapshot"))
+                .orElse(spec.getParent().getParent().resolve("snapshot").resolve(SnapshotTests.getModelName(spec)));
+    }
+
+    static Path getVerifyDir(Path spec) {
+        return getBasePath(spec).map(p -> p.resolve("verify"))
+                .orElse(spec.getParent().getParent().resolve("verify").resolve(SnapshotTests.getModelName(spec)));
+    }
+
+    static Path getOutputDir(Path spec) {
+        return getBasePath(spec).map(p -> p.resolve("output"))
+                .orElse(spec.getParent().getParent().resolve("output").resolve(getModelName(spec)));
+    }
+
+    private static Optional<Path> getBasePath(Path spec) {
+        if (spec.getFileName().toString().endsWith(".link")) {
+            String path = readFirstLine(spec).trim();
+            if (path.matches("https?://.*")) {
+                return Optional.empty();
+            }
+            String[] parts = path.split("\\s+");
+            if (parts.length == 1) {
+                return Optional.empty();
+            } else {
+                return Optional.of(Paths.get(parts[0]));
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 
     static void cleanDirectory(Path directory) throws IOException {
@@ -76,4 +96,17 @@ public class AbstractSnapshotTest {
         return lastDot < 0 ? filename : filename.substring(0, lastDot);
     }
 
+    private static String readFirstLine(Path spec) {
+        try {
+            return Files.readAllLines(spec).get(0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static void generate(CodegenConfigurator configurator) {
+        final ClientOptInput clientOptInput = configurator.toClientOptInput();
+        DefaultGenerator generator = new DefaultGenerator();
+        generator.opts(clientOptInput).generate();
+    }
 }

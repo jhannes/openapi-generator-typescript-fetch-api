@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+import org.openapitools.codegen.config.CodegenConfigurator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +12,9 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -25,36 +28,33 @@ public class VerifyOutputTests extends AbstractSnapshotTest {
 
     @TestFactory
     Stream<DynamicNode> typescriptFetchApi() throws IOException {
-        return Stream.of(
-                verify(SnapshotTests.SNAPSHOT_ROOT),
-                verify(SnapshotTests.LOCAL_SNAPSHOT_ROOT)
-        );
+        List<DynamicNode> testSuites = new ArrayList<>();
+        testSuites.add(verify(AbstractSnapshotTest.SNAPSHOT_ROOT));
+        if (Files.isDirectory(AbstractSnapshotTest.LOCAL_SNAPSHOT_ROOT.resolve("input"))) {
+            testSuites.add(verify(AbstractSnapshotTest.LOCAL_SNAPSHOT_ROOT));
+        }
+        return testSuites.stream();
     }
 
     private DynamicNode verify(Path testDir) throws IOException {
         Path inputDir = testDir.resolve("input");
-        if (!Files.isDirectory(inputDir)) {
-            return dynamicTest("No test for " + testDir, () -> {
-            });
-        }
         return dynamicContainer(
                 "Verifications of " + testDir,
-                Files.list(inputDir)
-                        .filter(p -> p.toFile().isFile())
-                        .map(VerifyOutputTests::createTestsForSpec));
+                Files.list(inputDir).filter(p -> p.toFile().isFile()).map(VerifyOutputTests::createTestsForSpec)
+        );
     }
 
-    static DynamicContainer createTestsForSpec(Path spec) {
-        Path projectDir = targetDirectory(spec, "verify");
+    public static DynamicNode createTestsForSpec(Path spec) {
+        return createTestNode(spec, createConfigurator(getModelName(spec)), getVerifyDir(spec));
+    }
+
+    private static DynamicContainer createTestNode(Path spec, CodegenConfigurator configurator, Path outputDir) {
+        configurator.setInputSpec(getInputSpec(spec)).setOutputDir(outputDir.toString());
         return dynamicContainer("Verify " + spec, Arrays.asList(
-                generateOutput(spec, projectDir),
-                runNpmInstall(spec, projectDir),
-                verifyGeneratedCode(spec, projectDir)
+                dynamicTest("Generate " + outputDir, () -> generate(configurator)),
+                runNpmInstall(spec, outputDir),
+                verifyGeneratedCode(spec, outputDir)
         ));
-    }
-
-    static Path targetDirectory(Path spec, String directoryName) {
-        return spec.getParent().getParent().resolve(directoryName).resolve(getModelName(spec));
     }
 
     static DynamicTest verifyGeneratedCode(Path spec, Path projectDir) {
@@ -66,10 +66,6 @@ public class VerifyOutputTests extends AbstractSnapshotTest {
 
     static DynamicTest runNpmInstall(Path spec, Path projectDir) {
         return dynamicTest("npm install " + spec, () -> npmInstall(projectDir));
-    }
-
-    static DynamicTest generateOutput(Path spec, Path projectDir) {
-        return dynamicTest("Generate " + spec, () -> generate(spec, getModelName(spec), projectDir));
     }
 
     private static void npmInstall(Path projectDir) throws IOException, InterruptedException {

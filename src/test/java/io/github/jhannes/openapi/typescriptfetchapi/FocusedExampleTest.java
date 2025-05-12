@@ -1,11 +1,11 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
-import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
 
 import java.nio.file.Path;
-import java.util.Arrays;
+
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
  * Use this test to fix bugs and develop new features:
@@ -21,22 +21,19 @@ import java.util.Arrays;
  *     </li>
  * </ol>
  */
-public class FocusedExampleTest {
+public class FocusedExampleTest extends AbstractSnapshotTest {
 
     public static final Path SPEC = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
 
     @TestFactory
-    DynamicNode snapshotShouldVerify() {
-        Path snapshotDirectory = VerifyOutputTests.targetDirectory(SPEC, "snapshot");
-        return DynamicContainer.dynamicContainer("Verify " + snapshotDirectory, Arrays.asList(
-                VerifyOutputTests.runNpmInstall(SPEC, snapshotDirectory),
-                VerifyOutputTests.verifyGeneratedCode(SPEC, snapshotDirectory)
-        ));
+    DynamicNode outputShouldMatchSnapshot() {
+        return SnapshotTests.createTestNode(SPEC);
     }
 
     @TestFactory
-    DynamicNode outputShouldMatchSnapshot() {
-        return SnapshotTests.createTestsForSpec(SPEC);
+    DynamicNode snapshotShouldVerify() {
+        Path snapshotDir = AbstractSnapshotTest.getSnapshotDir(SPEC);
+        return VerifyOutputTests.verifyGeneratedCode(SPEC, snapshotDir);
     }
 
     @TestFactory
