@@ -198,7 +198,7 @@ export interface ExposuresApiInterface {
      * @throws {HttpError}
      */
     listExposures(params?: {
-        queryParams?: { exposureDate?: Array<Date>; maxCount?: number };
+        queryParams?: { exposureDate?: Array<string>; maxCount?: number };
     } & RequestCallOptions): Promise<ExposureDto>;
     /**
      *
@@ -221,7 +221,7 @@ export class ExposuresApi extends BaseAPI implements ExposuresApiInterface {
      * @throws {HttpError}
      */
     public async listExposures(params?: {
-        queryParams?: { exposureDate?: Array<Date>; maxCount?: number };
+        queryParams?: { exposureDate?: Array<string>; maxCount?: number };
     } & RequestCallOptions): Promise<ExposureDto> {
         return await this.fetch(
             this.url("/api/exposures", {}, params?.queryParams, {

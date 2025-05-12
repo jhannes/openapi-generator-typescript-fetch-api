@@ -59,7 +59,6 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         embeddedTemplateDir = templateDir = "typescript-fetch-api";
 
         typeMapping.put("DateTime", "Date");
-        typeMapping.put("date", "Date");
         typeMapping.put("Set", "Array");
         typeMapping.put("set", "Array");
 

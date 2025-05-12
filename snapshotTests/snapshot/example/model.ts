@@ -13,7 +13,7 @@
 export interface PetDto {
     pet_type: PetTypeDto;
     name?: string;
-    birth_date?: Date;
+    birth_date?: string;
 }
 export const PetTypeDtoValues = [
     "cat",

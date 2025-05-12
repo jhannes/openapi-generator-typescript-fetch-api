@@ -206,6 +206,10 @@ export class TestSampleData {
         return this.randomPastDateTime(this.now);
     }
 
+    sampleLocalDate(): string {
+        return this.randomPastDateTime(this.now).toISOString().substring(0, 10);
+    }
+
     sampleString(dataFormat?: string, example?: string): string {
         if (dataFormat === "uuid") {
             return this.uuidv4();
@@ -357,7 +361,7 @@ export class TestSampleData {
             exposedDate: this.generate(
                 template?.exposedDate,
                 { containerClass, propertyName: "exposedDate", example: "null", isNullable: false },
-                () => this.sampleDate()
+                () => this.sampleLocalDate()
             ),
             exposureLocation: this.generate(
                 template?.exposureLocation,
@@ -450,7 +454,7 @@ export class TestSampleData {
             likelyInfectionDate: this.generate(
                 template?.likelyInfectionDate,
                 { containerClass, propertyName: "likelyInfectionDate", example: "null", isNullable: false },
-                () => this.sampleDate()
+                () => this.sampleLocalDate()
             ),
             notes: this.generate(
                 template?.notes,

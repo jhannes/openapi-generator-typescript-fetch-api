@@ -203,6 +203,10 @@ export class TestSampleData {
         return this.randomPastDateTime(this.now);
     }
 
+    sampleLocalDate(): string {
+        return this.randomPastDateTime(this.now).toISOString().substring(0, 10);
+    }
+
     sampleString(dataFormat?: string, example?: string): string {
         if (dataFormat === "uuid") {
             return this.uuidv4();
@@ -396,7 +400,6 @@ export class TestSampleData {
                 () => {
                     throw new Error("Can't automatically generate for [number, number, number?]");
                 }
-
             ),
         };
     }

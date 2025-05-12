@@ -57,7 +57,7 @@ export interface DefaultApiInterface {
      */
     listPets(params: {
         pathParams: { storeId: string };
-        queryParams?: { status?: Array<string>; tags?: Array<string>; bornAfter?: Date };
+        queryParams?: { status?: Array<string>; tags?: Array<string>; bornAfter?: string };
     } & RequestCallOptions): Promise<PetDto>;
 }
 
@@ -125,7 +125,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public async listPets(params: {
         pathParams: { storeId: string };
-        queryParams?: { status?: Array<string>; tags?: Array<string>; bornAfter?: Date };
+        queryParams?: { status?: Array<string>; tags?: Array<string>; bornAfter?: string };
     } & RequestCallOptions): Promise<PetDto> {
         return await this.fetch(
             this.url("/{storeId}/pets", params.pathParams, params?.queryParams, {

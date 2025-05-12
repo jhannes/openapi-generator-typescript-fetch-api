@@ -28,7 +28,7 @@ export interface PersonDto extends RecipientDto {
     type?: string;
     name?: PersonNameDto;
     phone?: string;
-    birthDate?: Date;
+    birthDate?: string;
     gender?: PersonDtoGenderEnum;
 }
 

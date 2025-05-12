@@ -82,7 +82,7 @@ export interface PersonDto {
     familyName: string;
     email?: string;
     phone?: string;
-    birthDate?: Date;
+    birthDate?: string;
 }
 
 export type UpdateErrorDto =

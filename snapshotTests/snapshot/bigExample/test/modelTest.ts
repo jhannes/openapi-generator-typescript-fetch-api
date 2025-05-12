@@ -199,6 +199,10 @@ export class TestSampleData {
         return this.randomPastDateTime(this.now);
     }
 
+    sampleLocalDate(): string {
+        return this.randomPastDateTime(this.now).toISOString().substring(0, 10);
+    }
+
     sampleString(dataFormat?: string, example?: string): string {
         if (dataFormat === "uuid") {
             return this.uuidv4();
@@ -298,7 +302,7 @@ export class TestSampleData {
             birth_date: this.generate(
                 template?.birth_date,
                 { containerClass, propertyName: "birth_date", example: "null", isNullable: false },
-                () => this.sampleDate()
+                () => this.sampleLocalDate()
             ),
         };
     }

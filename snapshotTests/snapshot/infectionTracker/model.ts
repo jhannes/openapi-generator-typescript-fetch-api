@@ -21,7 +21,7 @@ export interface ExposureDto {
     readonly id?: string;
     exposedPersonName?: string;
     exposedPersonPhoneNumber?: string;
-    exposedDate?: Date;
+    exposedDate?: string;
     /**
      * Address or other identifying description of the location
      */
@@ -69,7 +69,7 @@ export interface InfectionDto {
 export interface InfectionInformationDto {
     patientName?: string;
     patientPhoneNumber?: string;
-    likelyInfectionDate?: Date;
+    likelyInfectionDate?: string;
     /**
      * Free form text to describe anything about the patient
      */
