@@ -232,16 +232,15 @@ export class TestSampleData {
         return Array.from({ length: length || this.arrayLength() }).map(() => this.samplenumber());
     }
 
-    generate(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        template?: ((sampleData: TestSampleData) => any) | any,
-        propertyDefinition?: PropertyDefinition,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        generator?: () => any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ): any {
+    generate<T>(
+        template: ((sampleData: TestSampleData) => T) | T | undefined,
+        propertyDefinition: PropertyDefinition | undefined,
+        generator: () => T
+    ): T {
         if (template != undefined) {
-            return typeof template === "function" ? template(this) : template;
+            return (typeof template === "function")
+                ? (template as (sampleData: TestSampleData) => T)(this)
+                : template;
         }
         if (propertyDefinition) {
             const { containerClass, propertyName, example } = propertyDefinition;
@@ -256,9 +255,10 @@ export class TestSampleData {
             if (this.samplePropertyValues[propertyName] !== undefined) {
                 return this.samplePropertyValues[propertyName](this);
             }
-            if (example && example !== "null") return example;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if (example && example !== "null") return example as any;
         }
-        return generator && generator();
+        return generator();
     }
 
     arrayLength(): number {
