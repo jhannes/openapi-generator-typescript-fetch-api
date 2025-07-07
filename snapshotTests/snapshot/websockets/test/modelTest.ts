@@ -12,7 +12,6 @@ import {
     UpdatePersonCommandDto,
     WebSocketCommandDto,
     WebSocketMessageDto,
-    WebSocketRequestDto,
 } from "../model";
 
 export class Random {
@@ -90,7 +89,6 @@ export interface SampleModelFactories {
     UpdatePersonCommandDto?: ModelFactory<UpdatePersonCommandDto>;
     WebSocketCommandDto?: ModelFactory<WebSocketCommandDto>;
     WebSocketMessageDto?: ModelFactory<WebSocketMessageDto>;
-    WebSocketRequestDto?: ModelFactory<WebSocketRequestDto>;
 }
 
 export interface SamplePropertyValues {
@@ -335,10 +333,6 @@ export class TestSampleData {
                 return this.sampleWebSocketMessageDto();
             case "Array<WebSocketMessageDto>":
                 return this.sampleArrayWebSocketMessageDto();
-            case "WebSocketRequestDto":
-                return this.sampleWebSocketRequestDto();
-            case "Array<WebSocketRequestDto>":
-                return this.sampleArrayWebSocketRequestDto();
             default:
                 throw new Error("Unknown type " + modelName);
         }
@@ -699,7 +693,7 @@ export class TestSampleData {
         }
         return this.pickOne([
             () => this.sampleWebSocketCommandDto(),
-            () => this.sampleWebSocketRequestDto(),
+            () => this.sampleSubscribeDto(),
         ])();
     }
 
@@ -709,36 +703,6 @@ export class TestSampleData {
     ): WebSocketMessageDto[] {
         return this.randomArray(
             () => this.sampleWebSocketMessageDto(factory),
-            length ?? this.arrayLength()
-        );
-    }
-
-    sampleWebSocketRequestDto(
-        factory?: (sampleData: TestSampleData) => WebSocketRequestDto
-    ): WebSocketRequestDto {
-        const containerClass = "WebSocketRequestDto";
-        if (factory) {
-            return factory(this);
-        }
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        const request = this.pickOneString(["Subscribe"])
-        switch (request) {
-            case "Subscribe":
-                return {
-                    ...this.sampleSubscribeDto(),
-                    request,
-                };
-        }
-    }
-
-    sampleArrayWebSocketRequestDto(
-        length?: number,
-        factory?: (sampleData: TestSampleData) => WebSocketRequestDto
-    ): WebSocketRequestDto[] {
-        return this.randomArray(
-            () => this.sampleWebSocketRequestDto(factory),
             length ?? this.arrayLength()
         );
     }

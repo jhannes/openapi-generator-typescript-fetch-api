@@ -24,7 +24,6 @@ import {
     EventFromServerDto,
     MessageFromServerDto,
     MessageToServerDto,
-    RequestToServerDto,
     SnapshotSetDto,
     SubscribeRequestDto,
     UpdateConversationDeltaDto,

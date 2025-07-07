@@ -72,16 +72,7 @@ export interface EventFromServerDto extends CommandToServerDto {
 
 export type MessageFromServerDto = SnapshotSetDto | EventFromServerDto;
 
-export type MessageToServerDto = CommandToServerDto | RequestToServerDto;
-
-export type RequestToServerDto =
-    { request: "SubscribeRequest" } & SubscribeRequestDto;
-
-export const RequestToServerDtoDiscriminators = [
-    "SubscribeRequest",
-] as const;
-
-export type RequestToServerDtoDiscriminator = typeof RequestToServerDtoDiscriminators[number];
+export type MessageToServerDto = CommandToServerDto | SubscribeRequestDto;
 
 export interface SnapshotSetDto {
     conversations: Array<ConversationSnapshotDto>;
