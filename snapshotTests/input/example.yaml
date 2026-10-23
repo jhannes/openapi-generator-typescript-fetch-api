@@ -105,6 +105,15 @@ components:
         birth_date:
           type: string
           format: date
+        age:
+          type: integer
+          example: 3
+        weight:
+          type: number
+          example: 4.5
+        vaccinated:
+          type: boolean
+          example: false
     PetType:
       type: string
       enum:

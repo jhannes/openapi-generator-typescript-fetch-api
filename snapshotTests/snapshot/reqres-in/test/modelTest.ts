@@ -100,7 +100,7 @@ export interface PropertyDefinition {
     containerClass: string;
     propertyName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    example?: string | null | Array<any>;
+    example?: string | number | boolean | null | Array<any>;
     isNullable?: boolean;
 }
 
@@ -266,7 +266,7 @@ export class TestSampleData {
                 return this.samplePropertyValues[propertyName](this);
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (example && example !== "null") return example as any;
+            if (example !== undefined && example !== null && example !== "null") return example as any;
         }
         return generator();
     }
@@ -438,7 +438,7 @@ export class TestSampleData {
         return {
             id: this.generate(
                 template?.id,
-                { containerClass, propertyName: "id", example: "null", isNullable: false },
+                { containerClass, propertyName: "id", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             name: this.generate(
@@ -448,7 +448,7 @@ export class TestSampleData {
             ),
             year: this.generate(
                 template?.year,
-                { containerClass, propertyName: "year", example: "null", isNullable: false },
+                { containerClass, propertyName: "year", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             color: this.generate(
@@ -482,7 +482,7 @@ export class TestSampleData {
         return {
             id: this.generate(
                 template?.id,
-                { containerClass, propertyName: "id", example: "null", isNullable: false },
+                { containerClass, propertyName: "id", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             email: this.generate(
@@ -526,22 +526,22 @@ export class TestSampleData {
         return {
             page: this.generate(
                 template?.page,
-                { containerClass, propertyName: "page", example: "null", isNullable: false },
+                { containerClass, propertyName: "page", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             per_page: this.generate(
                 template?.per_page,
-                { containerClass, propertyName: "per_page", example: "null", isNullable: false },
+                { containerClass, propertyName: "per_page", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             total: this.generate(
                 template?.total,
-                { containerClass, propertyName: "total", example: "null", isNullable: false },
+                { containerClass, propertyName: "total", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             total_pages: this.generate(
                 template?.total_pages,
-                { containerClass, propertyName: "total_pages", example: "null", isNullable: false },
+                { containerClass, propertyName: "total_pages", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             data: this.generate(

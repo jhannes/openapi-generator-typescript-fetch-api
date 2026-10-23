@@ -92,7 +92,7 @@ export interface PropertyDefinition {
     containerClass: string;
     propertyName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    example?: string | null | Array<any>;
+    example?: string | number | boolean | null | Array<any>;
     isNullable?: boolean;
 }
 
@@ -258,7 +258,7 @@ export class TestSampleData {
                 return this.samplePropertyValues[propertyName](this);
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (example && example !== "null") return example as any;
+            if (example !== undefined && example !== null && example !== "null") return example as any;
         }
         return generator();
     }
@@ -303,7 +303,7 @@ export class TestSampleData {
         return {
             id: this.generate(
                 template?.id,
-                { containerClass, propertyName: "id", example: "null", isNullable: false },
+                { containerClass, propertyName: "id", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             title: this.generate(
@@ -318,7 +318,7 @@ export class TestSampleData {
             ),
             completed: this.generate(
                 template?.completed,
-                { containerClass, propertyName: "completed", example: "null", isNullable: false },
+                { containerClass, propertyName: "completed", example: null, isNullable: false },
                 () => this.sampleboolean()
             ),
         };
@@ -342,12 +342,12 @@ export class TestSampleData {
         return {
             id: this.generate(
                 template?.id,
-                { containerClass, propertyName: "id", example: "null", isNullable: false },
+                { containerClass, propertyName: "id", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             idBook: this.generate(
                 template?.idBook,
-                { containerClass, propertyName: "idBook", example: "null", isNullable: false },
+                { containerClass, propertyName: "idBook", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             firstName: this.generate(
@@ -381,7 +381,7 @@ export class TestSampleData {
         return {
             id: this.generate(
                 template?.id,
-                { containerClass, propertyName: "id", example: "null", isNullable: false },
+                { containerClass, propertyName: "id", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             title: this.generate(
@@ -396,7 +396,7 @@ export class TestSampleData {
             ),
             pageCount: this.generate(
                 template?.pageCount,
-                { containerClass, propertyName: "pageCount", example: "null", isNullable: false },
+                { containerClass, propertyName: "pageCount", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             excerpt: this.generate(
@@ -430,12 +430,12 @@ export class TestSampleData {
         return {
             id: this.generate(
                 template?.id,
-                { containerClass, propertyName: "id", example: "null", isNullable: false },
+                { containerClass, propertyName: "id", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             idBook: this.generate(
                 template?.idBook,
-                { containerClass, propertyName: "idBook", example: "null", isNullable: false },
+                { containerClass, propertyName: "idBook", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             url: this.generate(
@@ -464,7 +464,7 @@ export class TestSampleData {
         return {
             id: this.generate(
                 template?.id,
-                { containerClass, propertyName: "id", example: "null", isNullable: false },
+                { containerClass, propertyName: "id", example: null, isNullable: false },
                 () => this.samplenumber()
             ),
             userName: this.generate(

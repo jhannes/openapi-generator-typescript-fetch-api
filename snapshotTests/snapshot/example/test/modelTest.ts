@@ -87,7 +87,7 @@ export interface PropertyDefinition {
     containerClass: string;
     propertyName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    example?: string | null | Array<any>;
+    example?: string | number | boolean | null | Array<any>;
     isNullable?: boolean;
 }
 
@@ -253,7 +253,7 @@ export class TestSampleData {
                 return this.samplePropertyValues[propertyName](this);
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (example && example !== "null") return example as any;
+            if (example !== undefined && example !== null && example !== "null") return example as any;
         }
         return generator();
     }
@@ -298,6 +298,21 @@ export class TestSampleData {
                 template?.birth_date,
                 { containerClass, propertyName: "birth_date", example: "null", isNullable: false },
                 () => this.sampleLocalDate()
+            ),
+            age: this.generate(
+                template?.age,
+                { containerClass, propertyName: "age", example: 3, isNullable: false },
+                () => this.samplenumber()
+            ),
+            weight: this.generate(
+                template?.weight,
+                { containerClass, propertyName: "weight", example: 4.5, isNullable: false },
+                () => this.samplenumber()
+            ),
+            vaccinated: this.generate(
+                template?.vaccinated,
+                { containerClass, propertyName: "vaccinated", example: false, isNullable: false },
+                () => this.sampleboolean()
             ),
         };
     }

@@ -14,6 +14,9 @@ export interface PetDto {
     pet_type: PetTypeDto;
     name?: string;
     birth_date?: string;
+    age?: number;
+    weight?: number;
+    vaccinated?: boolean;
 }
 export const PetTypeDtoValues = [
     "cat",
