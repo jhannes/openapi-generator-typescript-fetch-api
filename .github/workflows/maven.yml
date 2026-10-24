@@ -30,4 +30,4 @@ jobs:
       run: mvn -B package --file pom.xml --fail-at-end
     - name: Publish Test Report
       if: ${{ always() }}
-      uses: scacap/action-surefire-report@v1
+      uses: ScalableCapital/action-surefire-report@v2
