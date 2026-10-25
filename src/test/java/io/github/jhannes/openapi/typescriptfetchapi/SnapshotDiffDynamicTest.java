@@ -1,10 +1,10 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
-import difflib.DeleteDelta;
-import difflib.Delta;
-import difflib.DiffUtils;
-import difflib.InsertDelta;
-import difflib.Patch;
+import com.github.difflib.DiffUtils;
+import com.github.difflib.patch.AbstractDelta;
+import com.github.difflib.patch.DeleteDelta;
+import com.github.difflib.patch.InsertDelta;
+import com.github.difflib.patch.Patch;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.function.Executable;
@@ -79,7 +79,7 @@ public class SnapshotDiffDynamicTest implements Executable {
         assertTrue(Files.exists(snapshot), "Missing " + snapshot);
         Patch<String> diff = DiffUtils.diff(Files.readAllLines(file), Files.readAllLines(snapshot));
         if (!diff.getDeltas().isEmpty()) {
-            List<Delta<String>> significantDiff = diff.getDeltas().stream().filter(delta -> !whitespaceOnly(delta)).collect(Collectors.toList());
+            List<AbstractDelta<String>> significantDiff = diff.getDeltas().stream().filter(delta -> !whitespaceOnly(delta)).collect(Collectors.toList());
             if (significantDiff.isEmpty()) {
                 fail("whitespace difference: " + diff.getDeltas());
             } else {
@@ -88,11 +88,11 @@ public class SnapshotDiffDynamicTest implements Executable {
         }
     }
 
-    private static boolean whitespaceOnly(Delta<String> delta) {
+    private static boolean whitespaceOnly(AbstractDelta<String> delta) {
         if (delta instanceof InsertDelta) {
-            return delta.getRevised().getLines().stream().allMatch(s -> s == null || WHITESPACE.matcher(s).matches());
+            return delta.getSource().getLines().stream().allMatch(s -> s == null || WHITESPACE.matcher(s).matches());
         } else if (delta instanceof DeleteDelta) {
-            return delta.getOriginal().getLines().stream().allMatch(s -> s == null || WHITESPACE.matcher(s).matches());
+            return delta.getTarget().getLines().stream().allMatch(s -> s == null || WHITESPACE.matcher(s).matches());
         } else {
             return false;
         }

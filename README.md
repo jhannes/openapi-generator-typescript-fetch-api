@@ -1,5 +1,5 @@
 [![Apache 2.0 License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.jhannes.openapi/openapi-generator-typescript-fetch-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.jhannes.openapi/openapi-generator-typescript-fetch-api)
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.jhannes.openapi/openapi-generator-typescript-fetch-api/badge.svg)](https://maven-badges.sml.io/sonatype-central/io.github.jhannes.openapi/openapi-generator-typescript-fetch-api/)
 
 # OpenAPI Generator for TypeScript client library using Fetch API and API interfaces
 
@@ -234,7 +234,7 @@ Add to your `pom.xml`:
                     <dependency>
                         <groupId>io.github.jhannes.openapi</groupId>
                         <artifactId>openapi-generator-typescript-fetch-api</artifactId>
-                        <version>0.4.0</version>
+                        <version>0.7.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
