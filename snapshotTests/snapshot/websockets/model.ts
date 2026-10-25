@@ -86,13 +86,4 @@ export const WebSocketCommandDtoDiscriminators = [
 
 export type WebSocketCommandDtoDiscriminator = typeof WebSocketCommandDtoDiscriminators[number];
 
-export type WebSocketMessageDto = WebSocketCommandDto | WebSocketRequestDto;
-
-export type WebSocketRequestDto =
-    { request: "Subscribe" } & SubscribeDto;
-
-export const WebSocketRequestDtoDiscriminators = [
-    "Subscribe",
-] as const;
-
-export type WebSocketRequestDtoDiscriminator = typeof WebSocketRequestDtoDiscriminators[number];
+export type WebSocketMessageDto = WebSocketCommandDto | SubscribeDto;

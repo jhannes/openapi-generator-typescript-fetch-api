@@ -3,13 +3,17 @@ package io.github.jhannes.openapi.typescriptfetchapi;
 import org.openapitools.codegen.ClientOptInput;
 import org.openapitools.codegen.DefaultGenerator;
 import org.openapitools.codegen.config.CodegenConfigurator;
+import org.opentest4j.AssertionFailedError;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -105,6 +109,15 @@ public class AbstractSnapshotTest {
     }
 
     static void generate(CodegenConfigurator configurator) {
+        try {
+            NumberFormat.getInstance().parse("-1000");
+        } catch (ParseException e) {
+            throw new AssertionFailedError(
+                    "Can't parse enums with negative numbers when Locale is " + Locale.getDefault(Locale.Category.FORMAT)
+                            + ". Run with -Duser.language.format=en to avoid this error. "
+                            + "The error is due to a bug in swagger: https://github.com/swagger-api/swagger-core/pull/4178"
+            );
+        }
         final ClientOptInput clientOptInput = configurator.toClientOptInput();
         DefaultGenerator generator = new DefaultGenerator();
         generator.opts(clientOptInput).generate();

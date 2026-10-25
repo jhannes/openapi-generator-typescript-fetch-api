@@ -11,7 +11,6 @@ import {
     EventFromServerDto,
     MessageFromServerDto,
     MessageToServerDto,
-    RequestToServerDto,
     SnapshotSetDto,
     SubscribeRequestDto,
     UpdateConversationDeltaDto,
@@ -94,7 +93,6 @@ export interface SampleModelFactories {
     EventFromServerDto?: ModelFactory<EventFromServerDto>;
     MessageFromServerDto?: ModelFactory<MessageFromServerDto>;
     MessageToServerDto?: ModelFactory<MessageToServerDto>;
-    RequestToServerDto?: ModelFactory<RequestToServerDto>;
     SnapshotSetDto?: ModelFactory<SnapshotSetDto>;
     SubscribeRequestDto?: ModelFactory<SubscribeRequestDto>;
     UpdateConversationDeltaDto?: ModelFactory<UpdateConversationDeltaDto>;
@@ -344,10 +342,6 @@ export class TestSampleData {
                 return this.sampleMessageToServerDto();
             case "Array<MessageToServerDto>":
                 return this.sampleArrayMessageToServerDto();
-            case "RequestToServerDto":
-                return this.sampleRequestToServerDto();
-            case "Array<RequestToServerDto>":
-                return this.sampleArrayRequestToServerDto();
             case "SnapshotSetDto":
                 return this.sampleSnapshotSetDto();
             case "Array<SnapshotSetDto>":
@@ -716,7 +710,7 @@ export class TestSampleData {
         }
         return this.pickOne([
             () => this.sampleCommandToServerDto(),
-            () => this.sampleRequestToServerDto(),
+            () => this.sampleSubscribeRequestDto(),
         ])();
     }
 
@@ -726,36 +720,6 @@ export class TestSampleData {
     ): MessageToServerDto[] {
         return this.randomArray(
             () => this.sampleMessageToServerDto(factory),
-            length ?? this.arrayLength()
-        );
-    }
-
-    sampleRequestToServerDto(
-        factory?: (sampleData: TestSampleData) => RequestToServerDto
-    ): RequestToServerDto {
-        const containerClass = "RequestToServerDto";
-        if (factory) {
-            return factory(this);
-        }
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        const request = this.pickOneString(["SubscribeRequest"])
-        switch (request) {
-            case "SubscribeRequest":
-                return {
-                    ...this.sampleSubscribeRequestDto(),
-                    request,
-                };
-        }
-    }
-
-    sampleArrayRequestToServerDto(
-        length?: number,
-        factory?: (sampleData: TestSampleData) => RequestToServerDto
-    ): RequestToServerDto[] {
-        return this.randomArray(
-            () => this.sampleRequestToServerDto(factory),
             length ?? this.arrayLength()
         );
     }

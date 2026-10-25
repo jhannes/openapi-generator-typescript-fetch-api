@@ -24,7 +24,6 @@ import {
     UpdatePersonCommandDto,
     WebSocketCommandDto,
     WebSocketMessageDto,
-    WebSocketRequestDto,
 } from "./model";
 
 import { BaseAPI, RequestCallOptions, SecurityScheme } from "./base";

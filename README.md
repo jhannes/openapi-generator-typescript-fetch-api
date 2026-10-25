@@ -210,7 +210,14 @@ Add to your `pom.xml`:
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>6.2.0</version>
+                <version>7.24.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.github.jhannes.openapi</groupId>
+                        <artifactId>openapi-generator-typescript-fetch-api</artifactId>
+                        <version>0.7.1</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>petstore-typescript-fetch-api</id>
@@ -230,13 +237,6 @@ Add to your `pom.xml`:
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.github.jhannes.openapi</groupId>
-                        <artifactId>openapi-generator-typescript-fetch-api</artifactId>
-                        <version>0.7.1</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
