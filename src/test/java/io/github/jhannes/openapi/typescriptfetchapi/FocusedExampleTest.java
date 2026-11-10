@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -23,7 +24,12 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class FocusedExampleTest extends AbstractSnapshotTest {
 
-    public static final Path SPEC = SnapshotTests.SNAPSHOT_ROOT.resolve("input/websockets.yaml");
+    public static final Path SPEC;
+
+    static {
+        String spec = System.getenv("SPEC");
+        SPEC = spec != null ? Paths.get(spec) : SNAPSHOT_ROOT.resolve("input/websockets.yaml");
+    }
 
     @TestFactory
     DynamicNode outputShouldMatchSnapshot() {

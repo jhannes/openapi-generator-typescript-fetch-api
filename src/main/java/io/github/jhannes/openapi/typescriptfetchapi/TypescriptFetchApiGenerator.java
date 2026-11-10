@@ -20,7 +20,7 @@ import org.openapitools.codegen.model.OperationsMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -220,7 +220,7 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
 
                 if (!codegenModel.oneOf.isEmpty()) {
                     if (codegenModel.discriminator != null && codegenModel.discriminator.getMapping() == null) {
-                        Set<CodegenDiscriminator.MappedModel> mappedModels = new HashSet<>();
+                        Set<CodegenDiscriminator.MappedModel> mappedModels = new LinkedHashSet<>();
                         HashMap<String, String> mapping = new HashMap<>();
                         for (ModelMap subModel : getChildModels(codegenModel, result.values())) {
                             CodegenModel subCodegenModel = subModel.getModel();

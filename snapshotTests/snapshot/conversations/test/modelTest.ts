@@ -615,20 +615,20 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        const delta = this.pickOneString(["AddMessageToConversationDelta", "UpdateConversationDelta", "CreateConversationDelta"])
+        const delta = this.pickOneString(["AddMessageToConversationDelta", "CreateConversationDelta", "UpdateConversationDelta"])
         switch (delta) {
             case "AddMessageToConversationDelta":
                 return {
                     ...this.sampleAddMessageToConversationDeltaDto(),
                     delta,
                 };
-            case "UpdateConversationDelta":
-                return this.sampleUpdateConversationDeltaDto();
             case "CreateConversationDelta":
                 return {
                     ...this.sampleCreateConversationDeltaDto(),
                     delta,
                 };
+            case "UpdateConversationDelta":
+                return this.sampleUpdateConversationDeltaDto();
         }
     }
 
@@ -783,16 +783,16 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        const delta = this.pickOneString(["UpdateConversationTitleDelta", "UpdateConversationSummaryDelta"])
+        const delta = this.pickOneString(["UpdateConversationSummaryDelta", "UpdateConversationTitleDelta"])
         switch (delta) {
-            case "UpdateConversationTitleDelta":
-                return {
-                    ...this.sampleUpdateConversationTitleDeltaDto(),
-                    delta,
-                };
             case "UpdateConversationSummaryDelta":
                 return {
                     ...this.sampleUpdateConversationSummaryDeltaDto(),
+                    delta,
+                };
+            case "UpdateConversationTitleDelta":
+                return {
+                    ...this.sampleUpdateConversationTitleDeltaDto(),
                     delta,
                 };
         }

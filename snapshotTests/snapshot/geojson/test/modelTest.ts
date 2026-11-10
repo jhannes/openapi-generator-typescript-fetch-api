@@ -330,8 +330,13 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        const type = this.pickOneString(["Point", "Polygon", "LineString"])
+        const type = this.pickOneString(["LineString", "Point", "Polygon"])
         switch (type) {
+            case "LineString":
+                return {
+                    ...this.sampleLineStringDto(),
+                    type,
+                };
             case "Point":
                 return {
                     ...this.samplePointDto(),
@@ -340,11 +345,6 @@ export class TestSampleData {
             case "Polygon":
                 return {
                     ...this.samplePolygonDto(),
-                    type,
-                };
-            case "LineString":
-                return {
-                    ...this.sampleLineStringDto(),
                     type,
                 };
         }

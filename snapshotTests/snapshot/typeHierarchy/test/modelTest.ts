@@ -527,16 +527,16 @@ export class TestSampleData {
         if (typeof this.sampleModelProperties[containerClass] === "function") {
             return this.sampleModelProperties[containerClass](this);
         }
-        const pet_type = this.pickOneString(["WorkingDog", "Cat", "Goldfish", "Dog"])
+        const pet_type = this.pickOneString(["Cat", "Dog", "Goldfish", "WorkingDog"])
         switch (pet_type) {
-            case "WorkingDog":
-                return {
-                    ...this.sampleWorkingDogDto(),
-                    pet_type,
-                };
             case "Cat":
                 return {
                     ...this.sampleCatDto(),
+                    pet_type,
+                };
+            case "Dog":
+                return {
+                    ...this.sampleDogDto(),
                     pet_type,
                 };
             case "Goldfish":
@@ -544,9 +544,9 @@ export class TestSampleData {
                     ...this.sampleGoldfishDto(),
                     pet_type,
                 };
-            case "Dog":
+            case "WorkingDog":
                 return {
-                    ...this.sampleDogDto(),
+                    ...this.sampleWorkingDogDto(),
                     pet_type,
                 };
         }
