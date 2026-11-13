@@ -13,11 +13,11 @@
 * Supports `securitySchemes`
 * Support blob response types
 * Generates sample model data generators for test purposes
-* Generated code have no eslint or prettier warnings except long lines
+* Generated code have no prettier warnings except long lines
 
 ## Overview
 
-This is a plugin to [OpenApi Generator](https://openapi-generator.tech/) which generates Typescript client libraries from openapi specifications using the native `fetch` method. The generated code has no dependencies.
+This is a plugin to [OpenAPI Generator](https://openapi-generator.tech/) which generates TypeScript client libraries from OpenAPI specifications using the native `fetch` method. The generated code has no dependencies.
 
 The output contains both interfaces and classes for each `tag` in the input specification, [for example](https://github.com/jhannes/openapi-generator-typescript-fetch-api/blob/main/snapshotTests/snapshot/petstore/api.ts):
 
@@ -116,7 +116,7 @@ This is the fragment of the specification used to generate the code above:
         "type": "oauth2",
         "flows": {
           "implicit": {
-            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "authorizationUrl": "https://petstore.swagger.io/api/oauth/dialog",
             "scopes": {
               "write:pets": "modify pets in your account"
             }
@@ -193,7 +193,7 @@ it("shows pets", async () => {
 
 ### From the command line
 
-1. Download openapi jar. On Linux/mac
+1. Download OpenAPI jar. On Linux/Mac
     * `wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/6.2.0/openapi-generator-cli-6.2.0.jar -O openapi-generator-cli.jar`
 2. Download the Typescript-fetch-api generator
     * `wget https://repo1.maven.org/maven2/io/github/jhannes/openapi/openapi-generator-typescript-fetch-api/0.4.0/openapi-generator-typescript-fetch-api-0.4.0.jar -O openapi-generator-typescript-fetch-api.jar`
@@ -210,12 +210,12 @@ Add to your `pom.xml`:
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.24.0</version>
+                <version>7.26.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>io.github.jhannes.openapi</groupId>
                         <artifactId>openapi-generator-typescript-fetch-api</artifactId>
-                        <version>0.7.1</version>
+                        <version>0.8.1</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -258,7 +258,7 @@ In addition to `snapshotTests`, this test also runs on files in the `.gitignore`
 
 ### io.github.jhannes.openapi.typescriptfetchapi.VerifyOutputTests
 
-Generates code from `snapshotTests/input/*.json` to `snapshotTests/verify` and runs `npm install` and `npm run verify` on each output directory to verify that there are no Typescript or Eslint errors.
+Generates code from `snapshotTests/input/*.json` to `snapshotTests/verify` and runs `npm install` and `npm run verify` on each output directory to verify that there are no TypeScript errors.
 
 ### io.github.jhannes.openapi.typescriptfetchapi.FocusedExampleTest
 
