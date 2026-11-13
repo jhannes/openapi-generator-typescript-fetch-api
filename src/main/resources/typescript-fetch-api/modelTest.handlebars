@@ -303,7 +303,7 @@ export class TestSampleData {
         switch ({{propertyName}}) {
             {{~#mappedModels}}
             case "{{mappingName}}":
-            {{~#if children}}
+            {{~#if descendants}}
                 return this.sample{{modelName}}();
             {{~else}}
                 return {

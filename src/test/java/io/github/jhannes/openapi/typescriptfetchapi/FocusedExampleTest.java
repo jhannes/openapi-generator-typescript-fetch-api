@@ -1,12 +1,11 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
+import io.github.jhannes.openapi.typescriptfetchapi.testsupport.GeneratorTestFactory;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
  * Use this test to fix bugs and develop new features:
@@ -32,14 +31,13 @@ public class FocusedExampleTest extends AbstractSnapshotTest {
     }
 
     @TestFactory
-    DynamicNode outputShouldMatchSnapshot() {
-        return SnapshotTests.createTestNode(SPEC);
+    DynamicNode snapshotShouldVerify() {
+        return VerifyOutputTests.verifyGeneratedCode(SPEC, getSnapshotDir(SPEC));
     }
 
     @TestFactory
-    DynamicNode snapshotShouldVerify() {
-        Path snapshotDir = AbstractSnapshotTest.getSnapshotDir(SPEC);
-        return VerifyOutputTests.verifyGeneratedCode(SPEC, snapshotDir);
+    DynamicNode outputShouldMatchSnapshot() {
+        return new GeneratorTestFactory(createConfigurator(getModelName(SPEC)), SPEC, getOutputDir(SPEC)).createSnapshotTests(getSnapshotDir(SPEC), false);
     }
 
     @TestFactory

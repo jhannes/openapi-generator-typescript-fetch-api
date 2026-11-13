@@ -36,8 +36,9 @@ public class SnapshotDiffDynamicTest implements Executable {
         this.snapshotDir = snapshotDir;
     }
 
-    public static DynamicTest createSnapshotDiffTest(Path file, Path outputDir, Path snapshotDir) {
-        return dynamicTest(file.getFileName() + " in " + outputDir.relativize(file).getParent(), new SnapshotDiffDynamicTest(file, outputDir, snapshotDir));
+    public static DynamicTest createSnapshotDiffTest(Path spec, Path file, Path outputDir, Path snapshotDir) {
+        Path parent = outputDir.relativize(file).getParent();
+        return dynamicTest(file.getFileName() + " in " + (parent != null ? parent : spec), new SnapshotDiffDynamicTest(file, outputDir, snapshotDir));
     }
 
     static DynamicNode compareDirectories(Path spec, Path outputDir, Path snapshotDir) {
@@ -50,7 +51,7 @@ public class SnapshotDiffDynamicTest implements Executable {
         return dynamicContainer(spec.getFileName() + " in " + spec, Stream.of(
                 dynamicTest("Files", () -> compareFiles(outputDir, snapshotDir)),
                 dynamicContainer("Files in " + outputDir.getFileName() + " in " + outputDir.getParent(), files.stream().map(file ->
-                        createSnapshotDiffTest(file, outputDir, snapshotDir)
+                        createSnapshotDiffTest(spec, file, outputDir, snapshotDir)
                 ))));
     }
 

@@ -234,12 +234,24 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                                     childNames.add(childModel.getModel().name);
                                 }
                                 mappedModels.add(new CodegenDiscriminator.MappedModel(subCodegenModel.name, subModel.getModel().classname) {
-                                    public final List<String> children = childNames;
+                                    public final List<String> descendants = childNames;
                                 });
                             }
                         }
                         codegenModel.discriminator.setMapping(mapping);
                         codegenModel.discriminator.setMappedModels(mappedModels);
+                    }
+                } else if (codegenModel.discriminator != null && codegenModel.discriminator.getMappedModels() != null) {
+                    for (CodegenDiscriminator.MappedModel mappedModel : codegenModel.discriminator.getMappedModels()) {
+                        codegenModel.oneOf.add(mappedModel.getModel().classname);
+                        var childModel = mappedModel.getModel();
+                        while (childModel.parentModel != null) {
+                            if (childModel.parentModel == codegenModel) {
+                                removeParent(childModel, codegenModel);
+                            } else {
+                                childModel = childModel.parentModel;
+                            }
+                        }
                     }
                 } else if (!codegenModel.allOf.isEmpty()) {
                     List<CodegenModel> interfacesToBeRemoved = codegenModel.interfaceModels.stream()
@@ -283,6 +295,16 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
             }
         }
         return result;
+    }
+
+    private static void removeParent(CodegenModel childModel, CodegenModel parentModel) {
+        childModel.interfaceModels.remove(parentModel);
+        childModel.interfaces.remove(parentModel.classname);
+        childModel.allOf.remove(parentModel.classname);
+        childModel.allVars.removeIf(p -> parentModel.vars.stream().anyMatch(p2 -> Objects.equals(p.name, p2.name)));
+        childModel.parentModel = null;
+        childModel.parent = null;
+        childModel.parentVars = null;
     }
 
     private List<ModelMap> getChildModels(CodegenModel codegenModel, Collection<ModelsMap> allModels) {

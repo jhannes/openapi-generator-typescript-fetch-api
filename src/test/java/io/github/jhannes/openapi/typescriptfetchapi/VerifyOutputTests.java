@@ -1,5 +1,6 @@
 package io.github.jhannes.openapi.typescriptfetchapi;
 
+import io.github.jhannes.openapi.typescriptfetchapi.testsupport.GeneratorTestFactory;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
+import static io.github.jhannes.openapi.typescriptfetchapi.testsupport.GeneratorTestFactory.getInputSpec;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
@@ -49,9 +51,10 @@ public class VerifyOutputTests extends AbstractSnapshotTest {
     }
 
     private static DynamicContainer createTestNode(Path spec, CodegenConfigurator configurator, Path outputDir) {
+        GeneratorTestFactory generator = new GeneratorTestFactory(configurator, spec, outputDir);
         configurator.setInputSpec(getInputSpec(spec)).setOutputDir(outputDir.toString());
         return dynamicContainer("Verify " + spec, Arrays.asList(
-                dynamicTest("Generate " + outputDir, () -> generate(configurator)),
+                dynamicTest("Generate " + outputDir, generator::generate),
                 runNpmInstall(spec, outputDir),
                 verifyGeneratedCode(spec, outputDir)
         ));

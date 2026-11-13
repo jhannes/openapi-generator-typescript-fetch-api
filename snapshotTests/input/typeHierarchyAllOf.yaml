@@ -1,0 +1,120 @@
+openapi: 3.0.2
+info:
+  title: Sample API
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+servers:
+  - url: http://api.example.com/v1
+    description: Optional server description, e.g. Main (production) server
+  - url: http://staging-api.example.com
+    description: Optional server description, e.g. Internal staging server for testing
+paths:
+  /pets:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '200':
+          description: Updated
+components:
+  schemas:
+    Address:
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        addressTypes:
+          type: array
+          items:
+            enum: [ SHIPPING, BILLING ]
+      required:
+        - city
+        - country
+    PetBase:
+      allOf:
+        - $ref: "#/components/schemas/Pet"
+        - type: object
+          required:
+            - name
+          properties:
+            id:
+              type: string
+              readOnly: true
+            name:
+              type: string
+            birth_date:
+              type: string
+            ownerAddress:
+              $ref: '#/components/schemas/Address'
+    GenericDog:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - type: object
+          # all other properties specific to a `Dog`
+          properties:
+            bark:
+              type: boolean
+            breed:
+              type: string
+              enum: [Dingo, Husky, Retriever, Shepherd]
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/GenericDog'
+        - type: object
+          properties:
+            unused:
+              type: string
+    WorkingDog:
+      allOf:
+        - $ref: '#/components/schemas/GenericDog'
+        - type: object
+          properties:
+            capabilities:
+              type: array
+              items:
+                $ref: "#/components/schemas/WorkingDogCapability"
+          required:
+            - capabilities
+    WorkingDogCapability:
+      enum: [Guide, Rescue, Search]
+    Cat:     # "Cat" is a value for the pet_type property (the discriminator value)
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties
+        - $ref: '#/components/schemas/PetBase'
+        - type: object
+          # all other properties specific to a `Cat`
+          properties:
+            hunts:
+              type: boolean
+            age:
+              type: integer
+              readOnly: true
+    Goldfish:
+      allOf: # Combines the main `Pet` schema with `Goldfish`-specific properties
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          properties:
+            name:
+              type: string
+            species:
+              type: string
+    Pet:
+      type: object
+      properties:
+        pet_type:
+          type: string
+      required: [pet_type]
+      discriminator:
+        propertyName: pet_type
+        mapping:
+          Cat: '#/components/schemas/Cat'
+          Dog: '#/components/schemas/Dog'
+          WorkingDog: '#/components/schemas/WorkingDog'
+          Goldfish: '#/components/schemas/Goldfish'
