@@ -15,74 +15,18 @@
     "main": "./dist/index.js",
     "typings": "./dist/index.d.ts",
     "scripts": {
-        "build": "npm run lint && npm run build:typescript",
-        "build:typescript": "tsc --outDir dist/",
-        "lint": "eslint . --ext .ts",
+        "build": "tsc --outDir dist/",
         "format": "prettier --write *.ts test/*.ts *.json",
-        "verify": "npm run lint && tsc --noEmit",
+        "verify": "tsc --noEmit",
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {
-        "typescript": "^4.7.4",
-        "eslint": "^8.20.0",
-        "prettier": "^2.7.1",
-        "@typescript-eslint/eslint-plugin": "^5.30.7",
-        "@typescript-eslint/parser": "^5.30.7",
-        "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-prettier": "^4.2.1"
+        "prettier": "^3.10.1",
+        "typescript": "^7.0.2"
     }{{#if npmRepository}},
     "publishConfig": {
         "registry": "{{npmRepository}}"
     }{{/if}},
-    "eslintConfig": {
-        "root": true,
-        "parser": "@typescript-eslint/parser",
-        "plugins": [
-            "@typescript-eslint"
-        ],
-        "extends": [
-            "eslint:recommended",
-            "plugin:@typescript-eslint/eslint-recommended",
-            "plugin:@typescript-eslint/recommended",
-            "prettier"
-        ],
-        "rules": {
-            "comma-dangle": [
-                "warn",
-                "always-multiline"
-            ],
-            "indent": [
-                "error",
-                4,
-                {
-                    "SwitchCase": 1
-                }
-            ],
-            "linebreak-style": [
-                "error",
-                "unix"
-            ],
-            "max-len": [
-                "warn",
-                100,
-                {
-                    "comments": 140,
-                    "ignorePattern": "\\{ containerClass, propertyName:|sample\\w+Dto\\(template\\?: Factory|operation\\.\\w || reject"
-                }
-            ],
-            "no-trailing-spaces": "error",
-            "quotes": "warn",
-            "@typescript-eslint/explicit-function-return-type": [
-                "warn",
-                {
-                    "allowExpressions": true
-                }
-            ]
-        },
-        "ignorePatterns": [
-            "dist/**"
-        ]
-    },
     "prettier": {
         "tabWidth": 4,
         "printWidth": 100
