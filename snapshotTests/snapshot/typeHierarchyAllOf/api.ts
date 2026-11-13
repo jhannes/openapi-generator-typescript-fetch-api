@@ -14,11 +14,11 @@
 import {
     AddressDto,
     CatDto,
+    DiscriminatedPetDto,
     DogDto,
     GenericDogDto,
     GoldfishDto,
     PetBaseDto,
-    PetDto,
     WorkingDogCapabilityDto,
     WorkingDogDto,
 } from "./model";
@@ -39,7 +39,7 @@ export interface DefaultApiInterface {
      * @throws {HttpError}
      */
     petsPost(params?: {
-        petDto?: PetDto;
+        discriminatedPetDto?: DiscriminatedPetDto;
     } & RequestCallOptions): Promise<void>;
 }
 
@@ -53,14 +53,14 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {HttpError}
      */
     public async petsPost(params?: {
-        petDto?: PetDto;
+        discriminatedPetDto?: DiscriminatedPetDto;
     } & RequestCallOptions): Promise<void> {
         return await this.fetch(
             this.basePath + "/pets",
             {
                 ...params,
                 method: "POST",
-                body: params?.petDto ? JSON.stringify(params.petDto) : undefined,
+                body: params?.discriminatedPetDto ? JSON.stringify(params.discriminatedPetDto) : undefined,
                 headers: {
                     ...this.removeEmpty(params?.headers),
                     "Content-Type": "application/json",

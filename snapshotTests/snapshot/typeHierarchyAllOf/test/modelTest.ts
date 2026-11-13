@@ -2,12 +2,12 @@ import {
     AddressDto,
     AddressDtoAddressTypesEnumValues,
     CatDto,
+    DiscriminatedPetDto,
     DogDto,
     GenericDogDto,
     GenericDogDtoBreedEnumValues,
     GoldfishDto,
     PetBaseDto,
-    PetDto,
     WorkingDogCapabilityDto,
     WorkingDogCapabilityDtoValues,
     WorkingDogDto,
@@ -78,11 +78,11 @@ type ModelFactory<T> = Factory<T> | ((testData: TestSampleData) => T);
 export interface SampleModelFactories {
     AddressDto?: ModelFactory<AddressDto>;
     CatDto?: ModelFactory<CatDto>;
+    DiscriminatedPetDto?: ModelFactory<DiscriminatedPetDto>;
     DogDto?: ModelFactory<DogDto>;
     GenericDogDto?: ModelFactory<GenericDogDto>;
     GoldfishDto?: ModelFactory<GoldfishDto>;
     PetBaseDto?: ModelFactory<PetBaseDto>;
-    PetDto?: ModelFactory<PetDto>;
     WorkingDogCapabilityDto?: ModelFactory<WorkingDogCapabilityDto>;
     WorkingDogDto?: ModelFactory<WorkingDogDto>;
 }
@@ -289,6 +289,10 @@ export class TestSampleData {
                 return this.sampleCatDto();
             case "Array<CatDto>":
                 return this.sampleArrayCatDto();
+            case "DiscriminatedPetDto":
+                return this.sampleDiscriminatedPetDto();
+            case "Array<DiscriminatedPetDto>":
+                return this.sampleArrayDiscriminatedPetDto();
             case "DogDto":
                 return this.sampleDogDto();
             case "Array<DogDto>":
@@ -305,10 +309,6 @@ export class TestSampleData {
                 return this.samplePetBaseDto();
             case "Array<PetBaseDto>":
                 return this.sampleArrayPetBaseDto();
-            case "PetDto":
-                return this.samplePetDto();
-            case "Array<PetDto>":
-                return this.sampleArrayPetDto();
             case "WorkingDogCapabilityDto":
                 return this.sampleWorkingDogCapabilityDto();
             case "Array<WorkingDogCapabilityDto>":
@@ -392,6 +392,51 @@ export class TestSampleData {
     ): CatDto[] {
         return this.randomArray(
             () => this.sampleCatDto(template),
+            length ?? this.arrayLength()
+        );
+    }
+
+    sampleDiscriminatedPetDto(
+        factory?: (sampleData: TestSampleData) => DiscriminatedPetDto
+    ): DiscriminatedPetDto {
+        const containerClass = "DiscriminatedPetDto";
+        if (factory) {
+            return factory(this);
+        }
+        if (typeof this.sampleModelProperties[containerClass] === "function") {
+            return this.sampleModelProperties[containerClass](this);
+        }
+        const pet_type = this.pickOneString(["Cat", "Dog", "Goldfish", "WorkingDog"])
+        switch (pet_type) {
+            case "Cat":
+                return {
+                    ...this.sampleCatDto(),
+                    pet_type,
+                };
+            case "Dog":
+                return {
+                    ...this.sampleDogDto(),
+                    pet_type,
+                };
+            case "Goldfish":
+                return {
+                    ...this.sampleGoldfishDto(),
+                    pet_type,
+                };
+            case "WorkingDog":
+                return {
+                    ...this.sampleWorkingDogDto(),
+                    pet_type,
+                };
+        }
+    }
+
+    sampleArrayDiscriminatedPetDto(
+        length?: number,
+        factory?: (sampleData: TestSampleData) => DiscriminatedPetDto
+    ): DiscriminatedPetDto[] {
+        return this.randomArray(
+            () => this.sampleDiscriminatedPetDto(factory),
             length ?? this.arrayLength()
         );
     }
@@ -515,51 +560,6 @@ export class TestSampleData {
     ): PetBaseDto[] {
         return this.randomArray(
             () => this.samplePetBaseDto(template),
-            length ?? this.arrayLength()
-        );
-    }
-
-    samplePetDto(
-        factory?: (sampleData: TestSampleData) => PetDto
-    ): PetDto {
-        const containerClass = "PetDto";
-        if (factory) {
-            return factory(this);
-        }
-        if (typeof this.sampleModelProperties[containerClass] === "function") {
-            return this.sampleModelProperties[containerClass](this);
-        }
-        const pet_type = this.pickOneString(["Cat", "Dog", "Goldfish", "WorkingDog"])
-        switch (pet_type) {
-            case "Cat":
-                return {
-                    ...this.sampleCatDto(),
-                    pet_type,
-                };
-            case "Dog":
-                return {
-                    ...this.sampleDogDto(),
-                    pet_type,
-                };
-            case "Goldfish":
-                return {
-                    ...this.sampleGoldfishDto(),
-                    pet_type,
-                };
-            case "WorkingDog":
-                return {
-                    ...this.sampleWorkingDogDto(),
-                    pet_type,
-                };
-        }
-    }
-
-    sampleArrayPetDto(
-        length?: number,
-        factory?: (sampleData: TestSampleData) => PetDto
-    ): PetDto[] {
-        return this.randomArray(
-            () => this.samplePetDto(factory),
             length ?? this.arrayLength()
         );
     }

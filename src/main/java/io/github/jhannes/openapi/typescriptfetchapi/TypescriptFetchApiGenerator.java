@@ -246,11 +246,9 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         codegenModel.oneOf.add(mappedModel.getModel().classname);
                         var childModel = mappedModel.getModel();
                         while (childModel.parentModel != null) {
-                            if (childModel.parentModel == codegenModel) {
-                                removeParent(childModel, codegenModel);
-                            } else {
-                                childModel = childModel.parentModel;
-                            }
+                            var next = childModel.parentModel;
+                            removeParent(childModel, codegenModel);
+                            childModel = next;
                         }
                     }
                 } else if (!codegenModel.allOf.isEmpty()) {
@@ -302,9 +300,11 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
         childModel.interfaces.remove(parentModel.classname);
         childModel.allOf.remove(parentModel.classname);
         childModel.allVars.removeIf(p -> parentModel.vars.stream().anyMatch(p2 -> Objects.equals(p.name, p2.name)));
-        childModel.parentModel = null;
-        childModel.parent = null;
-        childModel.parentVars = null;
+        if (childModel.parentModel == parentModel) {
+            childModel.parentModel = null;
+            childModel.parent = null;
+            childModel.parentVars = null;
+        }
     }
 
     private List<ModelMap> getChildModels(CodegenModel codegenModel, Collection<ModelsMap> allModels) {

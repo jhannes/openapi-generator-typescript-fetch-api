@@ -15,7 +15,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Pet'
+              $ref: '#/components/schemas/DiscriminatedPet'
       responses:
         '200':
           description: Updated
@@ -40,7 +40,7 @@ components:
         - country
     PetBase:
       allOf:
-        - $ref: "#/components/schemas/Pet"
+        - $ref: "#/components/schemas/DiscriminatedPet"
         - type: object
           required:
             - name
@@ -58,7 +58,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/PetBase'
         - type: object
-          # all other properties specific to a `Dog`
           properties:
             bark:
               type: boolean
@@ -85,11 +84,10 @@ components:
             - capabilities
     WorkingDogCapability:
       enum: [Guide, Rescue, Search]
-    Cat:     # "Cat" is a value for the pet_type property (the discriminator value)
-      allOf: # Combines the main `Pet` schema with `Cat`-specific properties
+    Cat:
+      allOf:
         - $ref: '#/components/schemas/PetBase'
         - type: object
-          # all other properties specific to a `Cat`
           properties:
             hunts:
               type: boolean
@@ -97,15 +95,15 @@ components:
               type: integer
               readOnly: true
     Goldfish:
-      allOf: # Combines the main `Pet` schema with `Goldfish`-specific properties
-        - $ref: '#/components/schemas/Pet'
+      allOf:
+        - $ref: '#/components/schemas/DiscriminatedPet'
         - type: object
           properties:
             name:
               type: string
             species:
               type: string
-    Pet:
+    DiscriminatedPet:
       type: object
       properties:
         pet_type:

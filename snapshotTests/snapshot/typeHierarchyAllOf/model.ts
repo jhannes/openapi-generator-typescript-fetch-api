@@ -30,6 +30,21 @@ export interface CatDto extends PetBaseDto {
     readonly age?: number;
 }
 
+export type DiscriminatedPetDto =
+    { pet_type: "Cat" } & CatDto |
+    { pet_type: "Dog" } & DogDto |
+    { pet_type: "Goldfish" } & GoldfishDto |
+    { pet_type: "WorkingDog" } & WorkingDogDto;
+
+export const DiscriminatedPetDtoDiscriminators = [
+    "Cat",
+    "Dog",
+    "Goldfish",
+    "WorkingDog",
+] as const;
+
+export type DiscriminatedPetDtoDiscriminator = typeof DiscriminatedPetDtoDiscriminators[number];
+
 export interface DogDto extends GenericDogDto {
     unused?: string;
 }
@@ -59,21 +74,6 @@ export interface PetBaseDto {
     birth_date?: string;
     ownerAddress?: AddressDto;
 }
-
-export type PetDto =
-    { pet_type: "Cat" } & CatDto |
-    { pet_type: "Dog" } & DogDto |
-    { pet_type: "Goldfish" } & GoldfishDto |
-    { pet_type: "WorkingDog" } & WorkingDogDto;
-
-export const PetDtoDiscriminators = [
-    "Cat",
-    "Dog",
-    "Goldfish",
-    "WorkingDog",
-] as const;
-
-export type PetDtoDiscriminator = typeof PetDtoDiscriminators[number];
 export const WorkingDogCapabilityDtoValues = [
     "Guide",
     "Rescue",

@@ -14,11 +14,11 @@
 import {
     AddressDto,
     CatDto,
+    DiscriminatedPetDto,
     DogDto,
     GenericDogDto,
     GoldfishDto,
     PetBaseDto,
-    PetDto,
     WorkingDogCapabilityDto,
     WorkingDogDto,
 } from "../model";
