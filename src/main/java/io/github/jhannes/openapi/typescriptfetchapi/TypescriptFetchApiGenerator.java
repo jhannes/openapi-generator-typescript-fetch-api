@@ -211,10 +211,13 @@ public class TypescriptFetchApiGenerator extends AbstractTypeScriptClientCodegen
                         variable.dataType = variable.datatypeWithEnum = "unknown";
                     }
                     if (variable.isArray && variable.maxItems != null && variable.maxItems <= 5) {
+                        int minItems = variable.minItems != null ? variable.minItems : 0;
                         String tupleType = "[" + IntStream.range(0, variable.maxItems)
-                                .mapToObj(i -> variable.items.dataType + (i >= variable.minItems ? "?" : ""))
+                                .mapToObj(i -> variable.items.dataType + (i >= minItems ? "?" : ""))
                                 .collect(Collectors.joining(", ")) + "]";
                         variable.dataType = variable.datatypeWithEnum = tupleType;
+                        variable.vendorExtensions.put("x-tuple-min-items", minItems);
+                        variable.vendorExtensions.put("x-tuple-max-items", variable.maxItems);
                     }
                 }
 
