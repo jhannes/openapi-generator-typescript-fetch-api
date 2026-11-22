@@ -154,6 +154,11 @@ export class TestSampleData {
         return Array.from({ length }).map((_, index) => generator(index));
     }
 
+    sampleTuple<T>(generator: (n: number) => T, minItems: number, maxItems: number): T[] {
+        const length = minItems + this.nextInt(maxItems - minItems + 1);
+        return Array.from({ length }).map((_, index) => generator(index));
+    }
+
     randomEmail(): string {
         return (
             this.randomFirstName().toLowerCase() +
